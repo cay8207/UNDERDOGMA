@@ -44,3 +44,6 @@ TagManager:
   - name: Character & Enemy
     uniqueID: 3681329579
     locked: 0
+  - name: Devil Eye
+    uniqueID: 534990315
+    locked: 0

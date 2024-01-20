@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: e02f165f6d0f6c246bf1c986512bb204
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - KCC-Murukmuruk
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 065d76afa4f08b64b88235d9f1e08b33, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
