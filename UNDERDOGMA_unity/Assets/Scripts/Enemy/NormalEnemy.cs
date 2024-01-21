@@ -27,9 +27,10 @@ public class NormalEnemy : Enemy
     {
         Vector2Int targetPosition = new Vector2Int(Row, Col) + directionOffsets[_attackDirection];
         Debug.Log(targetPosition + " " + new Vector2Int(playerRow, playerCol));
+        Debug.Log("targetPosition: " + targetPosition + " playerPosition: " + new Vector2Int(playerRow, playerCol));
         if (targetPosition == new Vector2Int(playerRow, playerCol))
         {
-            base.EnemyAction(playerRow, playerCol);
+            StartCoroutine(base.EnemyAction(playerRow, playerCol));
             StageManager.Instance._character.GetComponent<Character>().Heart -= Attack;
             StageManager.Instance._character.GetComponent<Character>()._heartText.GetComponent<TextMeshPro>().text
                 = StageManager.Instance._character.GetComponent<Character>().Heart.ToString();

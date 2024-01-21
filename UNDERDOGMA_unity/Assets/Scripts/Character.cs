@@ -17,18 +17,18 @@ public class Character : MonoBehaviour
     }
 
     // 플레이어의 현재 위치를 저장. 
-    private int row, col;
+    private int _row, _col;
 
     public int Row
     {
-        get => row;
-        set => row = value;
+        get => _row;
+        set => _row = value;
     }
 
     public int Col
     {
-        get => col;
-        set => col = value;
+        get => _col;
+        set => _col = value;
     }
 
     // 타일, 적의 정보가 있는 딕셔너리들을 조금 더 사용하기 쉽게 변수 선언. 원래는 게임매니저에서 읽어온다. 
@@ -50,11 +50,12 @@ public class Character : MonoBehaviour
 
     // Start is called before the first frame update
     // 플레이어의 정보들을 저장해준다. 
-    public void Init()
+    public void Init(int row, int col, int heart)
     {
         // 게임이 재시작할때에도 해당 코드가 실행된다. 모든 변수들 초기화해두기. 
-        row = 0; col = 0;
-        _heart = 8;
+        this._row = row;
+        this._col = col;
+        this._heart = heart;
         _heartText.GetComponent<TextMeshPro>().text = _heart.ToString();
         _moveCount = 0;
     }
@@ -88,8 +89,8 @@ public class Character : MonoBehaviour
     void CharacterMove(int direction)
     {
         // 다음으로 이동할 칸의 위치를 설정해준다. 
-        Debug.Log("now row: " + row + " now col: " + col);
-        Vector2Int targetPosition = new Vector2Int(row, col) + directionOffsets[direction];
+        Debug.Log("now row: " + _row + " now col: " + _col);
+        Vector2Int targetPosition = new Vector2Int(_row, _col) + directionOffsets[direction];
 
         // 캐릭터가 이동하지 않는 경우에는 적들에게 데미지를 받는 등의 이벤트가 발생하면 안된다. 
         bool isMove = false;
@@ -101,7 +102,7 @@ public class Character : MonoBehaviour
             {
                 _moveCount++;
                 StartCoroutine(CharacterAttack(targetPosition));
-                StartCoroutine(EnemyDictionary[targetPosition].GetComponent<Enemy>().EnemyDeath(targetPosition));
+                EnemyManager.Instance.EnemyDeath(targetPosition);
                 _heart += TileDictionary[targetPosition][4];
                 _heartText.GetComponent<TextMeshPro>().text = _heart.ToString();
                 return;
@@ -144,8 +145,8 @@ public class Character : MonoBehaviour
                     Debug.Log("Enemy is dead");
                     isMove = true;
                     // transform.position += new Vector3(directionOffsets[direction].x, directionOffsets[direction].y, 0);
-                    row = targetPosition.x;
-                    col = targetPosition.y;
+                    _row = targetPosition.x;
+                    _col = targetPosition.y;
 
                     // 다음으로 이동할 칸을 계속 업데이트해줘야 한다. 
                     targetPosition += directionOffsets[direction];
@@ -156,18 +157,18 @@ public class Character : MonoBehaviour
             {
                 isMove = true;
                 // transform.position += new Vector3(directionOffsets[direction].x, directionOffsets[direction].y, 0);
-                row = targetPosition.x;
-                col = targetPosition.y;
+                _row = targetPosition.x;
+                _col = targetPosition.y;
 
                 // 다음으로 이동할 칸을 계속 업데이트해줘야 한다. 
                 targetPosition += directionOffsets[direction];
 
                 // while문이 무한루프에 빠지는 것을 방지하기 위해 범위를 제한해준다.
-                if (row > 100 || row < -100 || col > 100 || col < -100) break;
+                if (_row > 100 || _row < -100 || _col > 100 || _col < -100) break;
             }
         }
 
-        transform.DOMove(new Vector3(row, col + 0.5f, 0), 0.1f, false);
+        transform.DOMove(new Vector3(_row, _col + 0.5f, 0), 0.1f, false);
 
         // while문을 탈출한 후, 즉 이동이 끝난 후 상하좌우에 적이 있다면 데미지를 입어야 한다.
         if (isMove)
@@ -195,7 +196,7 @@ public class Character : MonoBehaviour
         gameObject.GetComponent<Animator>().SetBool("IsAttack", false);
 
         // 공격한 적을 죽인다. 
-        EnemyDictionary[targetPosition].GetComponent<Enemy>().EnemyDeath(targetPosition);
+        EnemyManager.Instance.EnemyDeath(targetPosition);
     }
 
     // 캐릭터가 죽었을 경우 죽는 애니메이션을 보여주고 게임을 재시작한다. 

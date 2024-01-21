@@ -23,5 +23,8 @@
     "2,1": [-1]
   },
   "ExecutionCount": 3,
-  "ExecutionHealth": 5
+  "ExecutionHealth": 5,
+  "CharacterRow": 0,
+  "CharacterCol": 0,
+  "CharacterHeart": 7
 }

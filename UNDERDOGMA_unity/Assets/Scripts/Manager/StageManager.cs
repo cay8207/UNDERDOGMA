@@ -5,6 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class StageManager : MonoBehaviour
 {
@@ -122,7 +124,7 @@ public class StageManager : MonoBehaviour
 
         // 캐릭터 오브젝트를 생성하고 초기화해준다. 
         _character = Instantiate(CharacterPrefab, new Vector3(0.0f, 0.5f, 0.0f), Quaternion.identity);
-        _character.GetComponent<Character>().Init();
+        _character.GetComponent<Character>().Init(_stageData.CharacterRow, _stageData.CharacterCol, _stageData.CharacterHeart);
         MainCamera.GetComponent<MainCamera>()._character = _character;
     }
 
@@ -138,24 +140,52 @@ public class StageManager : MonoBehaviour
     public void ResetGame()
     {
         // 맵에 존재하는 타일을 제외한 오브젝트들을 초기화시켜준다.
-        // 만약 처형이 진행중이라면 처형을 멈추고, 처형에 관한 변수들을 초기화시켜준다.
+        // 1. 만약 처형이 진행중이라면 처형을 멈추고, 처형에 관한 변수들을 초기화시켜준다.
         ExecutionManager.Instance.ExecutionStop();
 
+        for (int i = 0; i < ExecutionManager.Instance.ExecutionCount; i++)
+        {
+            ExecutionManager.Instance.ExecutionCountObjectList[i].GetComponent<Image>().sprite = ExecutionManager.Instance.CloseEye;
+        }
+
+        // 2. 적들을 모두 초기화해준다. 
+        // 적의 코루틴들을 모두 스탑시켜준다. 그렇지 않으면 진행되고 있던 코루틴이 리셋 이후 버그를 일으킬 수 있음. 
+        foreach (var coroutine in EnemyManager.Instance.EnemyActionCoroutineQueue)
+        {
+            if (coroutine != null)
+            {
+                EnemyManager.Instance.StopCoroutine(coroutine);
+            }
+        }
+
+        foreach (var coroutine in EnemyManager.Instance.EnemyDeathCoroutineQueue)
+        {
+            if (coroutine != null)
+            {
+                EnemyManager.Instance.StopCoroutine(coroutine);
+
+            }
+        }
+
+        // enemy 게임오브젝트들을 파괴. 
         foreach (var enemyWithVector in _enemyDictionary)
         {
-            // enemy 게임오브젝트들을 파괴. 
+            enemyWithVector.Value.SetActive(false);
             Destroy(enemyWithVector.Value);
         }
         _enemyDictionary.Clear();
 
+        // 3. 고기(체력 회복)들을 모두 초기화해준다. 
         foreach (var meatWithVector in _meatDictionary)
         {
             Destroy(meatWithVector.Value);
         }
         _meatDictionary.Clear();
 
+        // 4. 캐릭터를 초기화해준다.
         Destroy(_character);
 
+        // 5. 적과 고기들을 새롭게 생성해준다. 
         foreach (var tile in _stageData.TileDictionary)
         {
             Vector3 tilePosition = new Vector3(tile.Key.x, tile.Key.y, 0);
@@ -195,7 +225,7 @@ public class StageManager : MonoBehaviour
 
         // 캐릭터 오브젝트를 생성하고 초기화해준다. 
         _character = Instantiate(CharacterPrefab, new Vector3(0.0f, 0.5f, 0.0f), Quaternion.identity);
-        _character.GetComponent<Character>().Init();
+        _character.GetComponent<Character>().Init(_stageData.CharacterRow, _stageData.CharacterCol, _stageData.CharacterHeart);
         MainCamera.GetComponent<MainCamera>()._character = _character;
     }
 
@@ -218,5 +248,9 @@ public class StageManager : MonoBehaviour
         yield return new WaitForSeconds(2.0f);
 
         _character.GetComponent<Animator>().SetBool("StageClear", false);
+
+        yield return new WaitForSeconds(2.0f);
+
+        SceneManager.LoadScene("Stage" + (stage + 1).ToString());
     }
 }
