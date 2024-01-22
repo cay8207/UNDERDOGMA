@@ -1008,9 +1008,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Game Start
-
-'
+  m_text: Game Start
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 76d2df6edb4d35e4eb853fa156cf4b1a, type: 2}
   m_sharedMaterial: {fileID: -3444958598380155619, guid: 76d2df6edb4d35e4eb853fa156cf4b1a, type: 2}

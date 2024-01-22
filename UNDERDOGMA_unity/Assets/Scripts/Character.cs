@@ -102,7 +102,6 @@ public class Character : MonoBehaviour
             {
                 _moveCount++;
                 StartCoroutine(CharacterAttack(targetPosition));
-                EnemyManager.Instance.EnemyDeath(targetPosition);
                 _heart += TileDictionary[targetPosition][4];
                 _heartText.GetComponent<TextMeshPro>().text = _heart.ToString();
                 return;
