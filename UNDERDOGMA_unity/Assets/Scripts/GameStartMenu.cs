@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Unity.VisualStudio.Editor;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -13,6 +12,11 @@ public class GameStartMenu : MonoBehaviour
     [SerializeField] Button startButton;
     [SerializeField] Button creditsButton;
     [SerializeField] Button exitButton;
+
+    [SerializeField] Image StartButtonText;
+    [SerializeField] Image CreditsButtonText;
+    [SerializeField] Image ExitButtonText;
+
     [SerializeField] GameObject ButtonSelectHighlight;
 
     private int _selectedIndex;
@@ -26,6 +30,9 @@ public class GameStartMenu : MonoBehaviour
         startButton.onClick.AddListener(StartGame);
         creditsButton.onClick.AddListener(ShowCredits);
         exitButton.onClick.AddListener(ExitGame);
+
+        AudioManager.Instance.Init();
+        AudioManager.Instance.PlayBgm(true);
 
         _selectedIndex = 0;
     }
@@ -64,6 +71,8 @@ public class GameStartMenu : MonoBehaviour
             {
                 ExitGame();
             }
+            Debug.Log("Audio Start!");
+            AudioManager.Instance.PlaySfx(AudioManager.Sfx.UI_Toggle);
         }
     }
 
@@ -71,29 +80,28 @@ public class GameStartMenu : MonoBehaviour
     {
         if (_selectedIndex == 0)
         {
-            startButton.GetComponentInChildren<TextMeshProUGUI>().fontSize = 40;
-            creditsButton.GetComponentInChildren<TextMeshProUGUI>().fontSize = 32;
-            exitButton.GetComponentInChildren<TextMeshProUGUI>().fontSize = 32;
+            StartButtonText.rectTransform.sizeDelta = new Vector2(330.0f, 40.0f);
+            CreditsButtonText.rectTransform.sizeDelta = new Vector2(150.0f, 32.0f);
+            ExitButtonText.rectTransform.sizeDelta = new Vector2(90.0f, 32.0f);
         }
         else if (_selectedIndex == 1)
         {
-            startButton.GetComponentInChildren<TextMeshProUGUI>().fontSize = 32;
-            creditsButton.GetComponentInChildren<TextMeshProUGUI>().fontSize = 40;
-            exitButton.GetComponentInChildren<TextMeshProUGUI>().fontSize = 32;
+            StartButtonText.rectTransform.sizeDelta = new Vector2(260.0f, 32.0f);
+            CreditsButtonText.rectTransform.sizeDelta = new Vector2(200.0f, 40.0f);
+            ExitButtonText.rectTransform.sizeDelta = new Vector2(90.0f, 32.0f);
         }
         else if (_selectedIndex == 2)
         {
-            startButton.GetComponentInChildren<TextMeshProUGUI>().fontSize = 32;
-            creditsButton.GetComponentInChildren<TextMeshProUGUI>().fontSize = 32;
-            exitButton.GetComponentInChildren<TextMeshProUGUI>().fontSize = 40;
+            StartButtonText.rectTransform.sizeDelta = new Vector2(260.0f, 32.0f);
+            CreditsButtonText.rectTransform.sizeDelta = new Vector2(150.0f, 32.0f);
+            ExitButtonText.rectTransform.sizeDelta = new Vector2(120.0f, 40.0f);
         }
     }
 
     // '게임 시작' 버튼 클릭 시 호출되는 함수
     void StartGame()
     {
-        // 원하는 Scene으로 이동
-        SceneManager.LoadScene("Stage1");
+        SceneManager.LoadScene("Tutorial");
         Debug.Log("Stage1 Scene Loaded");
     }
 
@@ -102,6 +110,7 @@ public class GameStartMenu : MonoBehaviour
     {
         // 원하는 Scene으로 이동
         SceneManager.LoadScene("Credit");
+        AudioManager.Instance.PlayBgm(true);
     }
 
     // '게임 종료' 버튼 클릭 시 호출되는 함수

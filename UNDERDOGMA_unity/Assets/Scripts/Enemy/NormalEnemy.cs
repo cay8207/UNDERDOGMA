@@ -19,6 +19,25 @@ public class NormalEnemy : Enemy
 
         Vector2Int targetPosition = new Vector2Int(Row, Col) + directionOffsets[_attackDirection];
         GameObject _attackRange = Instantiate(AttackRange, new Vector3(targetPosition.x, targetPosition.y, 0), Quaternion.identity);
+        switch (_attackDirection)
+        {
+            case 0:
+                _attackRange.transform.Rotate(0, 0, -90);
+                _attackRange.transform.position += new Vector3(0.0f, -0.38f, 0.0f);
+                break;
+            case 1:
+                _attackRange.transform.Rotate(0, 0, 90);
+                _attackRange.transform.position += new Vector3(0.0f, 0.38f, 0.0f);
+                break;
+            case 2:
+                _attackRange.transform.Rotate(0, 0, 0);
+                _attackRange.transform.position += new Vector3(0.38f, 0.0f, 0.0f);
+                break;
+            case 3:
+                _attackRange.transform.Rotate(0, 0, 180);
+                _attackRange.transform.position += new Vector3(-0.38f, 0.0f, 0.0f);
+                break;
+        }
         _attackRange.transform.parent = transform;
         AttackRange.GetComponent<SpriteRenderer>().enabled = false;
     }
@@ -32,8 +51,9 @@ public class NormalEnemy : Enemy
         {
             StartCoroutine(base.EnemyAction(playerRow, playerCol));
             StageManager.Instance._character.GetComponent<Character>().Heart -= Attack;
-            StageManager.Instance._character.GetComponent<Character>()._heartText.GetComponent<TextMeshPro>().text
-                = StageManager.Instance._character.GetComponent<Character>().Heart.ToString();
+            StageManager.Instance._character.GetComponent<Character>()._heartText.GetComponent<Text>().SetText(
+                StageManager.Instance._character.GetComponent<Character>().Heart
+            );
         }
 
         yield return null;

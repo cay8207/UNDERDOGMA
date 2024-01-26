@@ -9,6 +9,8 @@ public abstract class Enemy : MonoBehaviour
     [SerializeField] GameObject _attackText;
     [SerializeField] GameObject _heartText;
 
+    private MainCamera _mainCamera;
+
     // 모든 적은 기본적으로 현재 위치를 가진다. 
     private int _row;
     public int Row
@@ -54,8 +56,10 @@ public abstract class Enemy : MonoBehaviour
     // Start is called before the first frame update
     public virtual void Start()
     {
-        _attackText.GetComponent<TextMeshPro>().text = _attack.ToString();
-        _heartText.GetComponent<TextMeshPro>().text = _heart.ToString();
+        _attackText.GetComponent<Text>().SetText(_attack);
+        _heartText.GetComponent<Text>().SetText(_heart);
+
+        _mainCamera = Camera.main.GetComponent<MainCamera>();
     }
 
     // Update is called once per frame
@@ -66,10 +70,15 @@ public abstract class Enemy : MonoBehaviour
 
     public virtual IEnumerator EnemyAction(int playerRow, int playerCol)
     {
-        // 캐릭터가 공격하는 애니메이션 진행. 
+
+        // 캐릭터를 공격하는 애니메이션 진행. 
         gameObject.GetComponent<Animator>().SetBool("IsAttack", true);
 
         yield return new WaitForSeconds(1.0f);
+
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.Enemy_Attack);
+
+        _mainCamera.Shake(0.5f);
 
         gameObject.GetComponent<Animator>().SetBool("IsAttack", false);
     }
@@ -81,6 +90,9 @@ public abstract class Enemy : MonoBehaviour
 
         gameObject.GetComponent<Animator>().SetBool("IsDied", true);
 
+        StartCoroutine(FadeOut(gameObject.GetComponent<SpriteRenderer>(), 1.0f));
+        StartCoroutine(FadeOut(gameObject.transform.GetChild(5).GetComponent<SpriteRenderer>(), 1.0f));
+
         yield return new WaitForSeconds(1.0f);
 
         gameObject.GetComponent<Animator>().SetBool("IsDied", false);
@@ -90,5 +102,31 @@ public abstract class Enemy : MonoBehaviour
         EnemyManager.Instance.EnemyDictionary.Remove(targetPosition);
 
         StageManager.Instance.StageClearCheck();
+
+        yield return null;
     }
+
+    public IEnumerator FadeIn(SpriteRenderer spriteRenderer, float time)
+    {
+        Color color = spriteRenderer.color;
+        while (color.a < 1f)
+        {
+            color.a += Time.deltaTime / time;
+            spriteRenderer.color = color;
+            yield return null;
+        }
+    }
+
+    public IEnumerator FadeOut(SpriteRenderer spriteRenderer, float time)
+    {
+        Color color = spriteRenderer.color;
+        while (color.a > 0f)
+        {
+            color.a -= Time.deltaTime / time;
+            spriteRenderer.color = color;
+            yield return null;
+        }
+    }
+
+
 }

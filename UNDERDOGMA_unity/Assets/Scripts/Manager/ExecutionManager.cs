@@ -35,7 +35,7 @@ public class ExecutionManager : MonoBehaviour
 
     [SerializeField] GameObject ExecutionPrefab;
     [SerializeField] GameObject ExecutionCanvas;
-    [SerializeField] GameObject ExecutionHealthObject;
+    [SerializeField] GameObject ExecutionHealthText;
     [SerializeField] GameObject ExecutionCountPrefab;
 
     [SerializeField] public Sprite CloseEye;
@@ -99,10 +99,11 @@ public class ExecutionManager : MonoBehaviour
 
         ExecutionObject = Instantiate(ExecutionPrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
 
-        ExecutionHealthObject.GetComponentInChildren<TextMeshProUGUI>().text = _executionHealth.ToString();
+        ExecutionHealthText.GetComponent<TextUI>().SetText(_executionHealth);
+
         for (int i = _executionCount - 1; i >= 0; i--)
         {
-            GameObject ExecutionCountObject = Instantiate(ExecutionCountPrefab, new Vector3(640.0f - 100.0f * i, 400.0f, 0.0f), Quaternion.identity);
+            GameObject ExecutionCountObject = Instantiate(ExecutionCountPrefab, new Vector3(37.5f * (_executionCount - 1) - 75.0f * i, 480.0f, 0.0f), Quaternion.identity);
             ExecutionCountObject.transform.SetParent(ExecutionCanvas.transform, false);
             _executionCountObjectList.Add(ExecutionCountObject);
         }
@@ -120,6 +121,7 @@ public class ExecutionManager : MonoBehaviour
 
         // 처형 카운트. 즉 상단에 있는 눈이 추가로 떠지도록 한다. 
         _executionCountObjectList[moveCount - 1].GetComponent<Image>().sprite = OpenEye;
+        _executionCountObjectList[moveCount - 1].GetComponent<Image>().rectTransform.sizeDelta = new Vector2(90.0f, 56.0f);
 
         if (moveCount >= _executionCount)
         {
@@ -127,6 +129,7 @@ public class ExecutionManager : MonoBehaviour
             for (int i = 0; i < moveCount; i++)
             {
                 _executionCountObjectList[i].GetComponent<Image>().sprite = CloseEye;
+                _executionCountObjectList[i].GetComponent<Image>().rectTransform.sizeDelta = new Vector2(69.0f, 17.0f);
             }
             return true;
         }
@@ -157,6 +160,8 @@ public class ExecutionManager : MonoBehaviour
 
         // 2. 처형 애니메이션 이전에 적이 공격하는 애니메이션 등을 보여주기 위해 잠깐의 텀을 둔다. 
         yield return new WaitForSeconds(1.0f);
+
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.Execute);
 
         ExecutionObject.GetComponent<Animator>().SetBool("InExecution", true);
 

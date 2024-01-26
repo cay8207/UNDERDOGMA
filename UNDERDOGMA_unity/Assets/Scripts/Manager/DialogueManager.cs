@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Unity.VisualStudio.Editor;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -41,27 +40,36 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private Canvas DialogueCanvas;
     [SerializeField] private TextMeshProUGUI DialogueText;
     [SerializeField] private UnityEngine.UI.Image DialogueWindow;
+    [SerializeField] private UnityEngine.UI.Image DialogueImage;
 
-    public List<string> listSentences = new List<string>();
-    public List<Sprite> listSprites = new List<Sprite>();
-    public List<Sprite> listWindows = new List<Sprite>();
+    // 대사와 함께 나올 스탠딩 cg들을 저장하는 배열. 
+    [SerializeField] private List<Sprite> listSprites;
+
+    private DialogueData _dialogueData;
+
+    public DialogueData DialogueData
+    {
+        get => _dialogueData;
+        set => _dialogueData = value;
+    }
 
     //  현재 몇번째 텍스트를 읽고 있는지 저장하기 위한 변수.
-    private int count;
+    private int count = 0;
 
     public void Start()
     {
-
+        string path = "Stage" + StageManager.Instance.stage.ToString();
+        _dialogueData = DialogueDataLoader.Instance.LoadDialogueData(path);
     }
 
     private void Update()
     {
         // 대화를 읽는다.
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return))
         {
             count++;
             // 모든 대화를 읽은 경우
-            if (count == listSentences.Count)
+            if (count == _dialogueData.DialogueList.Count)
             {
                 // 모든 코루틴 종료
                 StopAllCoroutines();
@@ -76,31 +84,14 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-    // 다이어로그 시작 //
-    // 나중에는 스테이지마다 다른 다이어로그를 보여주기 위해서, 매개변수로 스테이지를 받아올 수 있도록 구현할 예정.
-    public void ShowDialogue(Dialogue dialogue)
-    {
-
-        // 리스트 채우기 //
-        for (int i = 0; i < dialogue.sentences.Count; ++i)
-        {
-            listSentences.Add(dialogue.sentences[i]);
-            // listSprites.Add(dialogue.sprites[i]);
-            // listWindows.Add(dialogue.dialogueWindow[i]);
-        }
-
-        // 다이어로그를 보여주는 코루틴 실행
-        StartCoroutine(StartDialogueCoroutine());
-    }
-
     public IEnumerator StartDialogueCoroutine()
     {
         DialogueText.text = "";
 
         // 텍스트 출력 //
-        for (int i = 0; i < listSentences[count].Length; i++)
+        for (int i = 0; i < _dialogueData.DialogueList[count].Length; i++)
         {
-            DialogueText.text += listSentences[count][i]; // 한글자씩 출력
+            DialogueText.text += _dialogueData.DialogueList[count][i]; // 한글자씩 출력
             yield return new WaitForSeconds(0.01f);
         }
     }
@@ -111,8 +102,7 @@ public class DialogueManager : MonoBehaviour
         count = 0;
         DialogueText.text = "";
         // 리스트 초기화 //
-        listSentences.Clear();
-        listWindows.Clear();
+        _dialogueData.DialogueList.Clear();
         listSprites.Clear();
         // 애니메이터 초기화 //
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using DG.Tweening;
+using Unity.VisualScripting;
 
 public class Character : MonoBehaviour
 {
@@ -56,7 +57,7 @@ public class Character : MonoBehaviour
         this._row = row;
         this._col = col;
         this._heart = heart;
-        _heartText.GetComponent<TextMeshPro>().text = _heart.ToString();
+        _heartText.GetComponent<Text>().SetText(_heart);
         _moveCount = 0;
     }
 
@@ -66,27 +67,27 @@ public class Character : MonoBehaviour
     {
         if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) && !_executionInProgress)
         {
-            CharacterMove(0);
+            StartCoroutine(CharacterMove(0));
             if (ExecutionManager.Instance.ExecutionCheck(_moveCount)) _moveCount = 0;
         }
         if ((Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) && !_executionInProgress)
         {
-            CharacterMove(1);
+            StartCoroutine(CharacterMove(1));
             if (ExecutionManager.Instance.ExecutionCheck(_moveCount)) _moveCount = 0;
         }
         if ((Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)) && !_executionInProgress)
         {
-            CharacterMove(2);
+            StartCoroutine(CharacterMove(2));
             if (ExecutionManager.Instance.ExecutionCheck(_moveCount)) _moveCount = 0;
         }
         if ((Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)) && !_executionInProgress)
         {
-            CharacterMove(3);
+            StartCoroutine(CharacterMove(3));
             if (ExecutionManager.Instance.ExecutionCheck(_moveCount)) _moveCount = 0;
         }
     }
 
-    void CharacterMove(int direction)
+    IEnumerator CharacterMove(int direction)
     {
         // 다음으로 이동할 칸의 위치를 설정해준다. 
         Debug.Log("now row: " + _row + " now col: " + _col);
@@ -103,8 +104,8 @@ public class Character : MonoBehaviour
                 _moveCount++;
                 StartCoroutine(CharacterAttack(targetPosition));
                 _heart += TileDictionary[targetPosition][4];
-                _heartText.GetComponent<TextMeshPro>().text = _heart.ToString();
-                return;
+                _heartText.GetComponent<Text>().SetText(_heart);
+                yield return null;
             }
         }
 
@@ -119,8 +120,10 @@ public class Character : MonoBehaviour
             {
                 if (TileDictionary[targetPosition][1] == 1)
                 {
+                    AudioManager.Instance.PlaySfx(AudioManager.Sfx.Meat);
+
                     _heart += MeatDictionary[targetPosition].GetComponent<Meat>().Heart;
-                    _heartText.GetComponent<TextMeshPro>().text = _heart.ToString();
+                    _heartText.GetComponent<Text>().SetText(_heart);
                     MeatDictionary[targetPosition].GetComponent<Meat>().EatMeat(targetPosition);
                 }
             }
@@ -167,15 +170,18 @@ public class Character : MonoBehaviour
             }
         }
 
-        transform.DOMove(new Vector3(_row, _col + 0.5f, 0), 0.1f, false);
+        transform.DOMove(new Vector3(_row - 0.07f, _col + 0.35f, 0), 1.0f, false).SetEase(Ease.OutCirc);
 
         // while문을 탈출한 후, 즉 이동이 끝난 후 상하좌우에 적이 있다면 데미지를 입어야 한다.
         if (isMove)
         {
             _heart--;
-            _heartText.GetComponent<TextMeshPro>().text = _heart.ToString();
+            _heartText.GetComponent<Text>().SetText(_heart);
+
+            AudioManager.Instance.PlaySfx(AudioManager.Sfx.Move);
 
             _moveCount++;
+
             // 적의 턴을 진행하는 코드. 
             EnemyManager.Instance.EnemyTurn();
             if (_heart <= 0)
@@ -187,10 +193,12 @@ public class Character : MonoBehaviour
 
     public IEnumerator CharacterAttack(Vector2Int targetPosition)
     {
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.Eat);
+
         // 캐릭터가 공격하는 애니메이션 재생. 
         gameObject.GetComponent<Animator>().SetBool("IsAttack", true);
 
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.9f);
 
         gameObject.GetComponent<Animator>().SetBool("IsAttack", false);
 
@@ -202,13 +210,30 @@ public class Character : MonoBehaviour
     public IEnumerator CharacterDeath()
     {
         _heart = 0;
-        _heartText.GetComponent<TextMeshPro>().text = _heart.ToString();
-        gameObject.GetComponent<Animator>().SetBool("IsDied", true);
+        _heartText.GetComponent<Text>().SetText(_heart);
+
+        StartCoroutine(FadeOut(gameObject.GetComponent<SpriteRenderer>(), 1.0f));
 
         yield return new WaitForSeconds(1.0f);
 
-        gameObject.GetComponent<Animator>().SetBool("IsDied", false);
+        // 죽는 모션 추가되면 수정할 예정. 
+        // gameObject.GetComponent<Animator>().SetBool("IsDied", true);
+
+        // yield return new WaitForSeconds(1.0f);
+
+        // gameObject.GetComponent<Animator>().SetBool("IsDied", false);
 
         StageManager.Instance.ResetGame();
+    }
+
+    public IEnumerator FadeOut(SpriteRenderer spriteRenderer, float time)
+    {
+        Color color = spriteRenderer.color;
+        while (color.a > 0f)
+        {
+            color.a -= Time.deltaTime / time;
+            spriteRenderer.color = color;
+            yield return null;
+        }
     }
 }

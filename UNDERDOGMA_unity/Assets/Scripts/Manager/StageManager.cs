@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using DG.Tweening;
+using UnityEditor.PackageManager.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -42,7 +44,9 @@ public class StageManager : MonoBehaviour
     [SerializeField] GameObject CharacterPrefab;
     [SerializeField] GameObject MeatPrefab;
     [SerializeField] GameObject NormalEnemyPrefab;
-    [SerializeField] int stage;
+    [SerializeField] public int stage;
+    [SerializeField] GameObject ResetAnimationUpSide;
+    [SerializeField] GameObject ResetAnimationDownSide;
 
 
     // 위의 변수와 다르게 _character는 생성된 게임오브젝트를 저장하기 위한 변수. 
@@ -66,16 +70,19 @@ public class StageManager : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    public void Start()
+    public void Awake()
     {
-        Dialogue dialogue = new Dialogue();
-        dialogue.Init();
-        DialogueManager.Instance.ShowDialogue(dialogue);
-
         string path = "Stage" + stage.ToString();
         _stageData = StageDataLoader.Instance.LoadStageData(path);
 
+        // Dialogue dialogue = new Dialogue();
+        // dialogue.Init();
+        // DialogueManager.Instance.ShowDialogue(dialogue);
+
         TileInstantiate();
+
+        AudioManager.Instance.Init();
+        AudioManager.Instance.PlayBgm(true);
     }
 
     public void TileInstantiate()
@@ -102,7 +109,7 @@ public class StageManager : MonoBehaviour
                 // 나중에 enemyManager쪽으로 넣어서 깔끔하게 리팩토링 할 예정. 
                 if (tile.Value[1] == 0)
                 {
-                    newEnemy = Instantiate(NormalEnemyPrefab, tilePosition, Quaternion.identity);
+                    newEnemy = Instantiate(NormalEnemyPrefab, tilePosition + new Vector3(-0.06f, 0.3f, 0.0f), Quaternion.identity);
                     newEnemy.GetComponent<NormalEnemy>()._attackDirection = tile.Value[5];
                     newEnemy.GetComponent<NormalEnemy>().Attack = tile.Value[3];
                     newEnemy.GetComponent<NormalEnemy>().Heart = tile.Value[4];
@@ -123,7 +130,7 @@ public class StageManager : MonoBehaviour
         }
 
         // 캐릭터 오브젝트를 생성하고 초기화해준다. 
-        _character = Instantiate(CharacterPrefab, new Vector3(0.0f, 0.5f, 0.0f), Quaternion.identity);
+        _character = Instantiate(CharacterPrefab, new Vector3(-0.07f, 0.35f, 0.0f), Quaternion.identity);
         _character.GetComponent<Character>().Init(_stageData.CharacterRow, _stageData.CharacterCol, _stageData.CharacterHeart);
         MainCamera.GetComponent<MainCamera>()._character = _character;
     }
@@ -139,6 +146,10 @@ public class StageManager : MonoBehaviour
 
     public void ResetGame()
     {
+        ResetAnimation();
+
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.Reset);
+
         // 맵에 존재하는 타일을 제외한 오브젝트들을 초기화시켜준다.
         // 1. 만약 처형이 진행중이라면 처형을 멈추고, 처형에 관한 변수들을 초기화시켜준다.
         ExecutionManager.Instance.ExecutionStop();
@@ -146,6 +157,7 @@ public class StageManager : MonoBehaviour
         for (int i = 0; i < ExecutionManager.Instance.ExecutionCount; i++)
         {
             ExecutionManager.Instance.ExecutionCountObjectList[i].GetComponent<Image>().sprite = ExecutionManager.Instance.CloseEye;
+            ExecutionManager.Instance.ExecutionCountObjectList[i].GetComponent<Image>().rectTransform.sizeDelta = new Vector2(69.0f, 17.0f);
         }
 
         // 2. 적들을 모두 초기화해준다. 
@@ -199,7 +211,8 @@ public class StageManager : MonoBehaviour
                 // 나중에 enemyManager쪽으로 넣어서 깔끔하게 리팩토링 할 예정. 
                 if (tile.Value[1] == 0)
                 {
-                    newEnemy = Instantiate(NormalEnemyPrefab, tilePosition, Quaternion.identity);
+                    newEnemy = Instantiate(NormalEnemyPrefab, tilePosition + new Vector3(-0.06f, 0.3f, 0.0f), Quaternion.identity);
+
                     newEnemy.GetComponent<NormalEnemy>()._attackDirection = tile.Value[5];
                     newEnemy.GetComponent<NormalEnemy>().Attack = tile.Value[3];
                     newEnemy.GetComponent<NormalEnemy>().Heart = tile.Value[4];
@@ -224,9 +237,34 @@ public class StageManager : MonoBehaviour
         }
 
         // 캐릭터 오브젝트를 생성하고 초기화해준다. 
-        _character = Instantiate(CharacterPrefab, new Vector3(0.0f, 0.5f, 0.0f), Quaternion.identity);
+        _character = Instantiate(CharacterPrefab, new Vector3(-0.07f, 0.35f, 0.0f), Quaternion.identity);
         _character.GetComponent<Character>().Init(_stageData.CharacterRow, _stageData.CharacterCol, _stageData.CharacterHeart);
         MainCamera.GetComponent<MainCamera>()._character = _character;
+    }
+
+    public void ResetAnimation()
+    {
+        Sequence ResetUpSideSequence = DOTween.Sequence();
+        Sequence ResetDownSideSequence = DOTween.Sequence();
+
+        ResetUpSideSequence
+            .Append(
+                ResetAnimationUpSide.GetComponent<RectTransform>()
+                .DOLocalMove(new Vector3(0.0f, 333.0f, 0.0f), 0.5f, false)
+                .SetEase(Ease.InQuart))
+            .AppendInterval(1.0f)
+            .Append(
+                ResetAnimationUpSide.GetComponent<RectTransform>()
+                .DOLocalMove(new Vector3(0.0f, 1100.0f, 0.0f), 1.0f, false));
+        ResetDownSideSequence
+            .Append(
+                ResetAnimationDownSide.GetComponent<RectTransform>()
+                .DOLocalMove(new Vector3(0.0f, -333.0f, 0.0f), 0.5f, false)
+                .SetEase(Ease.InQuart))
+            .AppendInterval(1.0f)
+            .Append(
+                ResetAnimationDownSide.GetComponent<RectTransform>()
+                .DOLocalMove(new Vector3(0.0f, -1100.0f, 0.0f), 1.0f, false));
     }
 
     public void StageClearCheck()
@@ -243,14 +281,22 @@ public class StageManager : MonoBehaviour
     {
         Debug.Log("StageClear");
 
-        _character.GetComponent<Animator>().SetBool("StageClear", true);
+        // 승리 애니메이션 추가되면 수정할 예정. 
+        // _character.GetComponent<Animator>().SetBool("StageClear", true);
+
+        // yield return new WaitForSeconds(2.0f);
+
+        // _character.GetComponent<Animator>().SetBool("StageClear", false);
 
         yield return new WaitForSeconds(2.0f);
 
-        _character.GetComponent<Animator>().SetBool("StageClear", false);
-
-        yield return new WaitForSeconds(2.0f);
-
-        SceneManager.LoadScene("Stage" + (stage + 1).ToString());
+        if (stage == 3)
+        {
+            SceneManager.LoadScene("Ending");
+        }
+        else
+        {
+            SceneManager.LoadScene("Stage" + (stage + 1).ToString());
+        }
     }
 }

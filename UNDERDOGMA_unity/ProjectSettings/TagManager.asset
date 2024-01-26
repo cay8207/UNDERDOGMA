@@ -41,6 +41,15 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: BackGround
+    uniqueID: 2817845395
+    locked: 0
+  - name: Tile
+    uniqueID: 3907186495
+    locked: 0
+  - name: Shadow
+    uniqueID: 3796032155
+    locked: 0
   - name: Character & Enemy
     uniqueID: 3681329579
     locked: 0
