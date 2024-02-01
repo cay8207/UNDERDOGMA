@@ -1325,7 +1325,7 @@ MonoBehaviour:
   CharacterPrefab: {fileID: 3791002215514718548, guid: 8bed2afb13a5258419a557a40c91fd92, type: 3}
   MeatPrefab: {fileID: 4361116270441279902, guid: 3c87cf6e4e1a7c049b48e766bacf7bf7, type: 3}
   NormalEnemyPrefab: {fileID: 2102386051233708107, guid: 609fdcaa2011c214793ffb6bf594fc18, type: 3}
-  stage: 4
+  stage: 11
   ResetAnimationUpSide: {fileID: 381788613}
   ResetAnimationDownSide: {fileID: 1936668869}
   _character: {fileID: 0}

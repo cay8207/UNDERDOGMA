@@ -17,6 +17,7 @@ public class NormalEnemy : Enemy
     {
         base.Start();
 
+        // 일반 적의 경우 공격 방향이 정해져있고, 해당 방향에 UI를 넣어줘야 함. 
         Vector2Int targetPosition = new Vector2Int(Row, Col) + directionOffsets[_attackDirection];
         GameObject _attackRange = Instantiate(AttackRange, new Vector3(targetPosition.x, targetPosition.y, 0), Quaternion.identity);
         switch (_attackDirection)
@@ -42,6 +43,7 @@ public class NormalEnemy : Enemy
         AttackRange.GetComponent<SpriteRenderer>().enabled = false;
     }
 
+    // 적의 행동을 정의하는 함수. 일반 적의 경우 만약 플레이어가 공격 범위에 있다면 공격한다.
     public override IEnumerator EnemyAction(int playerRow, int playerCol)
     {
         Vector2Int targetPosition = new Vector2Int(Row, Col) + directionOffsets[_attackDirection];
