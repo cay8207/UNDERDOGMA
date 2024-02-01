@@ -22,6 +22,13 @@ public class MapEditorTile : MonoBehaviour
         public Sprite Meat;
     }
 
+    [Header ("Coordinate")]
+    [SerializeField]
+    int x;
+    [SerializeField]
+    int y;
+
+    [Header("Sprites")]
     [SerializeField]
     TileSprites tileSprites;
 
@@ -63,5 +70,16 @@ public class MapEditorTile : MonoBehaviour
             default:
                 return null;
         }
+    }
+
+    public int X
+    {
+        get { return x; }
+        set { x = value; }
+    }
+    public int Y
+    {
+        get { return y; }
+        set { y = value; }
     }
 }
