@@ -44,6 +44,8 @@ public class StageManager : MonoBehaviour
     [SerializeField] GameObject CharacterPrefab;
     [SerializeField] GameObject MeatPrefab;
     [SerializeField] GameObject NormalEnemyPrefab;
+    [SerializeField] GameObject ChaserEnemyPrefab;
+    [SerializeField] GameObject MiniBossPrefab;
     [SerializeField] public int stage;
     [SerializeField] GameObject ResetAnimationUpSide;
     [SerializeField] GameObject ResetAnimationDownSide;
@@ -53,6 +55,17 @@ public class StageManager : MonoBehaviour
     public GameObject _character;
 
     public StageData _stageData;
+
+    // 기본적인 타일 구조는 StageData의 TileDictionary에 저장되어있다.
+    // 하지만 게임을 진행하면서 데이터가 계속해서 바뀌어야 하는데, 리셋할때에는 또 초기 정보가 필요하다.
+    // 그래서 변경해도 상관없도록 복사한 Dictionary를 하나 만들어서 데이터를 그쪽에서 관리하고,
+    // 기존의 TileDictionary는 리셋할때에만 사용한다. 
+    private Dictionary<Vector2Int, List<int>> _tempTileDictionary = new Dictionary<Vector2Int, List<int>>();
+    public Dictionary<Vector2Int, List<int>> TempTileDictionary
+    {
+        get => _tempTileDictionary;
+        set => _tempTileDictionary = value;
+    }
 
     // 적에 대한 정보가 담긴 dictionary. 어떤 타일에 적이 있는지를 저장해두고, 플레이어가 적을 공격했을 때 이벤트를 보여주기 위해서. 
     private Dictionary<Vector2Int, GameObject> _enemyDictionary = new Dictionary<Vector2Int, GameObject>();
@@ -78,6 +91,8 @@ public class StageManager : MonoBehaviour
         // Dialogue dialogue = new Dialogue();
         // dialogue.Init();
         // DialogueManager.Instance.ShowDialogue(dialogue);
+
+        _tempTileDictionary = _stageData.TileDictionary.ToDictionary(entry => entry.Key, entry => entry.Value.ToList());
 
         TileInstantiate();
 
@@ -117,6 +132,26 @@ public class StageManager : MonoBehaviour
                     newEnemy.GetComponent<NormalEnemy>().Col = tile.Key.y;
                 }
 
+                if (tile.Value[1] == 1)
+                {
+                    newEnemy = Instantiate(ChaserEnemyPrefab, tilePosition + new Vector3(-0.06f, 0.3f, 0.0f), Quaternion.identity);
+                    newEnemy.GetComponent<ChaserEnemy>()._attackDirection = tile.Value[5];
+                    newEnemy.GetComponent<ChaserEnemy>().Attack = tile.Value[3];
+                    newEnemy.GetComponent<ChaserEnemy>().Heart = tile.Value[4];
+                    newEnemy.GetComponent<ChaserEnemy>().Row = tile.Key.x;
+                    newEnemy.GetComponent<ChaserEnemy>().Col = tile.Key.y;
+                }
+
+                if (tile.Value[1] == 2)
+                {
+                    newEnemy = Instantiate(MiniBossPrefab, tilePosition + new Vector3(-0.06f, 0.3f, 0.0f), Quaternion.identity);
+                    newEnemy.GetComponent<MiniBoss>()._attackDirection = tile.Value[5];
+                    newEnemy.GetComponent<MiniBoss>().Attack = tile.Value[3];
+                    newEnemy.GetComponent<MiniBoss>().Heart = tile.Value[4];
+                    newEnemy.GetComponent<MiniBoss>().Row = tile.Key.x;
+                    newEnemy.GetComponent<MiniBoss>().Col = tile.Key.y;
+                }
+
                 _enemyDictionary.Add(new Vector2Int(tile.Key.x, tile.Key.y), newEnemy);
             }
 
@@ -130,7 +165,7 @@ public class StageManager : MonoBehaviour
         }
 
         // 캐릭터 오브젝트를 생성하고 초기화해준다. 
-        _character = Instantiate(CharacterPrefab, new Vector3(-0.07f, 0.35f, 0.0f), Quaternion.identity);
+        _character = Instantiate(CharacterPrefab, new Vector3(_stageData.CharacterRow - 0.07f, _stageData.CharacterCol + 0.35f, 0.0f), Quaternion.identity);
         _character.GetComponent<Character>().Init(_stageData.CharacterRow, _stageData.CharacterCol, _stageData.CharacterHeart);
         MainCamera.GetComponent<MainCamera>()._character = _character;
     }
@@ -149,6 +184,9 @@ public class StageManager : MonoBehaviour
         ResetAnimation();
 
         AudioManager.Instance.PlaySfx(AudioManager.Sfx.Reset);
+
+        // 일단 변경된 데이터들을 모두 제대로 되돌려준다. 
+        _tempTileDictionary = _stageData.TileDictionary.ToDictionary(entry => entry.Key, entry => entry.Value.ToList());
 
         // 맵에 존재하는 타일을 제외한 오브젝트들을 초기화시켜준다.
         // 1. 만약 처형이 진행중이라면 처형을 멈추고, 처형에 관한 변수들을 초기화시켜준다.
@@ -220,7 +258,25 @@ public class StageManager : MonoBehaviour
                     newEnemy.GetComponent<NormalEnemy>().Col = tile.Key.y;
                 }
 
-                _stageData.TileDictionary[tile.Key][2] = 1;
+                if (tile.Value[1] == 1)
+                {
+                    newEnemy = Instantiate(ChaserEnemyPrefab, tilePosition + new Vector3(-0.06f, 0.3f, 0.0f), Quaternion.identity);
+                    newEnemy.GetComponent<ChaserEnemy>()._attackDirection = tile.Value[5];
+                    newEnemy.GetComponent<ChaserEnemy>().Attack = tile.Value[3];
+                    newEnemy.GetComponent<ChaserEnemy>().Heart = tile.Value[4];
+                    newEnemy.GetComponent<ChaserEnemy>().Row = tile.Key.x;
+                    newEnemy.GetComponent<ChaserEnemy>().Col = tile.Key.y;
+                }
+
+                if (tile.Value[1] == 2)
+                {
+                    newEnemy = Instantiate(MiniBossPrefab, tilePosition + new Vector3(-0.06f, 0.3f, 0.0f), Quaternion.identity);
+                    newEnemy.GetComponent<MiniBoss>()._attackDirection = tile.Value[5];
+                    newEnemy.GetComponent<MiniBoss>().Attack = tile.Value[3];
+                    newEnemy.GetComponent<MiniBoss>().Heart = tile.Value[4];
+                    newEnemy.GetComponent<MiniBoss>().Row = tile.Key.x;
+                    newEnemy.GetComponent<MiniBoss>().Col = tile.Key.y;
+                }
 
                 _enemyDictionary.Add(new Vector2Int(tile.Key.x, tile.Key.y), newEnemy);
             }
@@ -230,14 +286,12 @@ public class StageManager : MonoBehaviour
                 GameObject newMeat = Instantiate(MeatPrefab, tilePosition, Quaternion.identity);
                 newMeat.GetComponent<Meat>().Heart = tile.Value[2];
 
-                _stageData.TileDictionary[tile.Key][1] = 1;
-
                 _meatDictionary.Add(new Vector2Int(tile.Key.x, tile.Key.y), newMeat);
             }
         }
 
         // 캐릭터 오브젝트를 생성하고 초기화해준다. 
-        _character = Instantiate(CharacterPrefab, new Vector3(-0.07f, 0.35f, 0.0f), Quaternion.identity);
+        _character = Instantiate(CharacterPrefab, new Vector3(_stageData.CharacterRow - 0.07f, _stageData.CharacterCol + 0.35f, 0.0f), Quaternion.identity);
         _character.GetComponent<Character>().Init(_stageData.CharacterRow, _stageData.CharacterCol, _stageData.CharacterHeart);
         MainCamera.GetComponent<MainCamera>()._character = _character;
     }
@@ -290,7 +344,7 @@ public class StageManager : MonoBehaviour
 
         yield return new WaitForSeconds(2.0f);
 
-        if (stage == 3)
+        if (stage == 4)
         {
             SceneManager.LoadScene("Ending");
         }

@@ -26,7 +26,7 @@ public class Meat : MonoBehaviour
     public void EatMeat(Vector2Int targetPosition)
     {
         Destroy(MeatDictionary[targetPosition]);
-        StageManager.Instance._stageData.TileDictionary[targetPosition][1] = 0;
+        StageManager.Instance.TempTileDictionary[targetPosition][1] = 0;
         MeatDictionary.Remove(targetPosition);
     }
 }
