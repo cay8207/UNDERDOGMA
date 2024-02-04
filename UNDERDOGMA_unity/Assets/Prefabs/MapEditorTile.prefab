@@ -1222,7 +1222,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 8479864592425398431}
         m_TargetAssemblyTypeName: MapEditorTile, Assembly-CSharp
-        m_MethodName: ChangeTile
+        m_MethodName: getCurrentTile
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

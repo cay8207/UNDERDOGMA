@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -33,6 +34,14 @@ public class MapEditorTile : MonoBehaviour
     TileSprites tileSprites;
 
     private Image tileImage;
+
+    private int enemyDirection = 0;
+    private int enemyHP = 0;
+    private int enemyAtk = 0;
+    private int meatHP = 0;
+
+    private MapEditor mapEditor;
+
     private void Start()
     {
         tileImage = GetComponent<Image>();
@@ -81,5 +90,32 @@ public class MapEditorTile : MonoBehaviour
     {
         get { return y; }
         set { y = value; }
+    }
+
+    public int EnemyDirection
+    {
+        get { return enemyDirection; }
+        set { enemyDirection = value; }
+    }
+    public int EnemyHP
+    {
+        get { return enemyHP; }
+        set { enemyHP = value; }
+    }
+    public int EnemyAtk
+    {
+        get { return enemyAtk; }
+        set { enemyHP = value; }
+    }
+    public int MeatHP
+    {
+        get { return meatHP; }
+        set { meatHP = value; }
+    }
+
+    public void getCurrentTile()
+    {
+        mapEditor = FindObjectOfType<MapEditor>();
+        mapEditor.test();
     }
 }
