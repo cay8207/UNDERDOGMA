@@ -410,7 +410,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 352778741}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 2, y: -1, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -959,8 +959,8 @@ MonoBehaviour:
   CharacterPrefab: {fileID: 3791002215514718548, guid: 8bed2afb13a5258419a557a40c91fd92, type: 3}
   MeatPrefab: {fileID: 4361116270441279902, guid: 3c87cf6e4e1a7c049b48e766bacf7bf7, type: 3}
   NormalEnemyPrefab: {fileID: 2102386051233708107, guid: 654343c5af990c042861ab5e563698c5, type: 3}
-  ChaserEnemyPrefab: {fileID: 2102386051233708107, guid: 609fdcaa2011c214793ffb6bf594fc18, type: 3}
-  MiniBossPrefab: {fileID: 2102386051233708107, guid: b939715f7daabaf4ca5c28a981f13728, type: 3}
+  ChaserEnemyPrefab: {fileID: 0}
+  MiniBossPrefab: {fileID: 0}
   stage: 1
   ResetAnimationUpSide: {fileID: 1240037534}
   ResetAnimationDownSide: {fileID: 532385163}
