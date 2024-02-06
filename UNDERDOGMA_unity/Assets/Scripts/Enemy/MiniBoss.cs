@@ -3,12 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
-// 일반 적은 하나의 방향으로만 공격한다.
-public class NormalEnemy : Enemy
+public class MiniBoss : Enemy
 {
     [SerializeField] GameObject AttackRange;
     public int _attackDirection;

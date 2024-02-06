@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -191,15 +190,30 @@ public class ExecutionManager : MonoBehaviour
             return;
         }
 
-        foreach (GameObject enemy in StageManager.Instance.EnemyDictionary.Values)
+        foreach (var enemy in StageManager.Instance.EnemyDictionary)
         {
-            Debug.Log("enemyHeart: " + enemy.GetComponent<NormalEnemy>().Heart);
-            Debug.Log("executionHealth: " + _executionHealth);
-            if (enemy.GetComponent<NormalEnemy>().Heart >= _executionHealth)
+            int enemyRow = enemy.Key.x;
+            int enemyCol = enemy.Key.y;
+
+            if (StageManager.Instance.TempTileDictionary[new Vector2Int(enemyRow, enemyCol)][1] == 0)
             {
-                int row = enemy.GetComponent<NormalEnemy>().Row;
-                int col = enemy.GetComponent<NormalEnemy>().Col;
-                EnemyManager.Instance.EnemyDeath(new Vector2Int(row, col));
+                if (enemy.Value.GetComponent<NormalEnemy>().Heart >= _executionHealth)
+                {
+                    EnemyManager.Instance.EnemyDeath(new Vector2Int(enemyRow, enemyCol));
+                }
+            }
+            // 1번 타입 적인 경우
+            else if (StageManager.Instance.TempTileDictionary[new Vector2Int(enemyRow, enemyCol)][1] == 1)
+            {
+                if (enemy.Value.GetComponent<ChaserEnemy>().Heart >= _executionHealth)
+                {
+                    EnemyManager.Instance.EnemyDeath(new Vector2Int(enemyRow, enemyCol));
+                }
+            }
+            // 2번 타입 적. 즉, 미니보스인 경우. 처형하지 않는다. 
+            else if (StageManager.Instance.TempTileDictionary[new Vector2Int(enemyRow, enemyCol)][1] == 2)
+            {
+
             }
         }
     }

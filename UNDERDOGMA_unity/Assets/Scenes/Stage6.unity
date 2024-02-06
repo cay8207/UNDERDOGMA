@@ -961,7 +961,7 @@ MonoBehaviour:
   NormalEnemyPrefab: {fileID: 2102386051233708107, guid: 654343c5af990c042861ab5e563698c5, type: 3}
   ChaserEnemyPrefab: {fileID: 2102386051233708107, guid: 609fdcaa2011c214793ffb6bf594fc18, type: 3}
   MiniBossPrefab: {fileID: 2102386051233708107, guid: b939715f7daabaf4ca5c28a981f13728, type: 3}
-  stage: 1
+  stage: 6
   ResetAnimationUpSide: {fileID: 1240037534}
   ResetAnimationDownSide: {fileID: 532385163}
   _character: {fileID: 0}
