@@ -442,7 +442,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 99
+  m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -693,7 +693,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 9
+  m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1027,7 +1027,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 9
+  m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1222,7 +1222,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 8479864592425398431}
         m_TargetAssemblyTypeName: MapEditorTile, Assembly-CSharp
-        m_MethodName: getCurrentTile
+        m_MethodName: SelectTile
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1245,6 +1245,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentTileType: 0
+  CurrentEnemyDirection: 0
   x: 0
   y: 0
   tileSprites:
@@ -1253,6 +1254,8 @@ MonoBehaviour:
     Player: {fileID: 21300000, guid: c2708c6366428184c99e43dd92247982, type: 3}
     Enemy: {fileID: 21300000, guid: f84df4042f89e014e96b8731ec9e9833, type: 3}
     Meat: {fileID: 21300000, guid: 2eb0bb53f02ab414cad49f65ff62b7d1, type: 3}
+  enemyUI: {fileID: 1396233621}
+  meatUI: {fileID: 1542402468263614962}
 --- !u!1 &8661714754236234276
 GameObject:
   m_ObjectHideFlags: 0

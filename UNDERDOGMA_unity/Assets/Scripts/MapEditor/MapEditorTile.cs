@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEditor;
+using TMPro;
 
 public class MapEditorTile : MonoBehaviour
 {
@@ -12,6 +14,11 @@ public class MapEditorTile : MonoBehaviour
     }
 
     public TileType CurrentTileType;
+    public enum EnemyDirection
+    {
+        Up = 0, Down = 1, Left = 2, Right = 3
+    }
+    public EnemyDirection CurrentEnemyDirection;
 
     [System.Serializable]
     public class TileSprites
@@ -33,9 +40,14 @@ public class MapEditorTile : MonoBehaviour
     [SerializeField]
     TileSprites tileSprites;
 
+    [Header("Settings")]
+    [SerializeField]
+    GameObject enemyUI;
+    [SerializeField]
+    GameObject meatUI;
+
     private Image tileImage;
 
-    private int enemyDirection = 0;
     private int enemyHP = 0;
     private int enemyAtk = 0;
     private int meatHP = 0;
@@ -45,21 +57,7 @@ public class MapEditorTile : MonoBehaviour
     private void Start()
     {
         tileImage = GetComponent<Image>();
-        CurrentTileType = TileType.None;
-        UpdateTileImage();
-    }
-
-    public void ChangeTile()
-    {
-        int currentIndex = (int)CurrentTileType;
-        currentIndex = (currentIndex + 1) % System.Enum.GetValues(typeof(TileType)).Length;
-        CurrentTileType = (TileType)currentIndex;
-        UpdateTileImage();
-    }
-
-    private void UpdateTileImage()
-    {
-        tileImage.sprite = GetCurrentSprite();
+        SetTileType(TileType.None);
     }
 
     private Sprite GetCurrentSprite()
@@ -92,11 +90,6 @@ public class MapEditorTile : MonoBehaviour
         set { y = value; }
     }
 
-    public int EnemyDirection
-    {
-        get { return enemyDirection; }
-        set { enemyDirection = value; }
-    }
     public int EnemyHP
     {
         get { return enemyHP; }
@@ -113,9 +106,58 @@ public class MapEditorTile : MonoBehaviour
         set { meatHP = value; }
     }
 
-    public void getCurrentTile()
+    public void SelectTile()
     {
-        mapEditor = FindObjectOfType<MapEditor>();
-        mapEditor.test();
+        mapEditor =
+            (MapEditor)EditorWindow.GetWindow(typeof(MapEditor));
+        mapEditor.setTile(this);
+    }
+
+    public void SetTileType(TileType tileType)
+    {
+        CurrentTileType = tileType;
+        tileImage.sprite = GetCurrentSprite();
+        switch (CurrentTileType)
+        {
+            case TileType.Enemy:
+                enemyUI.SetActive(true);
+                meatUI.SetActive(false);
+                break;
+
+            case TileType.Meat:
+                meatUI.SetActive(true);
+                enemyUI.SetActive(false);
+                break;
+
+            default:
+                enemyUI.SetActive(false);
+                meatUI.SetActive(false);
+                break;
+        }
+    }
+
+    public void SetEnemyDirection(EnemyDirection direction)
+    {
+        CurrentEnemyDirection = direction;
+        for(int i = 0; i < 4; i++)
+        {
+            enemyUI.transform.Find("Direction").transform.GetChild(i).gameObject.SetActive(false);
+        }
+        enemyUI.transform.Find("Direction").transform.GetChild((int)direction).gameObject.SetActive(true);
+    }
+    public void SetEnemyHP(int hp)
+    {
+        EnemyHP = hp;
+        enemyUI.transform.Find("HP").transform.GetChild(1).transform.GetComponent<TextMeshProUGUI>().text = hp.ToString();
+    }
+    public void SetEnemyAtk(int atk)
+    {
+        EnemyAtk = atk;
+        enemyUI.transform.Find("ATK").transform.GetChild(1).transform.GetComponent<TextMeshProUGUI>().text = atk.ToString();
+    }
+    public void SetMeatHP(int hp)
+    {
+        MeatHP = hp;
+        meatUI.transform.GetChild(0).transform.GetComponent<TextMeshProUGUI>().text = hp.ToString();
     }
 }
