@@ -23,16 +23,16 @@ public class EnemyManager : Singleton<EnemyManager>
             int enemyCol = enemy.Key.y;
             Coroutine EnemyActionCoroutine = null;
             // 0번 타입 적인경우
-            if (StageManager.Instance.TempTileDictionary[new Vector2Int(enemyRow, enemyCol)][1] == 0)
+            if (StageManager.Instance.TempTileDictionary[new Vector2Int(enemyRow, enemyCol)].EnemyData.EnemyType == EnemyType.NormalEnemy)
             {
                 EnemyActionCoroutine = StartCoroutine(enemy.Value.GetComponent<NormalEnemy>().EnemyAction(PlayerPosition.x, PlayerPosition.y));
             }
             // 1번 타입 적인 경우
-            else if (StageManager.Instance.TempTileDictionary[new Vector2Int(enemyRow, enemyCol)][1] == 1)
+            else if (StageManager.Instance.TempTileDictionary[new Vector2Int(enemyRow, enemyCol)].EnemyData.EnemyType == EnemyType.ChaserEnemy)
             {
                 EnemyActionCoroutine = StartCoroutine(enemy.Value.GetComponent<ChaserEnemy>().EnemyAction(PlayerPosition.x, PlayerPosition.y));
             }
-            else if (StageManager.Instance.TempTileDictionary[new Vector2Int(enemyRow, enemyCol)][1] == 2)
+            else if (StageManager.Instance.TempTileDictionary[new Vector2Int(enemyRow, enemyCol)].EnemyData.EnemyType == EnemyType.MiniBoss)
             {
                 EnemyActionCoroutine = StartCoroutine(enemy.Value.GetComponent<MiniBoss>().EnemyAction(PlayerPosition.x, PlayerPosition.y));
             }
@@ -44,15 +44,15 @@ public class EnemyManager : Singleton<EnemyManager>
     public void EnemyDeath(Vector2Int targetPosition)
     {
         Coroutine EnemyDeathCoroutine = null;
-        if (StageManager.Instance.TempTileDictionary[targetPosition][1] == 0)
+        if (StageManager.Instance.TempTileDictionary[targetPosition].EnemyData.EnemyType == EnemyType.NormalEnemy)
         {
             EnemyDeathCoroutine = StartCoroutine(EnemyDictionary[targetPosition].GetComponent<NormalEnemy>().EnemyDeath(targetPosition));
         }
-        else if (StageManager.Instance.TempTileDictionary[targetPosition][1] == 1)
+        else if (StageManager.Instance.TempTileDictionary[targetPosition].EnemyData.EnemyType == EnemyType.ChaserEnemy)
         {
             EnemyDeathCoroutine = StartCoroutine(EnemyDictionary[targetPosition].GetComponent<ChaserEnemy>().EnemyDeath(targetPosition));
         }
-        else if (StageManager.Instance.TempTileDictionary[targetPosition][1] == 2)
+        else if (StageManager.Instance.TempTileDictionary[targetPosition].EnemyData.EnemyType == EnemyType.MiniBoss)
         {
             EnemyDeathCoroutine = StartCoroutine(EnemyDictionary[targetPosition].GetComponent<MiniBoss>().EnemyDeath(targetPosition));
         }

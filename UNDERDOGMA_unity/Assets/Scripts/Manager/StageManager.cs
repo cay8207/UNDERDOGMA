@@ -233,7 +233,7 @@ public class StageManager : MonoBehaviour
             if (tile.Value.Type == TileType.Meat)
             {
                 GameObject newMeat = Instantiate(MeatPrefab, tilePosition, Quaternion.identity);
-                newMeat.GetComponent<Meat>().Heart = tile.Value.MeatData.Amount;
+                newMeat.GetComponent<Meat>().Amount = tile.Value.MeatData.Amount;
 
                 _gameObjectDictionary.Add(new Vector2Int(tile.Key.x, tile.Key.y), newMeat);
             }

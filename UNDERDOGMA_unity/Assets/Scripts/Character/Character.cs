@@ -39,7 +39,7 @@ public class Character : MonoBehaviour
 
     // 4. 코드의 간결성을 위해 설정한 변수들. 
     // 4.1. 상하좌우 방향을 편하게 관리하기 위해 directionOffsets를 선언. 
-    private Vector2Int[] directionOffsets = new Vector2Int[]
+    public Vector2Int[] directionOffsets = new Vector2Int[]
         {
             new Vector2Int(0, 1),   // Up
             new Vector2Int(0, -1),  // Down
@@ -54,8 +54,11 @@ public class Character : MonoBehaviour
         Idle,
         Move,
         Attack,
+        Damaged,
+        Meat,
         Execution,
         Death,
+        Reset,
     }
 
     private State _curState;
@@ -104,18 +107,16 @@ public class Character : MonoBehaviour
                 if (_keyDownQueue.Count > 0)
                 {
                     KeyCode key = _keyDownQueue.Dequeue();
-                    if (WhatIsNextPosition(key) == TileType.Wall)
+                    if (WhatIsNextPosition(key) == TileType.Enemy)
                     {
-                        break;
-                    }
-                    else if (WhatIsNextPosition(key) == TileType.Enemy)
-                    {
-                        _moveCount++;
                         ChangeState(State.Attack);
+                    }
+                    else if (WhatIsNextPosition(key) == TileType.Wall)
+                    {
+
                     }
                     else
                     {
-                        _moveCount++;
                         ChangeState(State.Move);
                     }
                 }
@@ -124,9 +125,15 @@ public class Character : MonoBehaviour
                 break;
             case State.Attack:
                 break;
+            case State.Damaged:
+                break;
+            case State.Meat:
+                break;
             case State.Execution:
                 break;
             case State.Death:
+                break;
+            case State.Reset:
                 break;
         }
 
@@ -159,8 +166,8 @@ public class Character : MonoBehaviour
             case State.Idle:
                 _fsm.ChangeState(new IdleState(this));
                 break;
-            case State.Move:
-                _fsm.ChangeState(new MoveState(this));
+            case State.Damaged:
+                _fsm.ChangeState(new DamagedState(this));
                 break;
             case State.Execution:
                 _fsm.ChangeState(new ExecutionState(this));
@@ -168,10 +175,25 @@ public class Character : MonoBehaviour
             case State.Death:
                 _fsm.ChangeState(new DeathState(this));
                 break;
+            case State.Reset:
+                _fsm.ChangeState(new ResetState(this));
+                break;
         }
     }
 
-    // AttackState의 경우 어떤 위치의 적을 공격해야 하는지에 대한 정보도 필요하다. 
+    // 이동하는 경우에 어떤 방향으로 이동하는지에 대한 정보도 필요하다. 
+    public void ChangeState(State nextState, KeyCode key)
+    {
+        _curState = nextState;
+        switch (_curState)
+        {
+            case State.Move:
+                _fsm.ChangeState(new MoveState(this, key));
+                break;
+        }
+    }
+
+    // AttackState, Meat의 경우 어떤 위치의 오브젝트와 상호작용해야 하는지에 대한 정보도 필요하다. 
     public void ChangeState(State nextState, Vector2Int targetPosition)
     {
         _curState = nextState;
@@ -179,6 +201,9 @@ public class Character : MonoBehaviour
         {
             case State.Attack:
                 _fsm.ChangeState(new AttackState(this, targetPosition));
+                break;
+            case State.Meat:
+                _fsm.ChangeState(new MeatState(this, targetPosition));
                 break;
         }
     }
@@ -203,7 +228,25 @@ public class Character : MonoBehaviour
                 break;
         }
         TileObject tileObject = StageManager.Instance.TempTileDictionary[targetPosition];
-        return tileObject.Type;
+
+        if (tileObject.Type == TileType.Enemy)
+        {
+            if (tileObject.EnemyData.IsAlive == true && _heart > tileObject.EnemyData.Heart)
+            {
+                ChangeState(State.Attack, targetPosition);
+                return TileType.Enemy; ;
+            }
+        }
+        else if (tileObject.Type == TileType.Wall)
+        {
+            return TileType.Wall;
+        }
+        else
+        {
+            return TileType.Empty;
+        }
+
+        return TileType.Invalid;
     }
 
     public void UpdatePosition(int row, int col)
