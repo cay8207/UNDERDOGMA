@@ -61,7 +61,7 @@ public class ExecutionManager : MonoBehaviour
 
     public int ExecutionCount
     {
-        get => _executionCount;
+        get => StageManager.Instance._stageData.ExecutionCount;
         set => _executionCount = value;
     }
 
@@ -69,7 +69,7 @@ public class ExecutionManager : MonoBehaviour
 
     public int ExecutionHealth
     {
-        get => _executionHealth;
+        get => StageManager.Instance._stageData.ExecutionHealth;
         set => _executionHealth = value;
     }
 
@@ -93,9 +93,6 @@ public class ExecutionManager : MonoBehaviour
 
     public void ExecutionSetUp()
     {
-        _executionCount = StageManager.Instance._stageData.ExecutionCount;
-        _executionHealth = StageManager.Instance._stageData.ExecutionHealth;
-
         ExecutionObject = Instantiate(ExecutionPrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
 
         ExecutionHealthText.GetComponent<TextUI>().SetText(_executionHealth);
@@ -124,7 +121,6 @@ public class ExecutionManager : MonoBehaviour
 
         if (moveCount >= _executionCount)
         {
-            _executionCoroutine = StartCoroutine(ExecutionEvent());
             for (int i = 0; i < moveCount; i++)
             {
                 _executionCountObjectList[i].GetComponent<Image>().sprite = CloseEye;

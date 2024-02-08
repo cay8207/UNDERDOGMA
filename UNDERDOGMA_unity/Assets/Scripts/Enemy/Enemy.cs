@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using DG.Tweening;
 
 public abstract class Enemy : MonoBehaviour
 {
@@ -43,13 +44,13 @@ public abstract class Enemy : MonoBehaviour
     }
 
     // 상하좌우 체크를 위한 배열. 
-    public Vector2Int[] directionOffsets = new Vector2Int[]
-        {
-            new Vector2Int(0, 1),   // Up
-            new Vector2Int(0, -1),  // Down
-            new Vector2Int(-1, 0),  // Left
-            new Vector2Int(1, 0)    // Right
-        };
+    public Dictionary<AttackDirection, Vector2Int> directionOffsetDictionary = new Dictionary<AttackDirection, Vector2Int>
+    {
+        { AttackDirection.Up, new Vector2Int(0, 1) },
+        { AttackDirection.Down, new Vector2Int(0, -1) },
+        { AttackDirection.Left, new Vector2Int(-1, 0) },
+        { AttackDirection.Right, new Vector2Int(1, 0) }
+    };
 
     #endregion
 
@@ -90,43 +91,19 @@ public abstract class Enemy : MonoBehaviour
 
         gameObject.GetComponent<Animator>().SetBool("IsDied", true);
 
-        StartCoroutine(FadeOut(gameObject.GetComponent<SpriteRenderer>(), 1.0f));
-        StartCoroutine(FadeOut(gameObject.transform.GetChild(5).GetComponent<SpriteRenderer>(), 1.0f));
+        gameObject.GetComponent<SpriteRenderer>().DOFade(0, 1.0f);
+        gameObject.transform.GetChild(5).GetComponent<SpriteRenderer>().DOFade(0, 1.0f);
 
         yield return new WaitForSeconds(1.0f);
 
         gameObject.GetComponent<Animator>().SetBool("IsDied", false);
 
         Destroy(EnemyManager.Instance.EnemyDictionary[targetPosition]);
-        StageManager.Instance.TempTileDictionary[targetPosition][2] = 0;
+        StageManager.Instance.TempTileDictionary[targetPosition].EnemyData.IsAlive = false;
         EnemyManager.Instance.EnemyDictionary.Remove(targetPosition);
 
         StageManager.Instance.StageClearCheck();
 
         yield return null;
     }
-
-    public IEnumerator FadeIn(SpriteRenderer spriteRenderer, float time)
-    {
-        Color color = spriteRenderer.color;
-        while (color.a < 1f)
-        {
-            color.a += Time.deltaTime / time;
-            spriteRenderer.color = color;
-            yield return null;
-        }
-    }
-
-    public IEnumerator FadeOut(SpriteRenderer spriteRenderer, float time)
-    {
-        Color color = spriteRenderer.color;
-        while (color.a > 0f)
-        {
-            color.a -= Time.deltaTime / time;
-            spriteRenderer.color = color;
-            yield return null;
-        }
-    }
-
-
 }

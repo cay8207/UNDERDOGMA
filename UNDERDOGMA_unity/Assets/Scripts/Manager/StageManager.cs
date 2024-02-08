@@ -60,11 +60,19 @@ public class StageManager : MonoBehaviour
     // 하지만 게임을 진행하면서 데이터가 계속해서 바뀌어야 하는데, 리셋할때에는 또 초기 정보가 필요하다.
     // 그래서 변경해도 상관없도록 복사한 Dictionary를 하나 만들어서 데이터를 그쪽에서 관리하고,
     // 기존의 TileDictionary는 리셋할때에만 사용한다. 
-    private Dictionary<Vector2Int, List<int>> _tempTileDictionary = new Dictionary<Vector2Int, List<int>>();
-    public Dictionary<Vector2Int, List<int>> TempTileDictionary
+    private Dictionary<Vector2Int, TileObject> _tempTileDictionary = new Dictionary<Vector2Int, TileObject>();
+    public Dictionary<Vector2Int, TileObject> TempTileDictionary
     {
         get => _tempTileDictionary;
         set => _tempTileDictionary = value;
+    }
+
+    // 현재 게임에 존재하는 모든 오브젝트들을 관리하는 dictionary.
+    private Dictionary<Vector2Int, GameObject> _gameObjectDictionary = new Dictionary<Vector2Int, GameObject>();
+    public Dictionary<Vector2Int, GameObject> GameObjectDictionary
+    {
+        get => _gameObjectDictionary;
+        set => _gameObjectDictionary = value;
     }
 
     // 적에 대한 정보가 담긴 dictionary. 어떤 타일에 적이 있는지를 저장해두고, 플레이어가 적을 공격했을 때 이벤트를 보여주기 위해서. 
@@ -85,14 +93,15 @@ public class StageManager : MonoBehaviour
     // Start is called before the first frame update
     public void Awake()
     {
-        string path = "Stage" + stage.ToString();
-        _stageData = StageDataLoader.Instance.LoadStageData(path);
 
         // Dialogue dialogue = new Dialogue();
         // dialogue.Init();
         // DialogueManager.Instance.ShowDialogue(dialogue);
 
-        _tempTileDictionary = _stageData.TileDictionary.ToDictionary(entry => entry.Key, entry => entry.Value.ToList());
+        string path = "Stage" + stage.ToString();
+        _stageData = StageDataLoader.Instance.LoadStageData(path);
+
+        _tempTileDictionary = _stageData.TileDictionary;
 
         TileInstantiate();
 
@@ -100,75 +109,7 @@ public class StageManager : MonoBehaviour
         AudioManager.Instance.PlayBgm(true);
     }
 
-    public void TileInstantiate()
-    {
-        // 타일들을 하나씩 만들어준다. 
-        GameObject Tiles = new GameObject("Tiles");
 
-        foreach (var tile in _stageData.TileDictionary)
-        {
-            Vector3 tilePosition = new Vector3(tile.Key.x, tile.Key.y, 0);
-
-            // -1인 경우는 벽. 이외의 경우에만 타일 만들어주면 된다. 
-            if (tile.Value[0] >= 0)
-            {
-                GameObject newTile = Instantiate(TilePrefab, tilePosition, Quaternion.identity, Tiles.transform);
-            }
-
-            // 1은 적을 의미함. 해당 타일에 적을 만들어주고, 공격력과 생명력을 설정해준다. 
-            if (tile.Value[0] == 1)
-            {
-                GameObject newEnemy = null;
-
-                // 적의 타입에 따라 다른 적을 생성해준다. 일단 급해서 이렇게 짜두기는 했는데,
-                // 나중에 enemyManager쪽으로 넣어서 깔끔하게 리팩토링 할 예정. 
-                if (tile.Value[1] == 0)
-                {
-                    newEnemy = Instantiate(NormalEnemyPrefab, tilePosition + new Vector3(-0.06f, 0.3f, 0.0f), Quaternion.identity);
-                    newEnemy.GetComponent<NormalEnemy>()._attackDirection = tile.Value[5];
-                    newEnemy.GetComponent<NormalEnemy>().Attack = tile.Value[3];
-                    newEnemy.GetComponent<NormalEnemy>().Heart = tile.Value[4];
-                    newEnemy.GetComponent<NormalEnemy>().Row = tile.Key.x;
-                    newEnemy.GetComponent<NormalEnemy>().Col = tile.Key.y;
-                }
-
-                if (tile.Value[1] == 1)
-                {
-                    newEnemy = Instantiate(ChaserEnemyPrefab, tilePosition + new Vector3(-0.06f, 0.3f, 0.0f), Quaternion.identity);
-                    newEnemy.GetComponent<ChaserEnemy>()._attackDirection = tile.Value[5];
-                    newEnemy.GetComponent<ChaserEnemy>().Attack = tile.Value[3];
-                    newEnemy.GetComponent<ChaserEnemy>().Heart = tile.Value[4];
-                    newEnemy.GetComponent<ChaserEnemy>().Row = tile.Key.x;
-                    newEnemy.GetComponent<ChaserEnemy>().Col = tile.Key.y;
-                }
-
-                if (tile.Value[1] == 2)
-                {
-                    newEnemy = Instantiate(MiniBossPrefab, tilePosition + new Vector3(-0.06f, 0.3f, 0.0f), Quaternion.identity);
-                    newEnemy.GetComponent<MiniBoss>()._attackDirection = tile.Value[5];
-                    newEnemy.GetComponent<MiniBoss>().Attack = tile.Value[3];
-                    newEnemy.GetComponent<MiniBoss>().Heart = tile.Value[4];
-                    newEnemy.GetComponent<MiniBoss>().Row = tile.Key.x;
-                    newEnemy.GetComponent<MiniBoss>().Col = tile.Key.y;
-                }
-
-                _enemyDictionary.Add(new Vector2Int(tile.Key.x, tile.Key.y), newEnemy);
-            }
-
-            if (tile.Value[0] == 2)
-            {
-                GameObject newMeat = Instantiate(MeatPrefab, tilePosition, Quaternion.identity);
-                newMeat.GetComponent<Meat>().Heart = tile.Value[2];
-
-                _meatDictionary.Add(new Vector2Int(tile.Key.x, tile.Key.y), newMeat);
-            }
-        }
-
-        // 캐릭터 오브젝트를 생성하고 초기화해준다. 
-        _character = Instantiate(CharacterPrefab, new Vector3(_stageData.CharacterRow - 0.07f, _stageData.CharacterCol + 0.35f, 0.0f), Quaternion.identity);
-        _character.GetComponent<Character>().Init(_stageData.CharacterRow, _stageData.CharacterCol, _stageData.CharacterHeart);
-        MainCamera.GetComponent<MainCamera>()._character = _character;
-    }
 
     // Update is called once per frame
     void Update()
@@ -218,12 +159,12 @@ public class StageManager : MonoBehaviour
         }
 
         // enemy 게임오브젝트들을 파괴. 
-        foreach (var enemyWithVector in _enemyDictionary)
+        foreach (var enemyWithVector in _gameObjectDictionary)
         {
             enemyWithVector.Value.SetActive(false);
             Destroy(enemyWithVector.Value);
         }
-        _enemyDictionary.Clear();
+        _gameObjectDictionary.Clear();
 
         // 3. 고기(체력 회복)들을 모두 초기화해준다. 
         foreach (var meatWithVector in _meatDictionary)
@@ -235,65 +176,7 @@ public class StageManager : MonoBehaviour
         // 4. 캐릭터를 초기화해준다.
         Destroy(_character);
 
-        // 5. 적과 고기들을 새롭게 생성해준다. 
-        foreach (var tile in _stageData.TileDictionary)
-        {
-            Vector3 tilePosition = new Vector3(tile.Key.x, tile.Key.y, 0);
-
-            // 리셋 코드이니 타일은 그대로 두고 적, 고기만 다시 생성해준다. 
-            if (tile.Value[0] == 1)
-            {
-                GameObject newEnemy = null;
-
-                // 적의 타입에 따라 다른 적을 생성해준다. 일단 급해서 이렇게 짜두기는 했는데,
-                // 나중에 enemyManager쪽으로 넣어서 깔끔하게 리팩토링 할 예정. 
-                if (tile.Value[1] == 0)
-                {
-                    newEnemy = Instantiate(NormalEnemyPrefab, tilePosition + new Vector3(-0.06f, 0.3f, 0.0f), Quaternion.identity);
-
-                    newEnemy.GetComponent<NormalEnemy>()._attackDirection = tile.Value[5];
-                    newEnemy.GetComponent<NormalEnemy>().Attack = tile.Value[3];
-                    newEnemy.GetComponent<NormalEnemy>().Heart = tile.Value[4];
-                    newEnemy.GetComponent<NormalEnemy>().Row = tile.Key.x;
-                    newEnemy.GetComponent<NormalEnemy>().Col = tile.Key.y;
-                }
-
-                if (tile.Value[1] == 1)
-                {
-                    newEnemy = Instantiate(ChaserEnemyPrefab, tilePosition + new Vector3(-0.06f, 0.3f, 0.0f), Quaternion.identity);
-                    newEnemy.GetComponent<ChaserEnemy>()._attackDirection = tile.Value[5];
-                    newEnemy.GetComponent<ChaserEnemy>().Attack = tile.Value[3];
-                    newEnemy.GetComponent<ChaserEnemy>().Heart = tile.Value[4];
-                    newEnemy.GetComponent<ChaserEnemy>().Row = tile.Key.x;
-                    newEnemy.GetComponent<ChaserEnemy>().Col = tile.Key.y;
-                }
-
-                if (tile.Value[1] == 2)
-                {
-                    newEnemy = Instantiate(MiniBossPrefab, tilePosition + new Vector3(-0.06f, 0.3f, 0.0f), Quaternion.identity);
-                    newEnemy.GetComponent<MiniBoss>()._attackDirection = tile.Value[5];
-                    newEnemy.GetComponent<MiniBoss>().Attack = tile.Value[3];
-                    newEnemy.GetComponent<MiniBoss>().Heart = tile.Value[4];
-                    newEnemy.GetComponent<MiniBoss>().Row = tile.Key.x;
-                    newEnemy.GetComponent<MiniBoss>().Col = tile.Key.y;
-                }
-
-                _enemyDictionary.Add(new Vector2Int(tile.Key.x, tile.Key.y), newEnemy);
-            }
-
-            if (tile.Value[0] == 2)
-            {
-                GameObject newMeat = Instantiate(MeatPrefab, tilePosition, Quaternion.identity);
-                newMeat.GetComponent<Meat>().Heart = tile.Value[2];
-
-                _meatDictionary.Add(new Vector2Int(tile.Key.x, tile.Key.y), newMeat);
-            }
-        }
-
-        // 캐릭터 오브젝트를 생성하고 초기화해준다. 
-        _character = Instantiate(CharacterPrefab, new Vector3(_stageData.CharacterRow - 0.07f, _stageData.CharacterCol + 0.35f, 0.0f), Quaternion.identity);
-        _character.GetComponent<Character>().Init(_stageData.CharacterRow, _stageData.CharacterCol, _stageData.CharacterHeart);
-        MainCamera.GetComponent<MainCamera>()._character = _character;
+        TileInstantiate();
     }
 
     public void ResetAnimation()
@@ -319,6 +202,47 @@ public class StageManager : MonoBehaviour
             .Append(
                 ResetAnimationDownSide.GetComponent<RectTransform>()
                 .DOLocalMove(new Vector3(0.0f, -1100.0f, 0.0f), 1.0f, false));
+    }
+
+    public void TileInstantiate()
+    {
+        // 타일들을 하나씩 만들어준다. 
+        GameObject Tiles = new GameObject("Tiles");
+
+        foreach (var tile in _stageData.TileDictionary)
+        {
+            Vector3 tilePosition = new Vector3(tile.Key.x, tile.Key.y, 0);
+
+            // -1인 경우는 벽. 이외의 경우에만 타일 만들어주면 된다. 
+            if (tile.Value.Type == TileType.Wall)
+            {
+                GameObject newTile = Instantiate(TilePrefab, tilePosition, Quaternion.identity, Tiles.transform);
+            }
+
+            if (tile.Value.Type == TileType.Enemy)
+            {
+                GameObject newEnemy = InstantiateEnemy(tile.Value.EnemyData.EnemyType, tilePosition);
+                if (newEnemy != null)
+                {
+                    SetEnemyAttributes(newEnemy, tile.Value.EnemyData);
+                    SetEnemyPosition(newEnemy, tile.Key.x, tile.Key.y);
+                    _gameObjectDictionary.Add(new Vector2Int(tile.Key.x, tile.Key.y), newEnemy);
+                }
+            }
+
+            if (tile.Value.Type == TileType.Meat)
+            {
+                GameObject newMeat = Instantiate(MeatPrefab, tilePosition, Quaternion.identity);
+                newMeat.GetComponent<Meat>().Heart = tile.Value.MeatData.Amount;
+
+                _gameObjectDictionary.Add(new Vector2Int(tile.Key.x, tile.Key.y), newMeat);
+            }
+        }
+
+        // 캐릭터 오브젝트를 생성하고 초기화해준다. 
+        _character = Instantiate(CharacterPrefab, new Vector3(_stageData.CharacterRow - 0.07f, _stageData.CharacterCol + 0.35f, 0.0f), Quaternion.identity);
+        _character.GetComponent<Character>().Init(_stageData.CharacterRow, _stageData.CharacterCol, _stageData.CharacterHeart);
+        MainCamera.GetComponent<MainCamera>()._character = _character;
     }
 
     public void StageClearCheck()
@@ -351,6 +275,59 @@ public class StageManager : MonoBehaviour
         else
         {
             SceneManager.LoadScene("Stage" + (stage + 1).ToString());
+        }
+    }
+
+    private GameObject InstantiateEnemy(EnemyType enemyType, Vector3 position)
+    {
+        GameObject prefab = GetEnemyPrefab(enemyType);
+        if (prefab != null)
+        {
+            return Instantiate(prefab, position + new Vector3(-0.06f, 0.3f, 0.0f), Quaternion.identity);
+        }
+
+        return null;
+    }
+
+    private void SetEnemyAttributes(GameObject enemy, EnemyData enemyData)
+    {
+        if (enemy == null)
+        {
+            return;
+        }
+
+        if (enemy.TryGetComponent(out IEnemyAttributesSetter attributesSetter))
+        {
+            attributesSetter.SetAttributes(enemyData);
+        }
+    }
+
+    private void SetEnemyPosition(GameObject enemy, int row, int col)
+    {
+        if (enemy == null)
+        {
+            return;
+        }
+
+        if (enemy.TryGetComponent(out IEnemyPositionSetter positionSetter))
+        {
+            positionSetter.Row = row;
+            positionSetter.Col = col;
+        }
+    }
+
+    private GameObject GetEnemyPrefab(EnemyType enemyType)
+    {
+        switch (enemyType)
+        {
+            case EnemyType.NormalEnemy:
+                return NormalEnemyPrefab;
+            case EnemyType.ChaserEnemy:
+                return ChaserEnemyPrefab;
+            case EnemyType.MiniBoss:
+                return MiniBossPrefab;
+            default:
+                return null;
         }
     }
 }
