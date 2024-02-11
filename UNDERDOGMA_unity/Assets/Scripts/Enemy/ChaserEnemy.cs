@@ -96,11 +96,11 @@ public class ChaserEnemy : Enemy
             StageManager.Instance.TempTileDictionary[new Vector2Int(Row, Col)] = new TileObject(TileType.Empty);
             StageManager.Instance.TempTileDictionary[targetPosition] = enemyInfo;
 
-            // 4.2. EnemyDictionary 정보를 수정해준다. 
+            // 4.2. gameObjectDictionary 정보를 수정해준다. 
             // 적의 과거 위치인 Row, Col을 기반으로 해당 Dictionary의 Value를 가져오고, 
             // 이를 새로운 위치인 playerRow-1, playerCol에 넣어준 후 기존의 위치에 있는 Dictionary 값은 삭제한다.
-            StageManager.Instance.EnemyDictionary.Add(targetPosition, StageManager.Instance.EnemyDictionary[new Vector2Int(Row, Col)]);
-            StageManager.Instance.EnemyDictionary.Remove(new Vector2Int(Row, Col));
+            StageManager.Instance.GameObjectDictionary.Add(targetPosition, StageManager.Instance.GameObjectDictionary[new Vector2Int(Row, Col)]);
+            StageManager.Instance.GameObjectDictionary.Remove(new Vector2Int(Row, Col));
 
             // 4.3. 일단 행과 열이 바뀌었음을 저장해준다. 
             Row = targetPosition.x;

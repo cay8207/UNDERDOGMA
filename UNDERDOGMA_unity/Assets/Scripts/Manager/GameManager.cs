@@ -15,7 +15,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] GameObject DialogueManagerPrefab;
 
     StageManager _stageManager;
-    ExecutionManager _executionManager;
+    Execution _executionManager;
     DialogueManager _dialogueManager;
 
     void Awake()

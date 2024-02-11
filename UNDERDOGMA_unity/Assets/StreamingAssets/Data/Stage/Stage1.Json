@@ -5,8 +5,7 @@
     "1,-1": { "Type": "Empty" },
     "1,-2": { "Type": "Empty" },
     "2,-2": { "Type": "Empty" },
-    "3,-2": { "Type": "Empty" },
-    "-3, -2": {
+    "3, -2": {
       "Type": "Enemy",
       "EnemyType": "NormalEnemy",
       "IsAlive": true,

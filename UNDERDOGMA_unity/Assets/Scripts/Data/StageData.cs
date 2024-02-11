@@ -68,7 +68,7 @@ public class StageData
     }
 
     // 데이터를 초기화하는 생성자
-    public StageData(Dictionary<string, Dictionary<String, String>> tileDictionary, int executionCount, int executionHealth,
+    public StageData(Dictionary<string, Dictionary<string, string>> tileDictionary, int executionCount, int executionHealth,
     int characterRow, int characterCol, int characterHeart)
     {
         foreach (var tile in tileDictionary)
@@ -94,10 +94,10 @@ public class StageData
                     break;
                 case "Enemy":
                     if (tile.Value.ContainsKey("EnemyType") == false
-                        != tile.Value.ContainsKey("IsAlive") == false
-                        != tile.Value.ContainsKey("Attack") == false
-                        != tile.Value.ContainsKey("Heart") == false
-                        != tile.Value.ContainsKey("AttackDirection") == false)
+                        || tile.Value.ContainsKey("IsAlive") == false
+                        || tile.Value.ContainsKey("Attack") == false
+                        || tile.Value.ContainsKey("Heart") == false
+                        || tile.Value.ContainsKey("AttackDirection") == false)
                     {
                         Debug.Log("Enemy 데이터가 잘못 입력되었습니다. EnemyType, IsAlive, Attack, Heart, AttackDirection 중 빠진 게 없는지 체크해주세요.");
                         continue;

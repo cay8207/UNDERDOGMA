@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using DG.Tweening;
-using Unity.VisualScripting;
+using UnityEngine.SceneManagement;
 
 public class Character : MonoBehaviour
 {
@@ -33,9 +33,8 @@ public class Character : MonoBehaviour
         set => _col = value;
     }
 
-    // 3. 타일, 적의 정보가 있는 딕셔너리들을 조금 더 사용하기 쉽게 변수 선언. 원래는 게임매니저에서 읽어온다. 
-    private Dictionary<Vector2Int, GameObject> EnemyDictionary => StageManager.Instance.EnemyDictionary;
-    private Dictionary<Vector2Int, GameObject> MeatDictionary => StageManager.Instance.MeatDictionary;
+    // 3. 게임 오브젝트 딕셔너리를 조금 더 사용하기 쉽게 변수 선언. 원래는 게임매니저에서 읽어온다. 
+    private Dictionary<Vector2Int, GameObject> GameObjectDictionary => StageManager.Instance.GameObjectDictionary;
 
     // 4. 코드의 간결성을 위해 설정한 변수들. 
     // 4.1. 상하좌우 방향을 편하게 관리하기 위해 directionOffsets를 선언. 
@@ -59,6 +58,7 @@ public class Character : MonoBehaviour
         Execution,
         Death,
         Reset,
+        Clear,
     }
 
     private State _curState;
@@ -73,14 +73,26 @@ public class Character : MonoBehaviour
     }
     private Queue<KeyCode> _keyDownQueue = new Queue<KeyCode>();
 
+    // 7. 캐릭터의 코루틴을 관리하기 위한 변수. 큐로 관리하므로 하나의 변수만 필요.
+
+    private bool _isCharacterCoroutineRunning;
+    public bool IsCharacterCoroutineRunning
+    {
+        get => _isCharacterCoroutineRunning;
+        set => _isCharacterCoroutineRunning = value;
+    }
+
+    CoroutineController _coroutineController;
+
     #endregion
 
 
-
+    // 1. 기본 Start, Init, Update와 관련된 함수들. 
     private void Start()
     {
         _curState = State.Idle;
         _fsm = new FSM(new IdleState(this));
+        _coroutineController = GetComponent<CoroutineController>();
     }
 
     // Start is called before the first frame update
@@ -102,6 +114,16 @@ public class Character : MonoBehaviour
         switch (_curState)
         {
             case State.Idle:
+                Debug.Log("Move Count: " + _moveCount + "Execution Count: " + Execution.Instance.ExecutionCount);
+                if (_moveCount == Execution.Instance.ExecutionCount)
+                {
+                    Debug.Log("hi! i'm idle state if");
+                    ChangeState(State.Execution);
+                    _moveCount = 0;
+                    _keyDownQueue.Clear();
+                    break;
+                }
+
                 // TODO: 현재와 같은 방식이면 벽이 있는 방향으로 여러번 클릭시 여러 프레임 이후에야 이동이 가능.
                 // 이를 방지하기 위해 while문을 돌려줘야 할 것 같다.
                 if (_keyDownQueue.Count > 0)
@@ -117,7 +139,7 @@ public class Character : MonoBehaviour
                     }
                     else
                     {
-                        ChangeState(State.Move);
+                        ChangeState(State.Move, key);
                     }
                 }
                 break;
@@ -135,32 +157,39 @@ public class Character : MonoBehaviour
                 break;
             case State.Reset:
                 break;
+            case State.Clear:
+                break;
         }
 
-        if (_moveCount + _keyDownQueue.Count < ExecutionManager.Instance.ExecutionCount)
+        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
         {
-            if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
-            {
-                _keyDownQueue.Enqueue(KeyCode.W);
-            }
-            else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
-            {
-                _keyDownQueue.Enqueue(KeyCode.S);
-            }
-            else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
-            {
-                _keyDownQueue.Enqueue(KeyCode.A);
-            }
-            else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
-            {
-                _keyDownQueue.Enqueue(KeyCode.D);
-            }
+            _keyDownQueue.Enqueue(KeyCode.W);
         }
+        else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            _keyDownQueue.Enqueue(KeyCode.S);
+        }
+        else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            _keyDownQueue.Enqueue(KeyCode.A);
+        }
+        else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            _keyDownQueue.Enqueue(KeyCode.D);
+        }
+        else if (Input.GetKeyDown(KeyCode.R))
+        {
+            ChangeState(State.Reset);
+        }
+
+        _coroutineController.ExecuteCoroutine();
     }
 
+    // 2. state machine과 관련된 함수들. 
     public void ChangeState(State nextState)
     {
         _curState = nextState;
+        Debug.Log("Current State: " + _curState.ToString());
         switch (_curState)
         {
             case State.Idle:
@@ -178,14 +207,16 @@ public class Character : MonoBehaviour
             case State.Reset:
                 _fsm.ChangeState(new ResetState(this));
                 break;
+            case State.Clear:
+                _fsm.ChangeState(new ClearState(this));
+                break;
         }
     }
 
-    // 이동하는 경우에 어떤 방향으로 이동하는지에 대한 정보도 필요하다. 
+    // moveState의 경우에는 어느 방향인지 키에 대한 정보도 필요하다. 
     public void ChangeState(State nextState, KeyCode key)
     {
-        _curState = nextState;
-        switch (_curState)
+        switch (nextState)
         {
             case State.Move:
                 _fsm.ChangeState(new MoveState(this, key));
@@ -193,11 +224,10 @@ public class Character : MonoBehaviour
         }
     }
 
-    // AttackState, Meat의 경우 어떤 위치의 오브젝트와 상호작용해야 하는지에 대한 정보도 필요하다. 
+    // AttackState, MeatState의 경우에는 어느 위치에 있는 오브젝트에 대해 상호작용해야 하는지에 대한 정보도 필요하다. 
     public void ChangeState(State nextState, Vector2Int targetPosition)
     {
-        _curState = nextState;
-        switch (_curState)
+        switch (nextState)
         {
             case State.Attack:
                 _fsm.ChangeState(new AttackState(this, targetPosition));
@@ -233,7 +263,7 @@ public class Character : MonoBehaviour
         {
             if (tileObject.EnemyData.IsAlive == true && _heart > tileObject.EnemyData.Heart)
             {
-                ChangeState(State.Attack, targetPosition);
+                // ChangeState(State.Attack, targetPosition);
                 return TileType.Enemy; ;
             }
         }
@@ -261,4 +291,165 @@ public class Character : MonoBehaviour
         _heart += amount;
         _heartText.GetComponent<Text>().SetText(_heart);
     }
+
+
+    // 3. 애니메이션과 관련된 함수들. 
+    #region Animation
+    public void EnqueueCoroutine(IEnumerator coroutine)
+    {
+        Debug.Log("Character EnqueueCoroutine: " + coroutine.ToString());
+        _coroutineController.EnqueueCoroutine(coroutine);
+    }
+
+    public IEnumerator CharacterMoveCoroutine(Vector2Int targetPosition)
+    {
+        _isCharacterCoroutineRunning = true;
+
+        int row = targetPosition.x;
+        int col = targetPosition.y;
+
+        transform.DOMove(new Vector3(row, col, 0) + new Vector3(-0.07f, 0.35f, 0), 0.5f, false).SetEase(Ease.OutCirc);
+
+        UpdatePosition(row, col);
+
+        yield return new WaitForSeconds(0.5f);
+
+        _isCharacterCoroutineRunning = false;
+    }
+
+    // 캐릭터가 공격하는 애니메이션을 보여준다. 
+    public IEnumerator CharacterAttack(Vector2Int targetPosition)
+    {
+        _isCharacterCoroutineRunning = true;
+
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.Eat);
+
+        // 캐릭터가 공격하는 애니메이션 재생. 
+        GetComponent<Animator>().SetBool("IsAttack", true);
+
+        yield return new WaitForSeconds(0.9f);
+
+        GetComponent<Animator>().SetBool("IsAttack", false);
+
+        // 공격한 적을 죽인다. 
+        EnemyManager.Instance.EnemyDeath(targetPosition);
+
+        _isCharacterCoroutineRunning = false;
+    }
+
+    // 캐릭터가 죽었을 경우 죽는 애니메이션을 보여주고 게임을 재시작한다. 
+    public IEnumerator CharacterDeath()
+    {
+        _isCharacterCoroutineRunning = true;
+
+        gameObject.GetComponent<SpriteRenderer>().DOFade(0, 1.0f);
+
+        yield return new WaitForSeconds(1.0f);
+
+        // 죽는 모션 추가되면 수정할 예정. 
+        // gameObject.GetComponent<Animator>().SetBool("IsDied", true);
+
+        // yield return new WaitForSeconds(1.0f);
+
+        // gameObject.GetComponent<Animator>().SetBool("IsDied", false);
+
+        _isCharacterCoroutineRunning = false;
+    }
+
+    // Excution에 있는 코루틴을 실행한다. 
+    public IEnumerator ExecutionEvent()
+    {
+        _isCharacterCoroutineRunning = true;
+
+        Debug.Log("Character ExecutionEvent Start!");
+
+        StartCoroutine(Execution.Instance.ExecutionEvent());
+
+        yield return null;
+
+        _isCharacterCoroutineRunning = false;
+    }
+
+    // 플레이어가 고기를 먹는 애니메이션을 재생한다.
+    public IEnumerator CharacterEatMeat(Vector2Int targetPosition)
+    {
+        // 1. 코루틴이 실행되는 중인지를 체크하는 변수를 설정한다. 
+        _isCharacterCoroutineRunning = true;
+
+        // 2. 사운드를 재생한다. 
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.Eat);
+
+        // 3. 애니메이션을 재생한다.  
+        GetComponent<Animator>().SetBool("IsAttack", true);
+
+        yield return new WaitForSeconds(0.9f);
+
+        GetComponent<Animator>().SetBool("IsAttack", false);
+
+        // 4. 플레이어의 체력을 변화시키고, 고기를 사라지는 애니메이션을 실행한다. 
+        Meat meat = StageManager.Instance.GameObjectDictionary[targetPosition].GetComponent<Meat>();
+
+        HeartChange(meat.Amount);
+        meat.EatMeat(targetPosition);
+
+        // 5. 코루틴이 끝났다는 의미로 변수의 값을 변경해준다. 
+        _isCharacterCoroutineRunning = false;
+    }
+
+    public IEnumerator ResetAnimation()
+    {
+        _isCharacterCoroutineRunning = true;
+
+        Sequence ResetUpSideSequence = DOTween.Sequence();
+        Sequence ResetDownSideSequence = DOTween.Sequence();
+
+        ResetUpSideSequence
+            .Append(
+                StageManager.Instance.ResetAnimationUpSide.GetComponent<RectTransform>()
+                .DOLocalMove(new Vector3(0.0f, 333.0f, 0.0f), 0.5f, false)
+                .SetEase(Ease.InQuart))
+            .AppendInterval(1.0f)
+            .Append(
+                StageManager.Instance.ResetAnimationUpSide.GetComponent<RectTransform>()
+                .DOLocalMove(new Vector3(0.0f, 1100.0f, 0.0f), 1.0f, false));
+
+        ResetDownSideSequence
+            .Append(
+                StageManager.Instance.ResetAnimationDownSide.GetComponent<RectTransform>()
+                .DOLocalMove(new Vector3(0.0f, -333.0f, 0.0f), 0.5f, false)
+                .SetEase(Ease.InQuart))
+            .AppendInterval(1.0f)
+            .Append(
+                StageManager.Instance.ResetAnimationDownSide.GetComponent<RectTransform>()
+                .DOLocalMove(new Vector3(0.0f, -1100.0f, 0.0f), 1.0f, false));
+
+        yield return new WaitForSeconds(2.5f);
+
+        _isCharacterCoroutineRunning = false;
+    }
+
+    public IEnumerator StageClear()
+    {
+        Debug.Log("StageClear");
+
+        // 승리 애니메이션 추가되면 수정할 예정. 
+        // _character.GetComponent<Animator>().SetBool("StageClear", true);
+
+        // yield return new WaitForSeconds(2.0f);
+
+        // _character.GetComponent<Animator>().SetBool("StageClear", false);
+
+        yield return new WaitForSeconds(2.0f);
+
+        if (StageManager.Instance.stage == 10)
+        {
+            SceneManager.LoadScene("Ending");
+        }
+        else
+        {
+            SceneManager.LoadScene("Stage" + (StageManager.Instance.stage + 1).ToString());
+        }
+    }
+
+    #endregion
 }

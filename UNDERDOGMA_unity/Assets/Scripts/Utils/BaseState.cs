@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public abstract class BaseState : MonoBehaviour
+public abstract class BaseState
 {
     protected Character _character;
 

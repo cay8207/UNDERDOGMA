@@ -8,9 +8,7 @@ using DG.Tweening;
 
 public class MoveState : BaseState
 {
-    // 이동 방향을 알기 위한 변수. 
     public KeyCode _key;
-
     public MoveState(Character character, KeyCode key) : base(character)
     {
         _key = key;
@@ -18,7 +16,7 @@ public class MoveState : BaseState
 
     public override void OnStateEnter()
     {
-        StartCoroutine(CharacterMove)
+        CharacterMove(_key);
     }
 
     public override void OnStateUpdate()
@@ -31,16 +29,40 @@ public class MoveState : BaseState
 
     }
 
-    IEnumerator CharacterMove(int direction)
+    private void CharacterMove(KeyCode key)
+    {
+        // 캐릭터가 이동하지 않는 경우에는 적들에게 데미지를 받는 등의 이벤트가 발생하면 안된다. 
+        Vector2Int targetPosition = CheckCharacterMove(key);
+
+        // while문을 탈출한 후, 즉 이동이 끝난 후 상하좌우에 적이 있다면 데미지를 입어야 한다.
+        if ((targetPosition.x != _character.Row) || (targetPosition.y != _character.Col))
+        {
+            _character.MoveCount++;
+
+            Execution.Instance.ExecutionCheck(_character.MoveCount);
+            _character.EnqueueCoroutine(_character.CharacterMoveCoroutine(targetPosition));
+
+            _character.HeartChange(-1);
+
+            AudioManager.Instance.PlaySfx(AudioManager.Sfx.Move);
+
+            // 적의 턴을 진행하는 코드. 
+            EnemyManager.Instance.EnemyTurn();
+
+            if (_character.Heart <= 0)
+            {
+                _character.ChangeState(Character.State.Death);
+            }
+        }
+    }
+
+    public Vector2Int CheckCharacterMove(KeyCode key)
     {
         int row = _character.Row;
         int col = _character.Col;
 
         // 다음으로 이동할 칸의 위치를 설정해준다. 
-        Vector2Int targetPosition = new Vector2Int(row, col) + _character.directionOffsets[direction];
-
-        // 캐릭터가 이동하지 않는 경우에는 적들에게 데미지를 받는 등의 이벤트가 발생하면 안된다. 
-        bool isMove = false;
+        Vector2Int targetPosition = new Vector2Int(row, col) + returnDirection(key);
 
         while (true)
         {
@@ -52,6 +74,8 @@ public class MoveState : BaseState
             // 1. 이동하려는 칸에 벽이 있는 경우 멈춘다.
             if (tileObject.Type == TileType.Wall)
             {
+                // targetPosition에 벽이 있으므로, 이전 위치로 돌아가야 한다. 
+                targetPosition -= returnDirection(key);
                 _character.ChangeState(Character.State.Idle);
                 break;
             }
@@ -61,7 +85,9 @@ public class MoveState : BaseState
             {
                 if (tileObject.EnemyData.IsAlive == true)
                 {
-                    _character.ChangeState(Character.State.Damaged, targetPosition);
+                    // targetPosition에 벽이 있으므로, 이전 위치로 돌아가야 한다. 
+                    targetPosition -= returnDirection(key);
+                    _character.ChangeState(Character.State.Damaged);
                     break;
                 }
             }
@@ -71,10 +97,8 @@ public class MoveState : BaseState
             {
                 if (tileObject.MeatData.IsExist == true)
                 {
-                    // 3.1. 고기의 경우 해당 칸까지 가야하기 때문에 벽, 적을 만나는 경우보다 한 칸 더 가야한다!
-                    // 이를 위해 캐릭터의 위치를 업데이트해준다.
-                    _character.UpdatePosition(row, col);
-                    _character.ChangeState(Character.State.Meat, new Vector2Int(row, col));
+                    // 3.1. 고기의 경우 해당 칸까지 가야한다. targetPosition을 그대로 반환하면 됌. 
+                    _character.ChangeState(Character.State.Meat);
                     break;
                 }
             }
@@ -82,12 +106,8 @@ public class MoveState : BaseState
             // 4. 이외의 경우 해당 칸으로 한 칸 더 전진. 
             if (tileObject.Type == TileType.Empty)
             {
-                isMove = true;
-
-                _character.UpdatePosition(row, col);
-
                 // 다음으로 이동할 칸을 계속 업데이트해줘야 한다. 
-                targetPosition += _character.directionOffsets[direction];
+                targetPosition += returnDirection(key);
 
                 // while문이 무한루프에 빠지는 것을 방지하기 위해 범위를 제한해준다.
                 if (row > 100 || row < -100 || col > 100 || col < -100)
@@ -98,25 +118,30 @@ public class MoveState : BaseState
             }
         }
 
+        return targetPosition;
+    }
 
-        // while문을 탈출한 후, 즉 이동이 끝난 후 상하좌우에 적이 있다면 데미지를 입어야 한다.
-        if (isMove)
+    private Vector2Int returnDirection(KeyCode key)
+    {
+        if (key == KeyCode.W)
         {
-            transform.DOMove(new Vector3(row, col, 0) + new Vector3(-0.07f, 0.35f, 0), 1.0f, false).SetEase(Ease.OutCirc);
-
-            _character.HeartChange(-1);
-
-            AudioManager.Instance.PlaySfx(AudioManager.Sfx.Move);
-
-            // 적의 턴을 진행하는 코드. 
-            EnemyManager.Instance.EnemyTurn();
-
-            yield return new WaitForSeconds(0.1f);
-
-            if (_character.Heart <= 0)
-            {
-                StartCoroutine(CharacterDeath());
-            }
+            return new Vector2Int(0, 1);
+        }
+        else if (key == KeyCode.S)
+        {
+            return new Vector2Int(0, -1);
+        }
+        else if (key == KeyCode.A)
+        {
+            return new Vector2Int(-1, 0);
+        }
+        else if (key == KeyCode.D)
+        {
+            return new Vector2Int(1, 0);
+        }
+        else
+        {
+            return new Vector2Int(0, 0);
         }
     }
 }

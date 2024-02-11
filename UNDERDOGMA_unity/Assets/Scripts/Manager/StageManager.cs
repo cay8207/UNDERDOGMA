@@ -47,8 +47,8 @@ public class StageManager : MonoBehaviour
     [SerializeField] GameObject ChaserEnemyPrefab;
     [SerializeField] GameObject MiniBossPrefab;
     [SerializeField] public int stage;
-    [SerializeField] GameObject ResetAnimationUpSide;
-    [SerializeField] GameObject ResetAnimationDownSide;
+    [SerializeField] public GameObject ResetAnimationUpSide;
+    [SerializeField] public GameObject ResetAnimationDownSide;
 
 
     // 위의 변수와 다르게 _character는 생성된 게임오브젝트를 저장하기 위한 변수. 
@@ -75,21 +75,6 @@ public class StageManager : MonoBehaviour
         set => _gameObjectDictionary = value;
     }
 
-    // 적에 대한 정보가 담긴 dictionary. 어떤 타일에 적이 있는지를 저장해두고, 플레이어가 적을 공격했을 때 이벤트를 보여주기 위해서. 
-    private Dictionary<Vector2Int, GameObject> _enemyDictionary = new Dictionary<Vector2Int, GameObject>();
-    public Dictionary<Vector2Int, GameObject> EnemyDictionary
-    {
-        get => _enemyDictionary;
-        set => _enemyDictionary = value;
-    }
-
-    public Dictionary<Vector2Int, GameObject> _meatDictionary = new Dictionary<Vector2Int, GameObject>();
-    public Dictionary<Vector2Int, GameObject> MeatDictionary
-    {
-        get => _meatDictionary;
-        set => _meatDictionary = value;
-    }
-
     // Start is called before the first frame update
     public void Awake()
     {
@@ -114,94 +99,7 @@ public class StageManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            ResetGame();
-        }
-    }
 
-    public void ResetGame()
-    {
-        ResetAnimation();
-
-        AudioManager.Instance.PlaySfx(AudioManager.Sfx.Reset);
-
-        // 일단 변경된 데이터들을 모두 제대로 되돌려준다. 
-        _tempTileDictionary = _stageData.TileDictionary.ToDictionary(entry => entry.Key, entry => entry.Value.ToList());
-
-        // 맵에 존재하는 타일을 제외한 오브젝트들을 초기화시켜준다.
-        // 1. 만약 처형이 진행중이라면 처형을 멈추고, 처형에 관한 변수들을 초기화시켜준다.
-        ExecutionManager.Instance.ExecutionStop();
-
-        for (int i = 0; i < ExecutionManager.Instance.ExecutionCount; i++)
-        {
-            ExecutionManager.Instance.ExecutionCountObjectList[i].GetComponent<Image>().sprite = ExecutionManager.Instance.CloseEye;
-            ExecutionManager.Instance.ExecutionCountObjectList[i].GetComponent<Image>().rectTransform.sizeDelta = new Vector2(69.0f, 17.0f);
-        }
-
-        // 2. 적들을 모두 초기화해준다. 
-        // 적의 코루틴들을 모두 스탑시켜준다. 그렇지 않으면 진행되고 있던 코루틴이 리셋 이후 버그를 일으킬 수 있음. 
-        foreach (var coroutine in EnemyManager.Instance.EnemyActionCoroutineQueue)
-        {
-            if (coroutine != null)
-            {
-                EnemyManager.Instance.StopCoroutine(coroutine);
-            }
-        }
-
-        foreach (var coroutine in EnemyManager.Instance.EnemyDeathCoroutineQueue)
-        {
-            if (coroutine != null)
-            {
-                EnemyManager.Instance.StopCoroutine(coroutine);
-
-            }
-        }
-
-        // enemy 게임오브젝트들을 파괴. 
-        foreach (var enemyWithVector in _gameObjectDictionary)
-        {
-            enemyWithVector.Value.SetActive(false);
-            Destroy(enemyWithVector.Value);
-        }
-        _gameObjectDictionary.Clear();
-
-        // 3. 고기(체력 회복)들을 모두 초기화해준다. 
-        foreach (var meatWithVector in _meatDictionary)
-        {
-            Destroy(meatWithVector.Value);
-        }
-        _meatDictionary.Clear();
-
-        // 4. 캐릭터를 초기화해준다.
-        Destroy(_character);
-
-        TileInstantiate();
-    }
-
-    public void ResetAnimation()
-    {
-        Sequence ResetUpSideSequence = DOTween.Sequence();
-        Sequence ResetDownSideSequence = DOTween.Sequence();
-
-        ResetUpSideSequence
-            .Append(
-                ResetAnimationUpSide.GetComponent<RectTransform>()
-                .DOLocalMove(new Vector3(0.0f, 333.0f, 0.0f), 0.5f, false)
-                .SetEase(Ease.InQuart))
-            .AppendInterval(1.0f)
-            .Append(
-                ResetAnimationUpSide.GetComponent<RectTransform>()
-                .DOLocalMove(new Vector3(0.0f, 1100.0f, 0.0f), 1.0f, false));
-        ResetDownSideSequence
-            .Append(
-                ResetAnimationDownSide.GetComponent<RectTransform>()
-                .DOLocalMove(new Vector3(0.0f, -333.0f, 0.0f), 0.5f, false)
-                .SetEase(Ease.InQuart))
-            .AppendInterval(1.0f)
-            .Append(
-                ResetAnimationDownSide.GetComponent<RectTransform>()
-                .DOLocalMove(new Vector3(0.0f, -1100.0f, 0.0f), 1.0f, false));
     }
 
     public void TileInstantiate()
@@ -214,7 +112,7 @@ public class StageManager : MonoBehaviour
             Vector3 tilePosition = new Vector3(tile.Key.x, tile.Key.y, 0);
 
             // -1인 경우는 벽. 이외의 경우에만 타일 만들어주면 된다. 
-            if (tile.Value.Type == TileType.Wall)
+            if (tile.Value.Type != TileType.Wall)
             {
                 GameObject newTile = Instantiate(TilePrefab, tilePosition, Quaternion.identity, Tiles.transform);
             }
@@ -245,37 +143,50 @@ public class StageManager : MonoBehaviour
         MainCamera.GetComponent<MainCamera>()._character = _character;
     }
 
-    public void StageClearCheck()
+    public void DestroyAllObjects()
     {
-        Debug.Log("EnemyDictionary.Count: " + EnemyDictionary.Count);
+        // 일단 변경된 데이터들을 모두 제대로 되돌려준다. 
+        _tempTileDictionary = _stageData.TileDictionary;
 
-        if (EnemyDictionary.Count == 0)
+        // 맵에 존재하는 타일을 제외한 오브젝트들을 초기화시켜준다.
+        // 1. 만약 처형이 진행중이라면 처형을 멈추고, 처형에 관한 변수들을 초기화시켜준다.
+        Execution.Instance.ExecutionStop();
+
+        for (int i = 0; i < Execution.Instance.ExecutionCount; i++)
         {
-            StartCoroutine(StageClear());
+            Execution.Instance.ExecutionCountObjectList[i].GetComponent<Image>().sprite = Execution.Instance.CloseEye;
+            Execution.Instance.ExecutionCountObjectList[i].GetComponent<Image>().rectTransform.sizeDelta = new Vector2(69.0f, 17.0f);
         }
-    }
 
-    public IEnumerator StageClear()
-    {
-        Debug.Log("StageClear");
-
-        // 승리 애니메이션 추가되면 수정할 예정. 
-        // _character.GetComponent<Animator>().SetBool("StageClear", true);
-
-        // yield return new WaitForSeconds(2.0f);
-
-        // _character.GetComponent<Animator>().SetBool("StageClear", false);
-
-        yield return new WaitForSeconds(2.0f);
-
-        if (stage == 4)
+        // 2. 적들을 모두 초기화해준다. 
+        // 적의 코루틴들을 모두 스탑시켜준다. 그렇지 않으면 진행되고 있던 코루틴이 리셋 이후 버그를 일으킬 수 있음. 
+        foreach (var coroutine in EnemyManager.Instance.EnemyActionCoroutineQueue)
         {
-            SceneManager.LoadScene("Ending");
+            if (coroutine != null)
+            {
+                EnemyManager.Instance.StopCoroutine(coroutine);
+            }
         }
-        else
+
+        foreach (var coroutine in EnemyManager.Instance.EnemyDeathCoroutineQueue)
         {
-            SceneManager.LoadScene("Stage" + (stage + 1).ToString());
+            if (coroutine != null)
+            {
+                EnemyManager.Instance.StopCoroutine(coroutine);
+
+            }
         }
+
+        // 3. enemy 게임오브젝트들을 파괴. 
+        foreach (var gameObjectWithVector in _gameObjectDictionary)
+        {
+            gameObjectWithVector.Value.SetActive(false);
+            Destroy(gameObjectWithVector.Value);
+        }
+        _gameObjectDictionary.Clear();
+
+        // 4. 캐릭터를 초기화해준다.
+        Destroy(_character);
     }
 
     private GameObject InstantiateEnemy(EnemyType enemyType, Vector3 position)

@@ -4,25 +4,25 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ExecutionManager : MonoBehaviour
+public class Execution : MonoBehaviour
 {
     #region Singleton
     // 싱글톤 패턴.
     // 싱글톤 클래스를 구현해두긴 했지만, stageManager와 executionMangaer, DialogueManager는 
     // dontdestroyonload가 필요없기 때문에 클래스 내부에 싱글톤 패턴을 간단히 구현.
-    private static ExecutionManager _instance;
+    private static Execution _instance;
 
-    public static ExecutionManager Instance
+    public static Execution Instance
     {
         get
         {
             if (_instance == null)
             {
-                _instance = (ExecutionManager)FindObjectOfType(typeof(ExecutionManager));
+                _instance = (Execution)FindObjectOfType(typeof(Execution));
                 if (_instance == null)
                 {
-                    GameObject singletonObject = new GameObject($"{typeof(ExecutionManager)} (Singleton)");
-                    _instance = singletonObject.AddComponent<ExecutionManager>();
+                    GameObject singletonObject = new GameObject($"{typeof(Execution)} (Singleton)");
+                    _instance = singletonObject.AddComponent<Execution>();
                     singletonObject.transform.parent = null;
                 }
             }
@@ -49,7 +49,6 @@ public class ExecutionManager : MonoBehaviour
         set => _executionCountObjectList = value;
     }
 
-
     private bool _executionInProgress;
     public bool ExecutionInProgress
     {
@@ -59,19 +58,11 @@ public class ExecutionManager : MonoBehaviour
 
     private int _executionCount;
 
-    public int ExecutionCount
-    {
-        get => StageManager.Instance._stageData.ExecutionCount;
-        set => _executionCount = value;
-    }
+    public int ExecutionCount => _executionCount;
 
     private int _executionHealth;
 
-    public int ExecutionHealth
-    {
-        get => StageManager.Instance._stageData.ExecutionHealth;
-        set => _executionHealth = value;
-    }
+    public int ExecutionHealth => _executionCount;
 
     private Coroutine _executionCoroutine;
 
@@ -93,7 +84,12 @@ public class ExecutionManager : MonoBehaviour
 
     public void ExecutionSetUp()
     {
+        _executionCount = StageManager.Instance._stageData.ExecutionCount;
+        _executionHealth = StageManager.Instance._stageData.ExecutionHealth;
+
         ExecutionObject = Instantiate(ExecutionPrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
+
+        Debug.Log("ExecutionCount: " + _executionCount + " ExecutionHealth: " + _executionHealth);
 
         ExecutionHealthText.GetComponent<TextUI>().SetText(_executionHealth);
 
@@ -145,11 +141,12 @@ public class ExecutionManager : MonoBehaviour
             ExecuteEnemies();
             _executionInProgress = false;
         }
-
     }
 
     public IEnumerator ExecutionEvent()
     {
+        Debug.Log("Execution Event Start!");
+
         // 1. 처형이 이뤄지는 동안 플레이어는 이동할 수 없다. 
         _executionInProgress = true;
 
@@ -168,7 +165,6 @@ public class ExecutionManager : MonoBehaviour
 
         ExecutionObject.GetComponent<SpriteRenderer>().sprite = null;
 
-
         // 5. 특정 체력 이상의 적을 처형
         ExecuteEnemies();
 
@@ -176,42 +172,47 @@ public class ExecutionManager : MonoBehaviour
         _executionInProgress = false;
     }
 
-    void ExecuteEnemies()
+    // 체력이 가장 높은 적 or 캐릭터가 처형당해야 한다.
+    public GameObject ExecuteEnemies()
     {
         Debug.Log("execute Enemies!");
-        // 플레이어의 생명력이 처형 수치 이상이라면 처형.
-        if (StageManager.Instance._character.GetComponent<Character>().Heart >= _executionHealth)
-        {
-            StartCoroutine(StageManager.Instance._character.GetComponent<Character>().CharacterDeath());
-            return;
-        }
 
-        foreach (var enemy in StageManager.Instance.EnemyDictionary)
-        {
-            int enemyRow = enemy.Key.x;
-            int enemyCol = enemy.Key.y;
+        // 1. 체력이 가장 높은 오브젝트를 저장하는 변수들을 선언한다.
+        int _targetHeart = 0;
+        int _targetRow = 0;
+        int _targetCol = 0;
+        EnemyType _enemyType = EnemyType.NormalEnemy;
+        GameObject _executionTarget = null;
 
-            if (StageManager.Instance.TempTileDictionary[new Vector2Int(enemyRow, enemyCol)][1] == 0)
+        // 2. 적들 중에서 체력이 가장 높은 적을 찾는다.
+        foreach (var tile in StageManager.Instance.GameObjectDictionary)
+        {
+            if (tile.Value.GetComponent<TileObject>().Type == TileType.Enemy)
             {
-                if (enemy.Value.GetComponent<NormalEnemy>().Heart >= _executionHealth)
+                if (tile.Value.GetComponent<TileObject>().EnemyData.Heart > _targetHeart)
                 {
-                    EnemyManager.Instance.EnemyDeath(new Vector2Int(enemyRow, enemyCol));
+                    _targetHeart = tile.Value.GetComponent<TileObject>().EnemyData.Heart;
+                    _targetRow = tile.Key.x;
+                    _targetCol = tile.Key.y;
+                    _enemyType = tile.Value.GetComponent<TileObject>().EnemyData.EnemyType;
+                    _executionTarget = tile.Value;
                 }
             }
-            // 1번 타입 적인 경우
-            else if (StageManager.Instance.TempTileDictionary[new Vector2Int(enemyRow, enemyCol)][1] == 1)
-            {
-                if (enemy.Value.GetComponent<ChaserEnemy>().Heart >= _executionHealth)
-                {
-                    EnemyManager.Instance.EnemyDeath(new Vector2Int(enemyRow, enemyCol));
-                }
-            }
-            // 2번 타입 적. 즉, 미니보스인 경우. 처형하지 않는다. 
-            else if (StageManager.Instance.TempTileDictionary[new Vector2Int(enemyRow, enemyCol)][1] == 2)
-            {
-
-            }
         }
+
+        // 3. 플레이어의 생명력이 가장 높은거라면 플레이어를 처형.
+        if (StageManager.Instance._character.GetComponent<Character>().Heart > _targetHeart)
+        {
+            _targetHeart = StageManager.Instance._character.GetComponent<Character>().Heart;
+            _executionTarget = StageManager.Instance._character;
+        }
+        // 4. 그게 아니라면 적을 처형.
+        else
+        {
+            EnemyManager.Instance.EnemyDeath(new Vector2Int(_targetRow, _targetCol));
+        }
+
+        return _executionTarget;
     }
 }
 

@@ -98,11 +98,9 @@ public abstract class Enemy : MonoBehaviour
 
         gameObject.GetComponent<Animator>().SetBool("IsDied", false);
 
-        Destroy(EnemyManager.Instance.EnemyDictionary[targetPosition]);
+        Destroy(StageManager.Instance.GameObjectDictionary[targetPosition]);
         StageManager.Instance.TempTileDictionary[targetPosition].EnemyData.IsAlive = false;
-        EnemyManager.Instance.EnemyDictionary.Remove(targetPosition);
-
-        StageManager.Instance.StageClearCheck();
+        StageManager.Instance.GameObjectDictionary.Remove(targetPosition);
 
         yield return null;
     }

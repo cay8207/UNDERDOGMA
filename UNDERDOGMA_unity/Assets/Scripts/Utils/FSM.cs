@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UnityEngine;
 
 public class FSM
 {
@@ -15,6 +16,8 @@ public class FSM
 
     public void ChangeState(BaseState nextState)
     {
+        Debug.Log("Current State: " + _curState + " NextState: " + nextState);
+
         if (nextState == _curState)
         {
             return;
