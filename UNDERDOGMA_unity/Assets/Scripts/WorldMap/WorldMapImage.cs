@@ -37,7 +37,6 @@ public class WorldMapImage : MonoBehaviour
 
     public void OnMouseEnter()
     {
-        Debug.Log("Mouse Overed");
         WorldMapManager.Instance.SelectedWorld = WorldNum;
         WorldMapManager.Instance.SetInfoPos(WorldNum);
         WorldMapManager.Instance.SetWorldMapImage(WorldNum);

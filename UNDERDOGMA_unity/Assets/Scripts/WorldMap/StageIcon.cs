@@ -20,6 +20,18 @@ public class StageIcon : MonoBehaviour
     {
         originalScale = transform.localScale;
     }
+    public void OnMouseEnter()
+    {
+        StageSelectManager.Instance.NextSelectedStage = this;
+        StageSelectManager.Instance.SwitchSelectedStage();
+        //WorldMapManager.Instance.SelectedWorld = WorldNum;
+        //WorldMapManager.Instance.SetInfoPos(WorldNum);
+        //WorldMapManager.Instance.SetWorldMapImage(WorldNum);
+    }
+    public void OnMouseDown()
+    {
+        StageSelectManager.Instance.LoadSelectedStage();
+    }
     public enum StageDirection
     {
         Up,
@@ -46,7 +58,6 @@ public class StageIcon : MonoBehaviour
                 break;
             default:
                 return null;
-                Debug.Log("GetStageIcon Error");
                 break;
         }
         return this;

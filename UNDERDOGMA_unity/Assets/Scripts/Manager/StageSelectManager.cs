@@ -6,11 +6,11 @@ using static StageIcon;
 public class StageSelectManager : Singleton<StageSelectManager>
 {
     public StageIcon SelectedStage;
-    private StageIcon nextSelectedStage;
+    public StageIcon NextSelectedStage;
     void Start()
     {
         SelectedStage.IsSelected = true;
-        nextSelectedStage = SelectedStage;
+        NextSelectedStage = SelectedStage;
         SelectedStage.SelectWorld(true);
     }
 
@@ -18,26 +18,24 @@ public class StageSelectManager : Singleton<StageSelectManager>
     {
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            nextSelectedStage = SelectedStage.GetStageIcon(StageIcon.StageDirection.Up);
+            NextSelectedStage = SelectedStage.GetStageIcon(StageIcon.StageDirection.Up);
         }
         else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            nextSelectedStage = SelectedStage.GetStageIcon(StageIcon.StageDirection.Down);
+            NextSelectedStage = SelectedStage.GetStageIcon(StageIcon.StageDirection.Down);
         }
         else if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            nextSelectedStage = SelectedStage.GetStageIcon(StageIcon.StageDirection.Left);
+            NextSelectedStage = SelectedStage.GetStageIcon(StageIcon.StageDirection.Left);
         }
         else if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            nextSelectedStage = SelectedStage.GetStageIcon(StageIcon.StageDirection.Right);
+            NextSelectedStage = SelectedStage.GetStageIcon(StageIcon.StageDirection.Right);
         }
 
-        if(nextSelectedStage != SelectedStage)
+        if(NextSelectedStage != SelectedStage)
         {
-            SelectedStage.SelectWorld(false);
-            SelectedStage = nextSelectedStage;
-            SelectedStage.SelectWorld(true);
+            SwitchSelectedStage();
         }
 
         if (Input.GetKeyDown(KeyCode.Return))
@@ -45,7 +43,12 @@ public class StageSelectManager : Singleton<StageSelectManager>
             LoadSelectedStage();
         }
     }
-
+    public void SwitchSelectedStage()
+    {
+        SelectedStage.SelectWorld(false);
+        SelectedStage = NextSelectedStage;
+        SelectedStage.SelectWorld(true);
+    }
     public void LoadSelectedStage()
     {
         Debug.Log("Load");
