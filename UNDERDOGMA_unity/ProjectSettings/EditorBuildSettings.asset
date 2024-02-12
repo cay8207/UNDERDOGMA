@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Credit.unity
     guid: f748b7c5fc7ba9845bd6d68cb3301b73
   - enabled: 1
+    path: Assets/Scenes/WorldMap.unity
+    guid: 6e3a9aafbea81834cab0d79f3e6031da
+  - enabled: 1
     path: Assets/Scenes/Stage1.unity
     guid: 30658cbc858940e4fa32e0f54a732753
   - enabled: 1
