@@ -48,31 +48,34 @@ public class DamagedState : BaseState
         {
             int enemyRow = gameObject.Key.x;
             int enemyCol = gameObject.Key.y;
+            int amount = 0;
 
             if (StageManager.Instance.TempTileDictionary[new Vector2Int(enemyRow, enemyCol)].Type == TileType.Enemy)
             {
                 // 0번 타입 적인경우
                 if (StageManager.Instance.TempTileDictionary[new Vector2Int(enemyRow, enemyCol)].EnemyData.EnemyType == EnemyType.NormalEnemy)
                 {
-                    if (gameObject.Value.GetComponent<NormalEnemy>().CheckCharacterDamaged(PlayerPosition.x, PlayerPosition.y))
+                    amount = gameObject.Value.GetComponent<NormalEnemy>().CheckCharacterDamaged(PlayerPosition.x, PlayerPosition.y);
+                    if (amount > 0)
                     {
-                        Debug.Log("character Attacked!");
-                        _character.EnqueueCoroutine(_character.CharacterDamaged());
+                        _character.EnqueueCoroutine(_character.CharacterDamaged(amount));
                     }
                 }
                 // 1번 타입 적인 경우
                 else if (StageManager.Instance.TempTileDictionary[new Vector2Int(enemyRow, enemyCol)].EnemyData.EnemyType == EnemyType.ChaserEnemy)
                 {
-                    if (gameObject.Value.GetComponent<ChaserEnemy>().CheckCharacterDamaged(PlayerPosition.x, PlayerPosition.y))
+                    amount = gameObject.Value.GetComponent<ChaserEnemy>().CheckCharacterDamaged(PlayerPosition.x, PlayerPosition.y);
+                    if (amount > 0)
                     {
-                        _character.EnqueueCoroutine(_character.CharacterDamaged());
+                        _character.EnqueueCoroutine(_character.CharacterDamaged(amount));
                     }
                 }
                 else if (StageManager.Instance.TempTileDictionary[new Vector2Int(enemyRow, enemyCol)].EnemyData.EnemyType == EnemyType.MiniBoss)
                 {
-                    if (gameObject.Value.GetComponent<MiniBoss>().CheckCharacterDamaged(PlayerPosition.x, PlayerPosition.y))
+                    amount = gameObject.Value.GetComponent<MiniBoss>().CheckCharacterDamaged(PlayerPosition.x, PlayerPosition.y);
+                    if (amount > 0)
                     {
-                        _character.EnqueueCoroutine(_character.CharacterDamaged());
+                        _character.EnqueueCoroutine(_character.CharacterDamaged(amount));
                     }
                 }
             }

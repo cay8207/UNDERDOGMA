@@ -40,7 +40,7 @@ public class Execution : MonoBehaviour
     [SerializeField] public Sprite CloseEye;
     [SerializeField] public Sprite OpenEye;
 
-    private GameObject ExecutionObject;
+    public GameObject ExecutionObject;
 
     private List<GameObject> _executionCountObjectList = new List<GameObject>();
     public List<GameObject> ExecutionCountObjectList
@@ -132,35 +132,6 @@ public class Execution : MonoBehaviour
             ExecuteEnemies();
             _executionInProgress = false;
         }
-    }
-
-    public IEnumerator ExecutionEvent()
-    {
-        Debug.Log("Execution Event Start!");
-
-        // 1. 처형이 이뤄지는 동안 플레이어는 이동할 수 없다. 
-        _executionInProgress = true;
-
-        // 2. 처형 애니메이션 이전에 적이 공격하는 애니메이션 등을 보여주기 위해 잠깐의 텀을 둔다. 
-        yield return new WaitForSeconds(1.0f);
-
-        AudioManager.Instance.PlaySfx(AudioManager.Sfx.Execute);
-
-        ExecutionObject.GetComponent<Animator>().SetBool("InExecution", true);
-
-        // 3. 처형 애니메이션 보여줌.
-        yield return new WaitForSeconds(3.0f);
-
-        // 4. 애니메이션 종료.
-        ExecutionObject.GetComponent<Animator>().SetBool("InExecution", false);
-
-        ExecutionObject.GetComponent<SpriteRenderer>().sprite = null;
-
-        // 5. 특정 체력 이상의 적을 처형
-        ExecuteEnemies();
-
-        // 6. 처형 이벤트 종료. 캐릭터는 다시 움직일 수 있다. 
-        _executionInProgress = false;
     }
 
     // 체력이 가장 높은 적 or 캐릭터가 처형당해야 한다.

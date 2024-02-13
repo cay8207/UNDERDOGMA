@@ -29,17 +29,16 @@ public class MiniBoss : Enemy
     }
 
     // 적의 행동을 정의하는 함수. 일반 적의 경우 만약 플레이어가 공격 범위에 있다면 공격한다.
-    public bool CheckCharacterDamaged(int playerRow, int playerCol)
+    public int CheckCharacterDamaged(int playerRow, int playerCol)
     {
         Vector2Int targetPosition = new Vector2Int(Row, Col) + directionOffsetDictionary[_attackDirection];
 
         if (targetPosition == new Vector2Int(playerRow, playerCol))
         {
-            StageManager.Instance._character.GetComponent<Character>().HeartChange(-Attack);
             StartCoroutine(EnemyAttackAnimation());
-            return true;
+            return Attack;
         }
-        return false;
+        return 0;
     }
 
     public override IEnumerator EnemyAttackAnimation()

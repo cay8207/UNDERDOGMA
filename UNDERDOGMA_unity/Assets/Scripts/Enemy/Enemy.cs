@@ -82,19 +82,20 @@ public abstract class Enemy : MonoBehaviour
     {
         // 나중에 죽는 애니메이션 추가해야 함. 
         // gameObject.GetComponent<SpriteRenderer>().sprite = _deadDog;
+        StageManager.Instance.TempTileDictionary[targetPosition].EnemyData.IsAlive = false;
 
         gameObject.GetComponent<Animator>().SetBool("IsDied", true);
 
-        gameObject.GetComponent<SpriteRenderer>().DOFade(0, 1.0f);
-        gameObject.transform.GetChild(5).GetComponent<SpriteRenderer>().DOFade(0, 1.0f);
+        gameObject.GetComponent<SpriteRenderer>().DOFade(0, 0.5f);
+        gameObject.transform.GetChild(5).GetComponent<SpriteRenderer>().DOFade(0, 0.5f);
 
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.5f);
 
         gameObject.GetComponent<Animator>().SetBool("IsDied", false);
 
         Debug.Log("(Enemy.cs) 적이 죽었습니다. 데이터 변경하기!");
+
         Destroy(StageManager.Instance.GameObjectDictionary[targetPosition]);
-        StageManager.Instance.TempTileDictionary[targetPosition].EnemyData.IsAlive = false;
         StageManager.Instance.GameObjectDictionary.Remove(targetPosition);
 
         yield return null;

@@ -31,7 +31,7 @@ public class ChaserEnemy : Enemy
     }
 
     // 적의 행동을 정의하는 함수. 추격자의 경우 만약 캐릭터와 일직선상에 있고, 그 사이에 아무런 장애물이 없다면 돌진한 후 데미지를 입힌다.
-    public bool CheckCharacterDamaged(int playerRow, int playerCol)
+    public int CheckCharacterDamaged(int playerRow, int playerCol)
     {
         bool isObstacle = false;
 
@@ -41,19 +41,18 @@ public class ChaserEnemy : Enemy
         // 1. 만약 캐릭터가 추격자의 공격범위 칸에 있다면 공격한다.
         if (targetPosition == new Vector2Int(playerRow, playerCol))
         {
-            StageManager.Instance._character.GetComponent<Character>().HeartChange(-Attack);
             StartCoroutine(EnemyAttackAnimation());
-            return true;
+            return Attack;
         }
 
         // 2. 만약 캐릭터가 추적자의 공격범위 칸에 있지 않고, 일직선상에 있지 않다면 공격하지 않고 함수를 중단한다.
         if ((_attackDirection == AttackDirection.Up || _attackDirection == AttackDirection.Down) && Col != playerCol)
         {
-            return false;
+            return 0;
         }
         else if ((_attackDirection == AttackDirection.Left || _attackDirection == AttackDirection.Right) && Row != playerRow)
         {
-            return false;
+            return 0;
         }
 
         // 3. 만약 캐릭터가 추적자의 공격범위 칸에 있지는 않지만, 일직선상에 있다면 돌진한다. 이를 위해 일직선상에 장애물이 있는지 체크한다.
@@ -87,7 +86,6 @@ public class ChaserEnemy : Enemy
             gameObject.transform.DOMove(new Vector3(targetPosition.x, targetPosition.y, 0) + new Vector3(-0.06f, 0.3f, 0), 1.0f, false);
 
             StartCoroutine(EnemyAttackAnimation());
-            StageManager.Instance._character.GetComponent<Character>().HeartChange(-Attack);
 
             // 4.1. 원래 위치와 TileDictionary 정보를 바꾸어준다.
             // 원래 위치는 타일만 있는것으로, 새로운 위치는 적의 정보를 넣어준다.
@@ -105,10 +103,10 @@ public class ChaserEnemy : Enemy
             Row = targetPosition.x;
             Col = targetPosition.y;
 
-            return true;
+            return Attack;
         }
 
-        return false;
+        return 0;
     }
 
     public override IEnumerator EnemyAttackAnimation()

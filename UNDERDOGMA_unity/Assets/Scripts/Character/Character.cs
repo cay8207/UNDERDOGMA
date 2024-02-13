@@ -71,7 +71,7 @@ public class Character : MonoBehaviour
         get => _moveCount;
         set => _moveCount = value;
     }
-    private Queue<KeyCode> _keyDownQueue = new Queue<KeyCode>();
+    public Queue<KeyCode> _keyDownQueue = new Queue<KeyCode>();
 
     // 7. 캐릭터의 코루틴을 관리하기 위한 변수. 큐로 관리하므로 하나의 변수만 필요.
 
@@ -114,10 +114,10 @@ public class Character : MonoBehaviour
     // 캐릭터가 움직인 횟수를 체크해서 ExecutionManager에 넘겨주면 거기에서 처형 여부를 판단. 
     private void Update()
     {
-        Debug.Log("CharacterCoroutineRunning" + _isCharacterCoroutineRunning);
 
         if (!_isCharacterCoroutineRunning)
         {
+            Debug.Log("Character Coroutine doesn't running");
             switch (_curState)
             {
                 case State.Idle:
@@ -171,27 +171,27 @@ public class Character : MonoBehaviour
                 case State.Clear:
                     break;
             }
-        }
 
-        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
-        {
-            _keyDownQueue.Enqueue(KeyCode.W);
-        }
-        else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
-        {
-            _keyDownQueue.Enqueue(KeyCode.S);
-        }
-        else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            _keyDownQueue.Enqueue(KeyCode.A);
-        }
-        else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            _keyDownQueue.Enqueue(KeyCode.D);
-        }
-        else if (Input.GetKeyDown(KeyCode.R))
-        {
-            ChangeState(State.Reset);
+            if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                _keyDownQueue.Enqueue(KeyCode.W);
+            }
+            else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                _keyDownQueue.Enqueue(KeyCode.S);
+            }
+            else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+                _keyDownQueue.Enqueue(KeyCode.A);
+            }
+            else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                _keyDownQueue.Enqueue(KeyCode.D);
+            }
+            else if (Input.GetKeyDown(KeyCode.R))
+            {
+                ChangeState(State.Reset);
+            }
         }
 
         _coroutineController.ExecuteCoroutine();
@@ -358,13 +358,15 @@ public class Character : MonoBehaviour
         _isCharacterCoroutineRunning = false;
     }
 
-    public IEnumerator CharacterDamaged()
+    public IEnumerator CharacterDamaged(int amount)
     {
         _isCharacterCoroutineRunning = true;
 
         _mainCamera.Shake(0.5f);
 
         yield return new WaitForSeconds(0.5f);
+
+        HeartChange(-amount);
 
         // TODO: 캐릭터가 피해를 입는 애니메이션 완성되면 넣어야 함. 
         // GetComponent<Animator>().SetBool("IsDamaged", true);
@@ -395,17 +397,28 @@ public class Character : MonoBehaviour
         _isCharacterCoroutineRunning = false;
     }
 
-    // Excution에 있는 코루틴을 실행한다. 
+    // 처형되는 애니메이션을 재생한다. 
     public IEnumerator ExecutionEvent()
     {
         _isCharacterCoroutineRunning = true;
 
-        Debug.Log("Character ExecutionEvent Start!");
+        // 1. 공격, 피격 등의 애니메이션이 끝나기를 기다리기 위해 1초간 기다린다. 
+        yield return new WaitForSeconds(1.0f);
 
-        StartCoroutine(Execution.Instance.ExecutionEvent());
+        // 2. 처형 효과음 재생.
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.Execute);
 
-        yield return null;
+        // 3. 애니메이션을 3초간 재생. 
+        Execution.Instance.ExecutionObject.GetComponent<Animator>().SetBool("InExecution", true);
 
+        yield return new WaitForSeconds(3.0f);
+
+        // 4. 애니메이션 종료.
+        Execution.Instance.ExecutionObject.GetComponent<Animator>().SetBool("InExecution", false);
+
+        Execution.Instance.ExecutionObject.GetComponent<SpriteRenderer>().sprite = null;
+
+        // 5. 처형 이벤트 종료. 캐릭터는 다시 움직일 수 있다. 
         _isCharacterCoroutineRunning = false;
     }
 

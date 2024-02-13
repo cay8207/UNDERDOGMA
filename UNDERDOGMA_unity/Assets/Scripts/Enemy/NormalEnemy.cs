@@ -33,18 +33,17 @@ public class NormalEnemy : Enemy, IEnemyAttributesSetter, IEnemyPositionSetter
     }
 
     // 적을 공격할 수 있는지 체크하는 함수. 
-    public bool CheckCharacterDamaged(int playerRow, int playerCol)
+    public int CheckCharacterDamaged(int playerRow, int playerCol)
     {
         Vector2Int targetPosition = new Vector2Int(Row, Col) + directionOffsetDictionary[_attackDirection];
 
         if (targetPosition == new Vector2Int(playerRow, playerCol))
         {
             StartCoroutine(EnemyAttackAnimation());
-            StageManager.Instance._character.GetComponent<Character>().HeartChange(-Attack);
-            return true;
+            return Attack;
         }
 
-        return false;
+        return 0;
     }
 
     // 적을 공격하는 함수. 
