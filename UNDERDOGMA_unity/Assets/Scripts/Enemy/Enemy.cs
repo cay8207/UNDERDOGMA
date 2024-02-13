@@ -2,14 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using DG.Tweening;
 
 public abstract class Enemy : MonoBehaviour
 {
     #region Variables
     [SerializeField] GameObject _attackText;
     [SerializeField] GameObject _heartText;
-
-    private MainCamera _mainCamera;
 
     // 모든 적은 기본적으로 현재 위치를 가진다. 
     private int _row;
@@ -43,13 +42,13 @@ public abstract class Enemy : MonoBehaviour
     }
 
     // 상하좌우 체크를 위한 배열. 
-    public Vector2Int[] directionOffsets = new Vector2Int[]
-        {
-            new Vector2Int(0, 1),   // Up
-            new Vector2Int(0, -1),  // Down
-            new Vector2Int(-1, 0),  // Left
-            new Vector2Int(1, 0)    // Right
-        };
+    public Dictionary<AttackDirection, Vector2Int> directionOffsetDictionary = new Dictionary<AttackDirection, Vector2Int>
+    {
+        { AttackDirection.Up, new Vector2Int(0, 1) },
+        { AttackDirection.Down, new Vector2Int(0, -1) },
+        { AttackDirection.Left, new Vector2Int(-1, 0) },
+        { AttackDirection.Right, new Vector2Int(1, 0) }
+    };
 
     #endregion
 
@@ -58,8 +57,6 @@ public abstract class Enemy : MonoBehaviour
     {
         _attackText.GetComponent<Text>().SetText(_attack);
         _heartText.GetComponent<Text>().SetText(_heart);
-
-        _mainCamera = Camera.main.GetComponent<MainCamera>();
     }
 
     // Update is called once per frame
@@ -68,7 +65,7 @@ public abstract class Enemy : MonoBehaviour
 
     }
 
-    public virtual IEnumerator EnemyAction(int playerRow, int playerCol)
+    public virtual IEnumerator EnemyAttackAnimation()
     {
 
         // 캐릭터를 공격하는 애니메이션 진행. 
@@ -78,8 +75,6 @@ public abstract class Enemy : MonoBehaviour
 
         AudioManager.Instance.PlaySfx(AudioManager.Sfx.Enemy_Attack);
 
-        _mainCamera.Shake(0.5f);
-
         gameObject.GetComponent<Animator>().SetBool("IsAttack", false);
     }
 
@@ -87,46 +82,22 @@ public abstract class Enemy : MonoBehaviour
     {
         // 나중에 죽는 애니메이션 추가해야 함. 
         // gameObject.GetComponent<SpriteRenderer>().sprite = _deadDog;
+        StageManager.Instance.TempTileDictionary[targetPosition].EnemyData.IsAlive = false;
 
         gameObject.GetComponent<Animator>().SetBool("IsDied", true);
 
-        StartCoroutine(FadeOut(gameObject.GetComponent<SpriteRenderer>(), 1.0f));
-        StartCoroutine(FadeOut(gameObject.transform.GetChild(5).GetComponent<SpriteRenderer>(), 1.0f));
+        gameObject.GetComponent<SpriteRenderer>().DOFade(0, 0.5f);
+        gameObject.transform.GetChild(5).GetComponent<SpriteRenderer>().DOFade(0, 0.5f);
 
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.5f);
 
         gameObject.GetComponent<Animator>().SetBool("IsDied", false);
 
-        Destroy(EnemyManager.Instance.EnemyDictionary[targetPosition]);
-        StageManager.Instance.TempTileDictionary[targetPosition][2] = 0;
-        EnemyManager.Instance.EnemyDictionary.Remove(targetPosition);
+        Debug.Log("(Enemy.cs) 적이 죽었습니다. 데이터 변경하기!");
 
-        StageManager.Instance.StageClearCheck();
+        Destroy(StageManager.Instance.GameObjectDictionary[targetPosition]);
+        StageManager.Instance.GameObjectDictionary.Remove(targetPosition);
 
         yield return null;
     }
-
-    public IEnumerator FadeIn(SpriteRenderer spriteRenderer, float time)
-    {
-        Color color = spriteRenderer.color;
-        while (color.a < 1f)
-        {
-            color.a += Time.deltaTime / time;
-            spriteRenderer.color = color;
-            yield return null;
-        }
-    }
-
-    public IEnumerator FadeOut(SpriteRenderer spriteRenderer, float time)
-    {
-        Color color = spriteRenderer.color;
-        while (color.a > 0f)
-        {
-            color.a -= Time.deltaTime / time;
-            spriteRenderer.color = color;
-            yield return null;
-        }
-    }
-
-
 }

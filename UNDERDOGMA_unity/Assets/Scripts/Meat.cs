@@ -7,26 +7,30 @@ using UnityEngine;
 
 public class Meat : MonoBehaviour
 {
-    [SerializeField] private GameObject _heartText;
+    [SerializeField] private GameObject _amountText;
 
-    private Dictionary<Vector2Int, GameObject> MeatDictionary => StageManager.Instance.MeatDictionary;
-    private int _heart;
+    private int _amount;
 
-    public int Heart
+    public int Amount
     {
-        get => _heart;
-        set => _heart = value;
+        get => _amount;
+        set => _amount = value;
     }
 
     void Start()
     {
-        _heartText.GetComponent<TextMeshPro>().text = _heart.ToString();
+        _amountText.GetComponent<TextMeshPro>().text = _amount.ToString();
     }
 
     public void EatMeat(Vector2Int targetPosition)
     {
-        Destroy(MeatDictionary[targetPosition]);
-        StageManager.Instance.TempTileDictionary[targetPosition][1] = 0;
-        MeatDictionary.Remove(targetPosition);
+        // 1. 고기 오브젝트를 파괴시켜준다.
+        Destroy(StageManager.Instance.GameObjectDictionary[targetPosition]);
+
+        // 2. 데이터 업데이트를 위해 TempTileDictionary의 값을 변경해준다. 
+        StageManager.Instance.TempTileDictionary[targetPosition].MeatData.IsExist = false;
+
+        // 3. StageManager의 GameObjectDictionary에서도 제거해준다. 
+        StageManager.Instance.GameObjectDictionary.Remove(targetPosition);
     }
 }
