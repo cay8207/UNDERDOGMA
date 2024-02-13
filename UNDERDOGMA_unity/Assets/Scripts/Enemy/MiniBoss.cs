@@ -29,18 +29,22 @@ public class MiniBoss : Enemy
     }
 
     // 적의 행동을 정의하는 함수. 일반 적의 경우 만약 플레이어가 공격 범위에 있다면 공격한다.
-    public override IEnumerator EnemyAction(int playerRow, int playerCol)
+    public bool CheckCharacterDamaged(int playerRow, int playerCol)
     {
         Vector2Int targetPosition = new Vector2Int(Row, Col) + directionOffsetDictionary[_attackDirection];
 
         if (targetPosition == new Vector2Int(playerRow, playerCol))
         {
-            StartCoroutine(base.EnemyAction(playerRow, playerCol));
-            StageManager.Instance._character.GetComponent<Character>().Heart -= Attack;
-            StageManager.Instance._character.GetComponent<Character>()._heartText.GetComponent<Text>().SetText(
-                StageManager.Instance._character.GetComponent<Character>().Heart
-            );
+            StageManager.Instance._character.GetComponent<Character>().HeartChange(-Attack);
+            StartCoroutine(EnemyAttackAnimation());
+            return true;
         }
+        return false;
+    }
+
+    public override IEnumerator EnemyAttackAnimation()
+    {
+        StartCoroutine(base.EnemyAttackAnimation());
 
         yield return null;
     }

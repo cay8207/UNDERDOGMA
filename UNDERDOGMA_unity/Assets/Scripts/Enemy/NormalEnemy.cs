@@ -32,19 +32,25 @@ public class NormalEnemy : Enemy, IEnemyAttributesSetter, IEnemyPositionSetter
         AttackRange.GetComponent<SpriteRenderer>().enabled = false;
     }
 
-    // 적의 행동을 정의하는 함수. 일반 적의 경우 만약 플레이어가 공격 범위에 있다면 공격한다.
-    public override IEnumerator EnemyAction(int playerRow, int playerCol)
+    // 적을 공격할 수 있는지 체크하는 함수. 
+    public bool CheckCharacterDamaged(int playerRow, int playerCol)
     {
         Vector2Int targetPosition = new Vector2Int(Row, Col) + directionOffsetDictionary[_attackDirection];
 
         if (targetPosition == new Vector2Int(playerRow, playerCol))
         {
-            StartCoroutine(base.EnemyAction(playerRow, playerCol));
-            StageManager.Instance._character.GetComponent<Character>().Heart -= Attack;
-            StageManager.Instance._character.GetComponent<Character>()._heartText.GetComponent<Text>().SetText(
-                StageManager.Instance._character.GetComponent<Character>().Heart
-            );
+            StartCoroutine(EnemyAttackAnimation());
+            StageManager.Instance._character.GetComponent<Character>().HeartChange(-Attack);
+            return true;
         }
+
+        return false;
+    }
+
+    // 적을 공격하는 함수. 
+    public override IEnumerator EnemyAttackAnimation()
+    {
+        StartCoroutine(base.EnemyAttackAnimation());
 
         yield return null;
     }

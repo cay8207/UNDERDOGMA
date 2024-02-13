@@ -84,6 +84,8 @@ public class Character : MonoBehaviour
 
     CoroutineController _coroutineController;
 
+    private MainCamera _mainCamera;
+
     #endregion
 
 
@@ -93,6 +95,7 @@ public class Character : MonoBehaviour
         _curState = State.Idle;
         _fsm = new FSM(new IdleState(this));
         _coroutineController = GetComponent<CoroutineController>();
+        _mainCamera = Camera.main.GetComponent<MainCamera>();
     }
 
     // Start is called before the first frame update
@@ -111,54 +114,63 @@ public class Character : MonoBehaviour
     // 캐릭터가 움직인 횟수를 체크해서 ExecutionManager에 넘겨주면 거기에서 처형 여부를 판단. 
     private void Update()
     {
-        switch (_curState)
+        Debug.Log("CharacterCoroutineRunning" + _isCharacterCoroutineRunning);
+
+        if (!_isCharacterCoroutineRunning)
         {
-            case State.Idle:
-                Debug.Log("Move Count: " + _moveCount + "Execution Count: " + Execution.Instance.ExecutionCount);
-                if (_moveCount == Execution.Instance.ExecutionCount)
-                {
-                    Debug.Log("hi! i'm idle state if");
-                    ChangeState(State.Execution);
-                    _moveCount = 0;
-                    _keyDownQueue.Clear();
+            switch (_curState)
+            {
+                case State.Idle:
+                    if (_moveCount == Execution.Instance.ExecutionCount)
+                    {
+                        ChangeState(State.Execution);
+                        _moveCount = 0;
+                        _keyDownQueue.Clear();
+                        break;
+                    }
+
+                    for (int i = 0; i < _keyDownQueue.Count; i++)
+                    {
+                        Debug.Log("keydownQueue: " + _keyDownQueue.ToArray()[i]);
+                    }
+
+                    // TODO: 현재와 같은 방식이면 벽이 있는 방향으로 여러번 클릭시 여러 프레임 이후에야 이동이 가능.
+                    // 이를 방지하기 위해 while문을 돌려줘야 할 것 같다.
+                    if (_keyDownQueue.Count > 0)
+                    {
+                        KeyCode key = _keyDownQueue.Dequeue();
+                        Debug.Log("Next Position: " + WhatIsNextPosition(key));
+                        if (WhatIsNextPosition(key) == TileType.Enemy)
+                        {
+                            ChangeState(State.Attack, FindNextPosition(key, new Vector2Int(_row, _col)));
+                        }
+                        else if (WhatIsNextPosition(key) == TileType.Wall)
+                        {
+
+                        }
+                        else
+                        {
+                            ChangeState(State.Move, key);
+                        }
+                    }
                     break;
-                }
-
-                // TODO: 현재와 같은 방식이면 벽이 있는 방향으로 여러번 클릭시 여러 프레임 이후에야 이동이 가능.
-                // 이를 방지하기 위해 while문을 돌려줘야 할 것 같다.
-                if (_keyDownQueue.Count > 0)
-                {
-                    KeyCode key = _keyDownQueue.Dequeue();
-                    if (WhatIsNextPosition(key) == TileType.Enemy)
-                    {
-                        ChangeState(State.Attack);
-                    }
-                    else if (WhatIsNextPosition(key) == TileType.Wall)
-                    {
-
-                    }
-                    else
-                    {
-                        ChangeState(State.Move, key);
-                    }
-                }
-                break;
-            case State.Move:
-                break;
-            case State.Attack:
-                break;
-            case State.Damaged:
-                break;
-            case State.Meat:
-                break;
-            case State.Execution:
-                break;
-            case State.Death:
-                break;
-            case State.Reset:
-                break;
-            case State.Clear:
-                break;
+                case State.Move:
+                    break;
+                case State.Attack:
+                    break;
+                case State.Damaged:
+                    break;
+                case State.Meat:
+                    break;
+                case State.Execution:
+                    break;
+                case State.Death:
+                    break;
+                case State.Reset:
+                    break;
+                case State.Clear:
+                    break;
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
@@ -183,13 +195,14 @@ public class Character : MonoBehaviour
         }
 
         _coroutineController.ExecuteCoroutine();
+
+        _fsm.UpdateState();
     }
 
     // 2. state machine과 관련된 함수들. 
     public void ChangeState(State nextState)
     {
         _curState = nextState;
-        Debug.Log("Current State: " + _curState.ToString());
         switch (_curState)
         {
             case State.Idle:
@@ -241,7 +254,37 @@ public class Character : MonoBehaviour
     // 캐릭터의 다음 칸에 어떤 오브젝트가 있는지 반환한다. 
     private TileType WhatIsNextPosition(KeyCode key)
     {
-        Vector2Int targetPosition = new Vector2Int(_row, _col);
+        // 키의 방향에 따라 다음 위치가 어딘지를 반환한다. 
+        Vector2Int targetPosition = FindNextPosition(key, new Vector2Int(_row, _col));
+
+        TileObject tileObject = StageManager.Instance.TempTileDictionary[targetPosition];
+
+        if (tileObject.Type == TileType.Enemy)
+        {
+            if (tileObject.EnemyData.IsAlive == true && _heart > tileObject.EnemyData.Heart)
+            {
+                // ChangeState(State.Attack, targetPosition);
+                return TileType.Enemy;
+            }
+            else if (tileObject.EnemyData.IsAlive == false)
+            {
+                return TileType.Empty;
+            }
+        }
+        else if (tileObject.Type == TileType.Wall)
+        {
+            return TileType.Wall;
+        }
+        else
+        {
+            return TileType.Empty;
+        }
+
+        return TileType.Invalid;
+    }
+
+    private Vector2Int FindNextPosition(KeyCode key, Vector2Int targetPosition)
+    {
         switch (key)
         {
             case KeyCode.W:
@@ -257,26 +300,7 @@ public class Character : MonoBehaviour
                 targetPosition += directionOffsets[3];
                 break;
         }
-        TileObject tileObject = StageManager.Instance.TempTileDictionary[targetPosition];
-
-        if (tileObject.Type == TileType.Enemy)
-        {
-            if (tileObject.EnemyData.IsAlive == true && _heart > tileObject.EnemyData.Heart)
-            {
-                // ChangeState(State.Attack, targetPosition);
-                return TileType.Enemy; ;
-            }
-        }
-        else if (tileObject.Type == TileType.Wall)
-        {
-            return TileType.Wall;
-        }
-        else
-        {
-            return TileType.Empty;
-        }
-
-        return TileType.Invalid;
+        return targetPosition;
     }
 
     public void UpdatePosition(int row, int col)
@@ -297,7 +321,6 @@ public class Character : MonoBehaviour
     #region Animation
     public void EnqueueCoroutine(IEnumerator coroutine)
     {
-        Debug.Log("Character EnqueueCoroutine: " + coroutine.ToString());
         _coroutineController.EnqueueCoroutine(coroutine);
     }
 
@@ -309,8 +332,6 @@ public class Character : MonoBehaviour
         int col = targetPosition.y;
 
         transform.DOMove(new Vector3(row, col, 0) + new Vector3(-0.07f, 0.35f, 0), 0.5f, false).SetEase(Ease.OutCirc);
-
-        UpdatePosition(row, col);
 
         yield return new WaitForSeconds(0.5f);
 
@@ -333,6 +354,24 @@ public class Character : MonoBehaviour
 
         // 공격한 적을 죽인다. 
         EnemyManager.Instance.EnemyDeath(targetPosition);
+
+        _isCharacterCoroutineRunning = false;
+    }
+
+    public IEnumerator CharacterDamaged()
+    {
+        _isCharacterCoroutineRunning = true;
+
+        _mainCamera.Shake(0.5f);
+
+        yield return new WaitForSeconds(0.5f);
+
+        // TODO: 캐릭터가 피해를 입는 애니메이션 완성되면 넣어야 함. 
+        // GetComponent<Animator>().SetBool("IsDamaged", true);
+
+        // yield return new WaitForSeconds(0.9f);
+
+        // GetComponent<Animator>().SetBool("IsDamaged", false);
 
         _isCharacterCoroutineRunning = false;
     }

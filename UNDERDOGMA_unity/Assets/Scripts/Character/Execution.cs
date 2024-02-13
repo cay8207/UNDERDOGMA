@@ -60,10 +60,6 @@ public class Execution : MonoBehaviour
 
     public int ExecutionCount => _executionCount;
 
-    private int _executionHealth;
-
-    public int ExecutionHealth => _executionCount;
-
     private Coroutine _executionCoroutine;
 
     public void Start()
@@ -85,13 +81,8 @@ public class Execution : MonoBehaviour
     public void ExecutionSetUp()
     {
         _executionCount = StageManager.Instance._stageData.ExecutionCount;
-        _executionHealth = StageManager.Instance._stageData.ExecutionHealth;
 
         ExecutionObject = Instantiate(ExecutionPrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
-
-        Debug.Log("ExecutionCount: " + _executionCount + " ExecutionHealth: " + _executionHealth);
-
-        ExecutionHealthText.GetComponent<TextUI>().SetText(_executionHealth);
 
         for (int i = _executionCount - 1; i >= 0; i--)
         {
@@ -185,17 +176,22 @@ public class Execution : MonoBehaviour
         GameObject _executionTarget = null;
 
         // 2. 적들 중에서 체력이 가장 높은 적을 찾는다.
-        foreach (var tile in StageManager.Instance.GameObjectDictionary)
+        foreach (var gameObject in StageManager.Instance.GameObjectDictionary)
         {
-            if (tile.Value.GetComponent<TileObject>().Type == TileType.Enemy)
+            int _row = gameObject.Key.x;
+            int _col = gameObject.Key.y;
+
+            var tile = StageManager.Instance.TempTileDictionary[new Vector2Int(_row, _col)];
+
+            if (tile.Type == TileType.Enemy && tile.EnemyData.IsAlive == true)
             {
-                if (tile.Value.GetComponent<TileObject>().EnemyData.Heart > _targetHeart)
+                if (tile.EnemyData.Heart > _targetHeart)
                 {
-                    _targetHeart = tile.Value.GetComponent<TileObject>().EnemyData.Heart;
-                    _targetRow = tile.Key.x;
-                    _targetCol = tile.Key.y;
-                    _enemyType = tile.Value.GetComponent<TileObject>().EnemyData.EnemyType;
-                    _executionTarget = tile.Value;
+                    _targetHeart = tile.EnemyData.Heart;
+                    _targetRow = gameObject.Key.x;
+                    _targetCol = gameObject.Key.y;
+                    _enemyType = tile.EnemyData.EnemyType;
+                    _executionTarget = gameObject.Value;
                 }
             }
         }

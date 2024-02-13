@@ -8,6 +8,7 @@ using DG.Tweening;
 using UnityEditor.PackageManager.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 
 public class StageManager : MonoBehaviour
@@ -38,25 +39,36 @@ public class StageManager : MonoBehaviour
     }
     #endregion
 
-    // SerializeField가 붙은것들은 프리팹을 저장하기 위한 변수들. 
+    // 1. SerializeField가 붙은것들은 프리팹을 저장하기 위한 변수들. 
+
+    // 1.1. 피격 시 카메라 쉐이킹 등을 위함. 
     [SerializeField] public GameObject MainCamera;
+
+    // 1.2. 오브젝트들을 그려주기 위한 프리팹 및 스프라이트들. 
     [SerializeField] GameObject TilePrefab;
     [SerializeField] GameObject CharacterPrefab;
     [SerializeField] GameObject MeatPrefab;
     [SerializeField] GameObject NormalEnemyPrefab;
     [SerializeField] GameObject ChaserEnemyPrefab;
     [SerializeField] GameObject MiniBossPrefab;
+    [SerializeField] List<Sprite> TileSprites;
+
+    // 1.3. 현재 스테이지를 저장하기 위한 변수.
     [SerializeField] public int stage;
+
+    // 1.4. 리셋 애니메이션을 보여주기 위한 오브젝트. 
     [SerializeField] public GameObject ResetAnimationUpSide;
     [SerializeField] public GameObject ResetAnimationDownSide;
 
 
-    // 위의 변수와 다르게 _character는 생성된 게임오브젝트를 저장하기 위한 변수. 
+    // 2. 위의 변수와 다르게 _character는 생성된 게임오브젝트를 저장하기 위한 변수. 
     public GameObject _character;
 
     public StageData _stageData;
 
-    // 기본적인 타일 구조는 StageData의 TileDictionary에 저장되어있다.
+    // 3. 스테이지의 데이터, 오브젝트 등을 저장하기 위한 변수들.
+
+    // 3.1. 기본적인 타일 구조는 StageData의 TileDictionary에 저장되어있다.
     // 하지만 게임을 진행하면서 데이터가 계속해서 바뀌어야 하는데, 리셋할때에는 또 초기 정보가 필요하다.
     // 그래서 변경해도 상관없도록 복사한 Dictionary를 하나 만들어서 데이터를 그쪽에서 관리하고,
     // 기존의 TileDictionary는 리셋할때에만 사용한다. 
@@ -67,7 +79,7 @@ public class StageManager : MonoBehaviour
         set => _tempTileDictionary = value;
     }
 
-    // 현재 게임에 존재하는 모든 오브젝트들을 관리하는 dictionary.
+    // 3.2. 현재 게임에 존재하는 모든 오브젝트들을 관리하는 dictionary.
     private Dictionary<Vector2Int, GameObject> _gameObjectDictionary = new Dictionary<Vector2Int, GameObject>();
     public Dictionary<Vector2Int, GameObject> GameObjectDictionary
     {
@@ -78,7 +90,6 @@ public class StageManager : MonoBehaviour
     // Start is called before the first frame update
     public void Awake()
     {
-
         // Dialogue dialogue = new Dialogue();
         // dialogue.Init();
         // DialogueManager.Instance.ShowDialogue(dialogue);
@@ -86,12 +97,10 @@ public class StageManager : MonoBehaviour
         string path = "Stage" + stage.ToString();
         _stageData = StageDataLoader.Instance.LoadStageData(path);
 
-        _tempTileDictionary = _stageData.TileDictionary;
-
-        TileInstantiate();
-
         AudioManager.Instance.Init();
         AudioManager.Instance.PlayBgm(true);
+
+        TileInstantiate();
     }
 
 
@@ -104,10 +113,28 @@ public class StageManager : MonoBehaviour
 
     public void TileInstantiate()
     {
+        // 원래는 한번만 가져오면 될 것 같은데 지금 알 수 없는 이유로 기존의 데이터가 훼손되어서... 일단 반복해서 가져오는걸로.
+        string path = "Stage" + stage.ToString();
+        _stageData = StageDataLoader.Instance.LoadStageData(path);
+
         // 타일들을 하나씩 만들어준다. 
         GameObject Tiles = new GameObject("Tiles");
 
-        foreach (var tile in _stageData.TileDictionary)
+        Debug.Log("(StageManager.cs) TileInstantiate 함수 실행됨.");
+
+        _tempTileDictionary.Clear();
+
+        // 게임을 리셋할때에 변경된 데이터들을 모두 제대로 되돌려준다. 
+        foreach (var entry in _stageData.TileDictionary)
+        {
+            TileObject clonedTileObject = new TileObject(entry.Value); // 복사 생성자 사용
+            _tempTileDictionary.Add(entry.Key, clonedTileObject);
+        }
+
+        Debug.Log("(3, -1) enemy alive? tileDictionary: " + _stageData.TileDictionary[new Vector2Int(3, -1)].EnemyData.IsAlive);
+        Debug.Log("(3, -1) enemy alive? tempTileDictionary" + _tempTileDictionary[new Vector2Int(3, -1)].EnemyData.IsAlive);
+
+        foreach (var tile in _tempTileDictionary)
         {
             Vector3 tilePosition = new Vector3(tile.Key.x, tile.Key.y, 0);
 
@@ -115,6 +142,23 @@ public class StageManager : MonoBehaviour
             if (tile.Value.Type != TileType.Wall)
             {
                 GameObject newTile = Instantiate(TilePrefab, tilePosition, Quaternion.identity, Tiles.transform);
+                newTile.GetComponent<SpriteRenderer>().sprite = SetTileSprite(tile.Value);
+
+                if (tile.Value.Round == 1 || tile.Value.Round == 2)
+                {
+                    if (tile.Value.TileDirection == TileDirection.Up)
+                    {
+                        newTile.transform.Rotate(0, 0, -90);
+                    }
+                    else if (tile.Value.TileDirection == TileDirection.Down)
+                    {
+                        newTile.transform.Rotate(0, 0, 90);
+                    }
+                    else if (tile.Value.TileDirection == TileDirection.Right)
+                    {
+                        newTile.transform.Rotate(0, 0, 180);
+                    }
+                }
             }
 
             if (tile.Value.Type == TileType.Enemy)
@@ -143,11 +187,8 @@ public class StageManager : MonoBehaviour
         MainCamera.GetComponent<MainCamera>()._character = _character;
     }
 
-    public void DestroyAllObjects()
+    public void DestroyAllObjectsAndTileInstantiate()
     {
-        // 일단 변경된 데이터들을 모두 제대로 되돌려준다. 
-        _tempTileDictionary = _stageData.TileDictionary;
-
         // 맵에 존재하는 타일을 제외한 오브젝트들을 초기화시켜준다.
         // 1. 만약 처형이 진행중이라면 처형을 멈추고, 처형에 관한 변수들을 초기화시켜준다.
         Execution.Instance.ExecutionStop();
@@ -158,35 +199,27 @@ public class StageManager : MonoBehaviour
             Execution.Instance.ExecutionCountObjectList[i].GetComponent<Image>().rectTransform.sizeDelta = new Vector2(69.0f, 17.0f);
         }
 
-        // 2. 적들을 모두 초기화해준다. 
-        // 적의 코루틴들을 모두 스탑시켜준다. 그렇지 않으면 진행되고 있던 코루틴이 리셋 이후 버그를 일으킬 수 있음. 
-        foreach (var coroutine in EnemyManager.Instance.EnemyActionCoroutineQueue)
-        {
-            if (coroutine != null)
-            {
-                EnemyManager.Instance.StopCoroutine(coroutine);
-            }
-        }
-
         foreach (var coroutine in EnemyManager.Instance.EnemyDeathCoroutineQueue)
         {
             if (coroutine != null)
             {
                 EnemyManager.Instance.StopCoroutine(coroutine);
-
             }
         }
 
-        // 3. enemy 게임오브젝트들을 파괴. 
+        // 2. enemy 게임오브젝트들을 파괴. 
         foreach (var gameObjectWithVector in _gameObjectDictionary)
         {
             gameObjectWithVector.Value.SetActive(false);
             Destroy(gameObjectWithVector.Value);
         }
+
         _gameObjectDictionary.Clear();
 
-        // 4. 캐릭터를 초기화해준다.
+        // 3. 캐릭터를 초기화해준다.
         Destroy(_character);
+
+        TileInstantiate();
     }
 
     private GameObject InstantiateEnemy(EnemyType enemyType, Vector3 position)
@@ -240,5 +273,48 @@ public class StageManager : MonoBehaviour
             default:
                 return null;
         }
+    }
+
+    // 타일의 스프라이트를 반환하는 함수. 둥근 모서리의 수, 패턴, 방향에 따라 다르게 반환해줘야 한다. 
+    private Sprite SetTileSprite(TileObject tile)
+    {
+        if (tile.Round == 0 && tile.Pattern == 0 && tile.TileDirection == TileDirection.None)
+        {
+            return TileSprites[0];
+        }
+        else if (tile.Round == 0 && tile.Pattern == 1 && tile.TileDirection == TileDirection.None)
+        {
+            return TileSprites[1];
+        }
+        else if (tile.Round == 0 && tile.Pattern == 2 && tile.TileDirection == TileDirection.None)
+        {
+            return TileSprites[2];
+        }
+        else if (tile.Round == 1 && tile.Pattern == 0)
+        {
+            return TileSprites[3];
+        }
+        else if (tile.Round == 1 && tile.Pattern == 1)
+        {
+            return TileSprites[4];
+        }
+        else if (tile.Round == 1 && tile.Pattern == 2)
+        {
+            return TileSprites[5];
+        }
+        else if (tile.Round == 2 && tile.Pattern == 0)
+        {
+            return TileSprites[6];
+        }
+        else if (tile.Round == 2 && tile.Pattern == 1)
+        {
+            return TileSprites[7];
+        }
+        else if (tile.Round == 2 && tile.Pattern == 2)
+        {
+            return TileSprites[8];
+        }
+
+        return null;
     }
 }

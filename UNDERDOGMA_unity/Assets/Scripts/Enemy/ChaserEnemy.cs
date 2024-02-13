@@ -31,11 +31,9 @@ public class ChaserEnemy : Enemy
     }
 
     // 적의 행동을 정의하는 함수. 추격자의 경우 만약 캐릭터와 일직선상에 있고, 그 사이에 아무런 장애물이 없다면 돌진한 후 데미지를 입힌다.
-    public override IEnumerator EnemyAction(int playerRow, int playerCol)
+    public bool CheckCharacterDamaged(int playerRow, int playerCol)
     {
         bool isObstacle = false;
-
-        yield return null;
 
         Vector2Int EnemyPosition = new Vector2Int(Row, Col);
         Vector2Int targetPosition = EnemyPosition + directionOffsetDictionary[_attackDirection];
@@ -43,18 +41,19 @@ public class ChaserEnemy : Enemy
         // 1. 만약 캐릭터가 추격자의 공격범위 칸에 있다면 공격한다.
         if (targetPosition == new Vector2Int(playerRow, playerCol))
         {
-            StartCoroutine(base.EnemyAction(playerRow, playerCol));
             StageManager.Instance._character.GetComponent<Character>().HeartChange(-Attack);
+            StartCoroutine(EnemyAttackAnimation());
+            return true;
         }
 
         // 2. 만약 캐릭터가 추적자의 공격범위 칸에 있지 않고, 일직선상에 있지 않다면 공격하지 않고 함수를 중단한다.
         if ((_attackDirection == AttackDirection.Up || _attackDirection == AttackDirection.Down) && Col != playerCol)
         {
-            yield break;
+            return false;
         }
         else if ((_attackDirection == AttackDirection.Left || _attackDirection == AttackDirection.Right) && Row != playerRow)
         {
-            yield break;
+            return false;
         }
 
         // 3. 만약 캐릭터가 추적자의 공격범위 칸에 있지는 않지만, 일직선상에 있다면 돌진한다. 이를 위해 일직선상에 장애물이 있는지 체크한다.
@@ -87,7 +86,7 @@ public class ChaserEnemy : Enemy
         {
             gameObject.transform.DOMove(new Vector3(targetPosition.x, targetPosition.y, 0) + new Vector3(-0.06f, 0.3f, 0), 1.0f, false);
 
-            StartCoroutine(base.EnemyAction(playerRow, playerCol));
+            StartCoroutine(EnemyAttackAnimation());
             StageManager.Instance._character.GetComponent<Character>().HeartChange(-Attack);
 
             // 4.1. 원래 위치와 TileDictionary 정보를 바꾸어준다.
@@ -105,7 +104,18 @@ public class ChaserEnemy : Enemy
             // 4.3. 일단 행과 열이 바뀌었음을 저장해준다. 
             Row = targetPosition.x;
             Col = targetPosition.y;
+
+            return true;
         }
+
+        return false;
+    }
+
+    public override IEnumerator EnemyAttackAnimation()
+    {
+        StartCoroutine(base.EnemyAttackAnimation());
+
+        yield return null;
     }
 
     public void SetAttackRangePosition(GameObject attackRange, AttackDirection attackDirection)

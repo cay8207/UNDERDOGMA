@@ -9,6 +9,8 @@ using DG.Tweening;
 public class MoveState : BaseState
 {
     public KeyCode _key;
+    public Character.State _nextState;
+
     public MoveState(Character character, KeyCode key) : base(character)
     {
         _key = key;
@@ -17,6 +19,11 @@ public class MoveState : BaseState
     public override void OnStateEnter()
     {
         CharacterMove(_key);
+
+        // 1. 고기가 있는 칸에 도달하는 경우 MeatState로 넘어간다.
+        // 2. 그렇지 않은 경우 적에게 공격을 받는지 체크하는 Damaged State로 넘어간다.
+
+        _character.ChangeState(_nextState);
     }
 
     public override void OnStateUpdate()
@@ -31,29 +38,25 @@ public class MoveState : BaseState
 
     private void CharacterMove(KeyCode key)
     {
-        // 캐릭터가 이동하지 않는 경우에는 적들에게 데미지를 받는 등의 이벤트가 발생하면 안된다. 
+        // 1. 캐릭터가 이동하지 않는 경우에는 적들에게 데미지를 받는 등의 이벤트가 발생하면 안된다. 
         Vector2Int targetPosition = CheckCharacterMove(key);
 
-        // while문을 탈출한 후, 즉 이동이 끝난 후 상하좌우에 적이 있다면 데미지를 입어야 한다.
+        // 2. while문을 탈출한 후, 이동해야 한다면 캐릭터를 이동시킨다. 
         if ((targetPosition.x != _character.Row) || (targetPosition.y != _character.Col))
         {
             _character.MoveCount++;
 
-            Execution.Instance.ExecutionCheck(_character.MoveCount);
             _character.EnqueueCoroutine(_character.CharacterMoveCoroutine(targetPosition));
 
             _character.HeartChange(-1);
 
+            // 캐릭터가 이동했으니 상단의 눈이 하나 떠지도록 하는 코드. 
+            Execution.Instance.ExecutionCheck(_character.MoveCount);
+
             AudioManager.Instance.PlaySfx(AudioManager.Sfx.Move);
-
-            // 적의 턴을 진행하는 코드. 
-            EnemyManager.Instance.EnemyTurn();
-
-            if (_character.Heart <= 0)
-            {
-                _character.ChangeState(Character.State.Death);
-            }
         }
+
+        _character.UpdatePosition(targetPosition.x, targetPosition.y);
     }
 
     public Vector2Int CheckCharacterMove(KeyCode key)
@@ -66,30 +69,23 @@ public class MoveState : BaseState
 
         while (true)
         {
-            Debug.Log("next row: " + targetPosition.x + " " + "next col: " + targetPosition.y);
+            Debug.Log("(MoveState) next row: " + targetPosition.x + " " + "next col: " + targetPosition.y);
+            Debug.Log("(MoveState) next type: " + StageManager.Instance.TempTileDictionary[targetPosition].Type);
+            if (StageManager.Instance.TempTileDictionary[targetPosition].Type == TileType.Enemy)
+            {
+                Debug.Log("(MoveState) next enemy: " + StageManager.Instance.TempTileDictionary[targetPosition].EnemyData.IsAlive);
+            }
 
             // 다음으로 이동할 위치를 지정해준다. 
             TileObject tileObject = StageManager.Instance.TempTileDictionary[targetPosition];
 
             // 1. 이동하려는 칸에 벽이 있는 경우 멈춘다.
-            if (tileObject.Type == TileType.Wall)
+            if (tileObject.Type == TileType.Wall || (tileObject.Type == TileType.Enemy && tileObject.EnemyData.IsAlive == true))
             {
-                // targetPosition에 벽이 있으므로, 이전 위치로 돌아가야 한다. 
+                // 1.1. targetPosition에 벽이 있으므로, 이전 위치로 돌아가야 한다. 
                 targetPosition -= returnDirection(key);
-                _character.ChangeState(Character.State.Idle);
+                _nextState = Character.State.Damaged;
                 break;
-            }
-
-            // 2. 적이 있고, 살아있는 경우 Damaged State로 이동한다.
-            if (tileObject.Type == TileType.Enemy)
-            {
-                if (tileObject.EnemyData.IsAlive == true)
-                {
-                    // targetPosition에 벽이 있으므로, 이전 위치로 돌아가야 한다. 
-                    targetPosition -= returnDirection(key);
-                    _character.ChangeState(Character.State.Damaged);
-                    break;
-                }
             }
 
             // 3. 만약 해당 칸에 고기가 있다면 Meat State로 이동한다. 
@@ -98,23 +94,19 @@ public class MoveState : BaseState
                 if (tileObject.MeatData.IsExist == true)
                 {
                     // 3.1. 고기의 경우 해당 칸까지 가야한다. targetPosition을 그대로 반환하면 됌. 
-                    _character.ChangeState(Character.State.Meat);
+                    _nextState = Character.State.Meat;
                     break;
                 }
             }
 
-            // 4. 이외의 경우 해당 칸으로 한 칸 더 전진. 
-            if (tileObject.Type == TileType.Empty)
-            {
-                // 다음으로 이동할 칸을 계속 업데이트해줘야 한다. 
-                targetPosition += returnDirection(key);
+            // 4. 다음으로 이동할 칸을 계속 업데이트해줘야 한다. 
+            targetPosition += returnDirection(key);
 
-                // while문이 무한루프에 빠지는 것을 방지하기 위해 범위를 제한해준다.
-                if (row > 100 || row < -100 || col > 100 || col < -100)
-                {
-                    Debug.Log("캐릭터 이동 관련해서 무한루프 발생! 맵 오브젝트(적, 벽, 고기 등)의 위치를 확인해주세요! (MoveState.cs)");
-                    break;
-                }
+            // 5. while문이 무한루프에 빠지는 것을 방지하기 위해 범위를 제한해준다.
+            if (targetPosition.x > 100 || targetPosition.x < -100 || targetPosition.y > 100 || targetPosition.y < -100)
+            {
+                Debug.Log("캐릭터 이동 관련해서 무한루프 발생! 맵 오브젝트(적, 벽, 고기 등)의 위치를 확인해주세요! (MoveState.cs)");
+                break;
             }
         }
 

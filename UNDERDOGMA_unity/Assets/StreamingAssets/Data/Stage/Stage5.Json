@@ -1,24 +1,51 @@
 {
   "TileDictionary": {
-    "0,0": { "Type": "Empty" },
-    "1,0": { "Type": "Empty" },
-    "2,0": { "Type": "Empty" },
-    "2,-1": { "Type": "Empty" },
+    "0,0": {
+      "Type": "Empty",
+      "Round": "2",
+      "Pattern": "1",
+      "TileDirection": "Left"
+    },
+    "1,0": {
+      "Type": "Empty",
+      "Round": "0",
+      "Pattern": "0",
+      "TileDirection": "None"
+    },
+    "2,0": {
+      "Type": "Empty",
+      "Round": "0",
+      "Pattern": "2",
+      "TileDirection": "None"
+    },
+    "2,-1": {
+      "Type": "Empty",
+      "Round": "1",
+      "Pattern": "1",
+      "TileDirection": "Down"
+    },
     "2, 1": {
       "Type": "Enemy",
+      "Round": "2",
+      "Pattern": "0",
+      "TileDirection": "Up",
+
       "EnemyType": "NormalEnemy",
       "IsAlive": true,
-      "Attack": 1,
-      "Heart": 2,
+      "Attack": "1",
+      "Heart": "2",
       "AttackDirection": "Down"
     },
-
     "3, -1": {
       "Type": "Enemy",
+      "Round": "2",
+      "Pattern": "2",
+      "TileDirection": "Right",
+
       "EnemyType": "NormalEnemy",
       "IsAlive": true,
-      "Attack": 2,
-      "Heart": 1,
+      "Attack": "2",
+      "Heart": "1",
       "AttackDirection": "Left"
     },
 
@@ -35,7 +62,6 @@
     "4,-1": { "Type": "Wall" }
   },
   "ExecutionCount": 3,
-  "ExecutionHealth": 6,
   "CharacterRow": 0,
   "CharacterCol": 0,
   "CharacterHeart": 9

@@ -10,8 +10,6 @@ public abstract class Enemy : MonoBehaviour
     [SerializeField] GameObject _attackText;
     [SerializeField] GameObject _heartText;
 
-    private MainCamera _mainCamera;
-
     // 모든 적은 기본적으로 현재 위치를 가진다. 
     private int _row;
     public int Row
@@ -59,8 +57,6 @@ public abstract class Enemy : MonoBehaviour
     {
         _attackText.GetComponent<Text>().SetText(_attack);
         _heartText.GetComponent<Text>().SetText(_heart);
-
-        _mainCamera = Camera.main.GetComponent<MainCamera>();
     }
 
     // Update is called once per frame
@@ -69,7 +65,7 @@ public abstract class Enemy : MonoBehaviour
 
     }
 
-    public virtual IEnumerator EnemyAction(int playerRow, int playerCol)
+    public virtual IEnumerator EnemyAttackAnimation()
     {
 
         // 캐릭터를 공격하는 애니메이션 진행. 
@@ -78,8 +74,6 @@ public abstract class Enemy : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
 
         AudioManager.Instance.PlaySfx(AudioManager.Sfx.Enemy_Attack);
-
-        _mainCamera.Shake(0.5f);
 
         gameObject.GetComponent<Animator>().SetBool("IsAttack", false);
     }
@@ -98,6 +92,7 @@ public abstract class Enemy : MonoBehaviour
 
         gameObject.GetComponent<Animator>().SetBool("IsDied", false);
 
+        Debug.Log("(Enemy.cs) 적이 죽었습니다. 데이터 변경하기!");
         Destroy(StageManager.Instance.GameObjectDictionary[targetPosition]);
         StageManager.Instance.TempTileDictionary[targetPosition].EnemyData.IsAlive = false;
         StageManager.Instance.GameObjectDictionary.Remove(targetPosition);

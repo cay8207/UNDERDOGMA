@@ -20,11 +20,7 @@ public class StageData
     // {1, 1, 1, 3, 2, 2}라면  1: 적이 있다. 1: 1번 타입의 적이다(감시자). 1: 살아있다. 3: 공격력. 2: 생명력, 2: 공격방향(좌)
     [JsonIgnore]
     private Dictionary<Vector2Int, TileObject> _tileDictionary = new Dictionary<Vector2Int, TileObject>();
-    public Dictionary<Vector2Int, TileObject> TileDictionary
-    {
-        get => _tileDictionary;
-        set => _tileDictionary = value;
-    }
+    public Dictionary<Vector2Int, TileObject> TileDictionary => _tileDictionary;
 
     [JsonIgnore]
     // 처형 시스템에 대한 정보를 저장한다. 몇 번 이동하면 처형 이벤트가 작동하는지, 체력이 얼마 이상이어야 하는지. 
@@ -68,7 +64,7 @@ public class StageData
     }
 
     // 데이터를 초기화하는 생성자
-    public StageData(Dictionary<string, Dictionary<string, string>> tileDictionary, int executionCount, int executionHealth,
+    public StageData(Dictionary<string, Dictionary<string, string>> tileDictionary, int executionCount,
     int characterRow, int characterCol, int characterHeart)
     {
         foreach (var tile in tileDictionary)
@@ -87,10 +83,18 @@ public class StageData
             switch (tile.Value["Type"])
             {
                 case "Wall":
-                    _tileDictionary.Add(new Vector2Int(tilex, tiley), new TileObject(TileType.Wall));
+                    _tileDictionary
+                        .Add(
+                            new Vector2Int(tilex, tiley),
+                                new TileObject(TileType.Wall));
                     break;
                 case "Empty":
-                    _tileDictionary.Add(new Vector2Int(tilex, tiley), new TileObject(TileType.Empty));
+                    _tileDictionary
+                        .Add(new(tilex, tiley),
+                                new TileObject(TileType.Empty,
+                                    Int32.Parse(tile.Value["Round"]),
+                                        Int32.Parse(tile.Value["Pattern"]),
+                                            returnTileDirection(tile.Value["TileDirection"])));
                     break;
                 case "Enemy":
                     if (tile.Value.ContainsKey("EnemyType") == false
@@ -102,7 +106,13 @@ public class StageData
                         Debug.Log("Enemy 데이터가 잘못 입력되었습니다. EnemyType, IsAlive, Attack, Heart, AttackDirection 중 빠진 게 없는지 체크해주세요.");
                         continue;
                     }
-                    _tileDictionary.Add(new Vector2Int(tilex, tiley), createEnemyData(tile.Value));
+                    _tileDictionary
+                        .Add(new(tilex, tiley),
+                                new TileObject(TileType.Enemy,
+                                    Int32.Parse(tile.Value["Round"]),
+                                        Int32.Parse(tile.Value["Pattern"]),
+                                            returnTileDirection(tile.Value["TileDirection"]),
+                                                createEnemyData(tile.Value)));
                     break;
                 case "Meat":
                     if (tile.Value.ContainsKey("Amount") == false
@@ -111,19 +121,24 @@ public class StageData
                         Debug.Log("Meat 데이터가 잘못 입력되었습니다. Amount, IsExist 중 빠진 게 없는지 체크해주세요.");
                         continue;
                     }
-                    _tileDictionary.Add(new Vector2Int(tilex, tiley), createMeatData(tile.Value));
+                    _tileDictionary
+                        .Add(new(tilex, tiley),
+                                new TileObject(TileType.Enemy,
+                                    Int32.Parse(tile.Value["Round"]),
+                                        Int32.Parse(tile.Value["Pattern"]),
+                                            returnTileDirection(tile.Value["TileDirection"]),
+                                                createMeatData(tile.Value)));
                     break;
 
             }
         }
         this._executionCount = executionCount;
-        this._executionHealth = executionHealth;
         this._characterRow = characterRow;
         this._characterCol = characterCol;
         this._characterHeart = characterHeart;
     }
 
-    public TileObject createEnemyData(Dictionary<String, String> data)
+    public EnemyData createEnemyData(Dictionary<String, String> data)
     {
         EnemyData enemyData;
 
@@ -177,10 +192,10 @@ public class StageData
 
         enemyData = new EnemyData(enemyType, isAlive, attack, heart, attackDirection);
 
-        return new TileObject(returnTileType(data["Type"]), enemyData);
+        return enemyData;
     }
 
-    public TileObject createMeatData(Dictionary<String, String> data)
+    public MeatData createMeatData(Dictionary<String, String> data)
     {
         MeatData meatData;
 
@@ -199,7 +214,7 @@ public class StageData
 
         meatData = new MeatData(amount, isExist);
 
-        return new TileObject(returnTileType(data["Type"]), meatData);
+        return meatData;
     }
 
     public TileType returnTileType(String tileType)
@@ -216,6 +231,23 @@ public class StageData
                 return TileType.Meat;
             default:
                 return TileType.Invalid;
+        }
+    }
+
+    public TileDirection returnTileDirection(String tileDirection)
+    {
+        switch (tileDirection)
+        {
+            case "Up":
+                return TileDirection.Up;
+            case "Down":
+                return TileDirection.Down;
+            case "Left":
+                return TileDirection.Left;
+            case "Right":
+                return TileDirection.Right;
+            default:
+                return TileDirection.None;
         }
     }
 }

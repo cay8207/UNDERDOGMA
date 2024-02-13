@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UnityEngine;
 
 public class ResetState : BaseState
 {
@@ -12,12 +13,17 @@ public class ResetState : BaseState
 
     public override void OnStateEnter()
     {
-
     }
 
     public override void OnStateUpdate()
     {
-
+        // 재생되는 애니메이션. 즉, 공격하는거나 죽는거나 등등 모두 끝나고 리셋해야 한다. 
+        if (_character.IsCharacterCoroutineRunning == false)
+        {
+            Debug.Log("Game Reset!");
+            ResetGame();
+            _character.ChangeState(Character.State.Idle);
+        }
     }
 
     public override void OnStateExit()
@@ -34,9 +40,6 @@ public class ResetState : BaseState
         AudioManager.Instance.PlaySfx(AudioManager.Sfx.Reset);
 
         // 3. 모든 오브젝트들을 파괴시켜준다.
-        StageManager.Instance.DestroyAllObjects();
-
-        // 4. 타일들을 새롭게 다시 그려준다. 
-        StageManager.Instance.TileInstantiate();
+        StageManager.Instance.DestroyAllObjectsAndTileInstantiate();
     }
 }
