@@ -6,6 +6,7 @@ using UnityEngine;
 public class StageIcon : MonoBehaviour
 {
     public SpriteRenderer SelectMarker;
+    public GameObject StageText;
     public bool IsSelected = false;
     [Header("Connection")]
     [SerializeField] private StageIcon iconUp;
@@ -19,14 +20,12 @@ public class StageIcon : MonoBehaviour
     private void Start()
     {
         originalScale = transform.localScale;
+        StageText.SetActive(false);
     }
     public void OnMouseEnter()
     {
         StageSelectManager.Instance.NextSelectedStage = this;
         StageSelectManager.Instance.SwitchSelectedStage();
-        //WorldMapManager.Instance.SelectedWorld = WorldNum;
-        //WorldMapManager.Instance.SetInfoPos(WorldNum);
-        //WorldMapManager.Instance.SetWorldMapImage(WorldNum);
     }
     public void OnMouseDown()
     {
@@ -83,12 +82,14 @@ public class StageIcon : MonoBehaviour
         {
             IsSelected = true;
             SelectMarker.enabled = true;
+            StageText.SetActive(true);
             transform.DOScale(originalScale * sizeMultiplier, 0.5f);
         }
         else
         {
             SelectMarker.enabled = false;
             IsSelected = false;
+            StageText.SetActive(false);
             transform.DOScale(originalScale, 0.5f);
         }
     }
