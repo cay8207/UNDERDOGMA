@@ -939,7 +939,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: e94f7919e4ae5d04aa1f25b6432fc7f4, type: 3}
   - {fileID: 21300000, guid: e0938a86980dfc649a88e58ac3a86bfb, type: 3}
   - {fileID: 21300000, guid: 6cffffbdde4077b47b00a1ced643e6ef, type: 3}
-  stage: 10
+  stage: 25
   ResetAnimationUpSide: {fileID: 1240037534}
   ResetAnimationDownSide: {fileID: 532385163}
   _character: {fileID: 0}
