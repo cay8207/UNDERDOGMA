@@ -7,7 +7,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DialogueManager : MonoBehaviour
+public class DialogueManager : Singleton<DialogueManager>
 {
     #region Singleton
     // 싱글톤 패턴.
@@ -40,10 +40,17 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private Canvas DialogueCanvas;
     [SerializeField] private TextMeshProUGUI DialogueText;
     [SerializeField] private UnityEngine.UI.Image DialogueWindow;
-    [SerializeField] private UnityEngine.UI.Image DialogueImage;
+    [SerializeField] private UnityEngine.UI.Image DialogueImage1;
+    [SerializeField] private Vector3 DialogueImage1Position;
+    [SerializeField] private UnityEngine.UI.Image DialogueImage2;
+    [SerializeField] private Vector3 DialogueImage2Position;
 
     // 대사와 함께 나올 스탠딩 cg들을 저장하는 배열. 
-    [SerializeField] private List<Sprite> listSprites;
+    [SerializeField] private List<Sprite> listSprites1;
+    [SerializeField] private List<Sprite> listSprites2;
+
+    public bool _isDialogueRunning = false;
+    public bool _isDialogueTextRunning = false;
 
     private DialogueData _dialogueData;
 
@@ -56,24 +63,32 @@ public class DialogueManager : MonoBehaviour
     //  현재 몇번째 텍스트를 읽고 있는지 저장하기 위한 변수.
     private int count = 0;
 
+    public void Awake()
+    {
+        _isDialogueRunning = true;
+    }
+
     public void Start()
     {
         string path = "Stage" + StageManager.Instance.stage.ToString();
         _dialogueData = DialogueDataLoader.Instance.LoadDialogueData(path);
+
+        StartCoroutine(StartDialogueCoroutine());
     }
 
     private void Update()
     {
         // 대화를 읽는다.
-        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return))
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return)
+            && count < _dialogueData.DialogueList.Count && _isDialogueTextRunning == false)
         {
-            count++;
             // 모든 대화를 읽은 경우
             if (count == _dialogueData.DialogueList.Count)
             {
                 // 모든 코루틴 종료
                 StopAllCoroutines();
                 ExitDialogue();
+                _isDialogueRunning = false;
             }
             else
             {
@@ -86,7 +101,25 @@ public class DialogueManager : MonoBehaviour
 
     public IEnumerator StartDialogueCoroutine()
     {
+        _isDialogueTextRunning = true;
+
         DialogueText.text = "";
+
+        if (StageManager.Instance.stage == 1)
+        {
+            DialogueImage1.sprite = listSprites1[count];
+        }
+        else
+        {
+            DialogueImage1.rectTransform.localPosition = DialogueImage1Position;
+            DialogueImage2.rectTransform.localPosition = DialogueImage2Position;
+
+            DialogueImage1.rectTransform.sizeDelta = listSprites1[count].rect.size;
+            DialogueImage2.rectTransform.sizeDelta = listSprites2[count].rect.size;
+
+            DialogueImage1.sprite = listSprites1[count];
+            DialogueImage2.sprite = listSprites2[count];
+        }
 
         // 텍스트 출력 //
         for (int i = 0; i < _dialogueData.DialogueList[count].Length; i++)
@@ -94,17 +127,25 @@ public class DialogueManager : MonoBehaviour
             DialogueText.text += _dialogueData.DialogueList[count][i]; // 한글자씩 출력
             yield return new WaitForSeconds(0.01f);
         }
+
+        count++;
+
+        _isDialogueTextRunning = false;
     }
 
     public void ExitDialogue()
     {
-        //// 초기화 ////
         count = 0;
         DialogueText.text = "";
-        // 리스트 초기화 //
+
+        // 리스트 초기화
         _dialogueData.DialogueList.Clear();
-        listSprites.Clear();
-        // 애니메이터 초기화 //
+        listSprites1.Clear();
+        listSprites2.Clear();
+        // 애니메이터 초기화
+
+        DialogueImage1.GetComponent<Image>().enabled = false;
+        DialogueImage2.GetComponent<Image>().enabled = false;
 
         DialogueText.GetComponent<TextMeshProUGUI>().enabled = false;
         DialogueWindow.GetComponent<UnityEngine.UI.Image>().enabled = false;

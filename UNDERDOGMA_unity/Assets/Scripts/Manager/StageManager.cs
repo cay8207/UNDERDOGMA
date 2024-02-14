@@ -191,8 +191,6 @@ public class StageManager : MonoBehaviour
     {
         // 맵에 존재하는 타일을 제외한 오브젝트들을 초기화시켜준다.
         // 1. 만약 처형이 진행중이라면 처형을 멈추고, 처형에 관한 변수들을 초기화시켜준다.
-        Execution.Instance.ExecutionStop();
-
         for (int i = 0; i < Execution.Instance.ExecutionCount; i++)
         {
             Execution.Instance.ExecutionCountObjectList[i].GetComponent<Image>().sprite = Execution.Instance.CloseEye;
