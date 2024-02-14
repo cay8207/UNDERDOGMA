@@ -81,24 +81,27 @@ public class Execution : MonoBehaviour
         Vector2 CameraPosition = StageManager.Instance.MainCamera.transform.position;
         ExecutionObject.transform.position = new Vector3(CameraPosition.x, CameraPosition.y, 0.0f);
 
-        _executionTargetDictionary = ExecuteEnemies();
-
-        if (_executionTargetDictionary.Count > 0)
+        if (ExecutionCount > 0)
         {
-            int count = 0;
+            _executionTargetDictionary = ExecuteEnemies();
 
-            foreach (var enemy in _executionTargetDictionary)
+            if (_executionTargetDictionary.Count > 0)
             {
-                _executionTargetObjectList[count].transform.position = new Vector3(enemy.Key.x, enemy.Key.y, 0.0f);
-                Debug.Log("(Execution.cs) executionTarget: " + enemy.Value.name);
+                int count = 0;
 
-                count++;
-            }
+                foreach (var enemy in _executionTargetDictionary)
+                {
+                    _executionTargetObjectList[count].transform.position = new Vector3(enemy.Key.x, enemy.Key.y, 0.0f);
+                    Debug.Log("(Execution.cs) executionTarget: " + enemy.Value.name);
 
-            // 나머지 오브젝트는 숨겨준다. 
-            for (int i = count; i < 10; i++)
-            {
-                _executionTargetObjectList[i].transform.position = new Vector3(-9999.0f, -9999.0f, 0.0f);
+                    count++;
+                }
+
+                // 나머지 오브젝트는 숨겨준다. 
+                for (int i = count; i < 10; i++)
+                {
+                    _executionTargetObjectList[i].transform.position = new Vector3(-9999.0f, -9999.0f, 0.0f);
+                }
             }
         }
     }

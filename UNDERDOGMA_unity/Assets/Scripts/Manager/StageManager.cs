@@ -90,12 +90,10 @@ public class StageManager : MonoBehaviour
     // Start is called before the first frame update
     public void Awake()
     {
-        // Dialogue dialogue = new Dialogue();
-        // dialogue.Init();
-        // DialogueManager.Instance.ShowDialogue(dialogue);
-
         string path = "Stage" + stage.ToString();
         _stageData = StageDataLoader.Instance.LoadStageData(path);
+
+        SetCameraPosition();
 
         AudioManager.Instance.Init();
         AudioManager.Instance.PlayBgm(true);
@@ -103,12 +101,48 @@ public class StageManager : MonoBehaviour
         TileInstantiate();
     }
 
-
-
     // Update is called once per frame
     void Update()
     {
 
+    }
+
+    // 타일들을 모두 탐색해서, 가장 맵의 끝에 있는 타일의 x, y값을 찾아서 그 중간값을 카메라의 위치로 설정해준다.
+    public void SetCameraPosition()
+    {
+        int minX = 99999999;
+        int maxX = 0;
+        int minY = 99999999;
+        int maxY = 0;
+
+        foreach (var tile in _stageData.TileDictionary)
+        {
+            if (tile.Value.Type != TileType.Wall)
+            {
+                // 가장 작은 x값과 가장 큰 x값, 가장 작은 y값과 가장 큰 y값을 찾아서 그 중간값을 카메라의 위치로 설정해주면 될 것 같아.
+                // 그럼 카메라가 맵의 중간에 위치하게 될거야.
+
+                if (tile.Key.x < minX)
+                {
+                    minX = tile.Key.x;
+                }
+                else if (tile.Key.x > maxX)
+                {
+                    maxX = tile.Key.x;
+                }
+                if (tile.Key.y < minY)
+                {
+                    minY = tile.Key.y;
+                }
+                else if (tile.Key.y > maxY)
+                {
+                    maxY = tile.Key.y;
+                }
+            }
+        }
+
+        Vector2 CameraPosition = new Vector2((minX + maxX) / 2, (minY + maxY) / 2);
+        MainCamera.transform.position = new Vector3(CameraPosition.x, CameraPosition.y, -10.0f);
     }
 
     public void TileInstantiate()

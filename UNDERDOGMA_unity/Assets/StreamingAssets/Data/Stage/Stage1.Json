@@ -1,12 +1,41 @@
 {
   "TileDictionary": {
-    "0,0": { "Type": "Empty" },
-    "1,0": { "Type": "Empty" },
-    "1,-1": { "Type": "Empty" },
-    "1,-2": { "Type": "Empty" },
-    "2,-2": { "Type": "Empty" },
+    "0,0": {
+      "Type": "Empty",
+      "Round": "0",
+      "Pattern": "0",
+      "TileDirection": "None"
+    },
+    "1,0": {
+      "Type": "Empty",
+      "Round": "0",
+      "Pattern": "0",
+      "TileDirection": "None"
+    },
+    "1,-1": {
+      "Type": "Empty",
+      "Round": "0",
+      "Pattern": "0",
+      "TileDirection": "None"
+    },
+    "1,-2": {
+      "Type": "Empty",
+      "Round": "0",
+      "Pattern": "0",
+      "TileDirection": "None"
+    },
+    "2,-2": {
+      "Type": "Empty",
+      "Round": "0",
+      "Pattern": "0",
+      "TileDirection": "None"
+    },
     "3, -2": {
       "Type": "Enemy",
+      "Round": 1,
+      "Pattern": 1,
+      "TileDirection": "Up",
+
       "EnemyType": "NormalEnemy",
       "IsAlive": true,
       "Attack": 2,
@@ -27,7 +56,7 @@
     "3,-1": { "Type": "Wall" },
     "4,-2": { "Type": "Wall" }
   },
-  "ExecutionCount": 0,
+  "ExecutionCount": -1,
   "ExecutionHealth": 0,
   "CharacterRow": 0,
   "CharacterCol": 0,
