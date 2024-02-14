@@ -62,7 +62,6 @@
     "1,2": { "Type": "Wall" },
     "1,-2": { "Type": "Wall" },
     "2,-1": { "Type": "Wall" },
-    "2,0": { "Type": "Wall" }
   },
   "ExecutionCount": -1,
   "CharacterRow": 0,
