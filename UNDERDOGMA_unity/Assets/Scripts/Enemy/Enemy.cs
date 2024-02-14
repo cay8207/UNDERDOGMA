@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 using DG.Tweening;
 
-public abstract class Enemy : MonoBehaviour
+public abstract class Enemy : MonoBehaviour, IEnemyAttributesSetter, IEnemyPositionSetter
 {
     #region Variables
     [SerializeField] GameObject _attackText;
@@ -41,6 +41,13 @@ public abstract class Enemy : MonoBehaviour
         set => _heart = value;
     }
 
+    private AttackDirection _enemyAttackDirection;
+    public AttackDirection EnemyAttackDirection
+    {
+        get => _enemyAttackDirection;
+        set => _enemyAttackDirection = value;
+    }
+
     // 상하좌우 체크를 위한 배열. 
     public Dictionary<AttackDirection, Vector2Int> directionOffsetDictionary = new Dictionary<AttackDirection, Vector2Int>
     {
@@ -51,6 +58,13 @@ public abstract class Enemy : MonoBehaviour
     };
 
     #endregion
+
+    public void SetAttributes(EnemyData enemyData)
+    {
+        _attack = enemyData.Attack;
+        _heart = enemyData.Heart;
+        _enemyAttackDirection = enemyData.AttackDirection;
+    }
 
     // Start is called before the first frame update
     public virtual void Start()
