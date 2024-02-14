@@ -1011,6 +1011,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 63217358e087f1b458e2219beea4848b, type: 3}
   - {fileID: 21300000, guid: 63217358e087f1b458e2219beea4848b, type: 3}
   _isDialogueRunning: 0
+  _isDialogueTextRunning: 0
 --- !u!4 &1031148994
 Transform:
   m_ObjectHideFlags: 0
@@ -1403,8 +1404,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ExecutionPrefab: {fileID: 6264823619524710532, guid: e85921f50ffd0b6489e42b50426570e6, type: 3}
   ExecutionCanvas: {fileID: 185529058}
-  ExecutionHealthText: {fileID: 0}
   ExecutionCountPrefab: {fileID: 2722413630067619314, guid: c5e4d10f80bfb204daf9d4a8549b1a9e, type: 3}
+  ExecutionTargetPrefab: {fileID: 3660475419637654646, guid: bab168e94e046eb448af6e87787533f9, type: 3}
   CloseEye: {fileID: 21300000, guid: 7d22056769c62b24788bf2eaf2333bcd, type: 3}
   OpenEye: {fileID: 21300000, guid: 2403fa3fab40f6e4889e13a9e21f781e, type: 3}
   ExecutionObject: {fileID: 0}

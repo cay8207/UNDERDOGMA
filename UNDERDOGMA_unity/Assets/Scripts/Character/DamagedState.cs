@@ -70,6 +70,7 @@ public class DamagedState : BaseState
                         _character.EnqueueCoroutine(_character.CharacterDamaged(amount));
                     }
                 }
+                // 2번 타입 적인 경우
                 else if (StageManager.Instance.TempTileDictionary[new Vector2Int(enemyRow, enemyCol)].EnemyData.EnemyType == EnemyType.MiniBoss)
                 {
                     amount = gameObject.Value.GetComponent<MiniBoss>().CheckCharacterDamaged(PlayerPosition.x, PlayerPosition.y);
