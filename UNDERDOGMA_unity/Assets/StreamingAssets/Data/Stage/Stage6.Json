@@ -6,7 +6,7 @@
       "Pattern": "0",
       "TileDirection": "None",
 
-      "EnemyType": "NormalEnemy",
+      "EnemyType": "MiniBoss",
       "IsAlive": true,
       "Attack": 1,
       "Heart": 8,

@@ -12,20 +12,13 @@ public class ChaserEnemy : Enemy
 {
     [SerializeField] GameObject AttackRange;
 
-    public AttackDirection _attackDirection;
-
-    public void SetAttributes(EnemyData enemyData)
-    {
-        // NormalEnemy에 특화된 SetAttributes 로직을 구현
-    }
-
     public override void Start()
     {
         base.Start();
 
-        Vector2Int targetPosition = new Vector2Int(Row, Col) + directionOffsetDictionary[_attackDirection];
+        Vector2Int targetPosition = new Vector2Int(Row, Col) + directionOffsetDictionary[EnemyAttackDirection];
         GameObject _attackRange = Instantiate(AttackRange, new Vector3(targetPosition.x, targetPosition.y, 0), Quaternion.identity);
-        SetAttackRangePosition(_attackRange, _attackDirection);
+        SetAttackRangePosition(_attackRange, EnemyAttackDirection);
         _attackRange.transform.parent = transform;
         AttackRange.GetComponent<SpriteRenderer>().enabled = false;
     }
@@ -36,7 +29,7 @@ public class ChaserEnemy : Enemy
         bool isObstacle = false;
 
         Vector2Int EnemyPosition = new Vector2Int(Row, Col);
-        Vector2Int targetPosition = EnemyPosition + directionOffsetDictionary[_attackDirection];
+        Vector2Int targetPosition = EnemyPosition + directionOffsetDictionary[EnemyAttackDirection];
 
         // 1. 만약 캐릭터가 추격자의 공격범위 칸에 있다면 공격한다.
         if (targetPosition == new Vector2Int(playerRow, playerCol))
@@ -46,11 +39,11 @@ public class ChaserEnemy : Enemy
         }
 
         // 2. 만약 캐릭터가 추적자의 공격범위 칸에 있지 않고, 일직선상에 있지 않다면 공격하지 않고 함수를 중단한다.
-        if ((_attackDirection == AttackDirection.Up || _attackDirection == AttackDirection.Down) && Col != playerCol)
+        if ((EnemyAttackDirection == AttackDirection.Up || EnemyAttackDirection == AttackDirection.Down) && Col != playerCol)
         {
             return 0;
         }
-        else if ((_attackDirection == AttackDirection.Left || _attackDirection == AttackDirection.Right) && Row != playerRow)
+        else if ((EnemyAttackDirection == AttackDirection.Left || EnemyAttackDirection == AttackDirection.Right) && Row != playerRow)
         {
             return 0;
         }
@@ -58,7 +51,7 @@ public class ChaserEnemy : Enemy
         // 3. 만약 캐릭터가 추적자의 공격범위 칸에 있지는 않지만, 일직선상에 있다면 돌진한다. 이를 위해 일직선상에 장애물이 있는지 체크한다.
         while (true)
         {
-            targetPosition += directionOffsetDictionary[_attackDirection];
+            targetPosition += directionOffsetDictionary[EnemyAttackDirection];
             TileType tileType = StageManager.Instance.TempTileDictionary[targetPosition].Type;
             if (tileType == TileType.Wall || tileType == TileType.Enemy || tileType == TileType.Meat)
             {
@@ -68,7 +61,7 @@ public class ChaserEnemy : Enemy
             else if (targetPosition == new Vector2Int(playerRow, playerCol))
             {
                 // 추적자가 실제로 도달할 칸은 플레이어 바로 전 칸이다. 따라서 플레이어 칸에서 공격 방향을 하나 뺀 만큼의 칸으로 이동한다.
-                targetPosition -= directionOffsetDictionary[_attackDirection];
+                targetPosition -= directionOffsetDictionary[EnemyAttackDirection];
                 break;
             }
 

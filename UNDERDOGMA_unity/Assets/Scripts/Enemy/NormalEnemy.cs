@@ -8,26 +8,18 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 // 일반 적은 하나의 방향으로만 공격한다.
-public class NormalEnemy : Enemy, IEnemyAttributesSetter, IEnemyPositionSetter
+public class NormalEnemy : Enemy
 {
     [SerializeField] GameObject AttackRange;
-    public AttackDirection _attackDirection;
-
-    public void SetAttributes(EnemyData enemyData)
-    {
-        Attack = enemyData.Attack;
-        Heart = enemyData.Heart;
-        _attackDirection = enemyData.AttackDirection;
-    }
 
     public override void Start()
     {
         base.Start();
 
         // 일반 적의 경우 공격 방향이 정해져있고, 해당 방향에 UI를 넣어줘야 함. 
-        Vector2Int targetPosition = new Vector2Int(Row, Col) + directionOffsetDictionary[_attackDirection];
+        Vector2Int targetPosition = new Vector2Int(Row, Col) + directionOffsetDictionary[EnemyAttackDirection];
         GameObject _attackRange = Instantiate(AttackRange, new Vector3(targetPosition.x, targetPosition.y, 0), Quaternion.identity);
-        SetAttackRangePosition(_attackRange, _attackDirection);
+        SetAttackRangePosition(_attackRange, EnemyAttackDirection);
         _attackRange.transform.parent = transform;
         AttackRange.GetComponent<SpriteRenderer>().enabled = false;
     }
@@ -35,7 +27,7 @@ public class NormalEnemy : Enemy, IEnemyAttributesSetter, IEnemyPositionSetter
     // 적을 공격할 수 있는지 체크하는 함수. 
     public int CheckCharacterDamaged(int playerRow, int playerCol)
     {
-        Vector2Int targetPosition = new Vector2Int(Row, Col) + directionOffsetDictionary[_attackDirection];
+        Vector2Int targetPosition = new Vector2Int(Row, Col) + directionOffsetDictionary[EnemyAttackDirection];
 
         if (targetPosition == new Vector2Int(playerRow, playerCol))
         {

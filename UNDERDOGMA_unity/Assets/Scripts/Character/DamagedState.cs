@@ -14,24 +14,25 @@ public class DamagedState : BaseState
     public override void OnStateEnter()
     {
         EnemyTurn();
-
-        // 이동이 끝나고, 적의 턴까지 끝났을때에 몇가지 경우의 수가 존재한다.
-        // 1. 만약 hp가 0 이하라면 죽는다.
-        if (_character.Heart <= 0)
-        {
-            _character.ChangeState(Character.State.Death);
-            return;
-        }
-        else
-        {
-            _character.ChangeState(Character.State.Idle);
-
-        }
     }
 
     public override void OnStateUpdate()
     {
+        if (_character.IsCharacterCoroutineRunning == false)
+        {
+            // 이동이 끝나고, 적의 턴까지 끝났을때에 몇가지 경우의 수가 존재한다.
+            // 1. 만약 hp가 0 이하라면 죽는다.
+            if (_character.Heart <= 0)
+            {
+                _character.ChangeState(Character.State.Death);
+                return;
+            }
+            else
+            {
+                _character.ChangeState(Character.State.Idle);
 
+            }
+        }
     }
 
     public override void OnStateExit()
