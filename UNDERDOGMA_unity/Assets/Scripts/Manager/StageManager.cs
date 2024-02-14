@@ -131,9 +131,6 @@ public class StageManager : MonoBehaviour
             _tempTileDictionary.Add(entry.Key, clonedTileObject);
         }
 
-        Debug.Log("(3, -1) enemy alive? tileDictionary: " + _stageData.TileDictionary[new Vector2Int(3, -1)].EnemyData.IsAlive);
-        Debug.Log("(3, -1) enemy alive? tempTileDictionary" + _tempTileDictionary[new Vector2Int(3, -1)].EnemyData.IsAlive);
-
         foreach (var tile in _tempTileDictionary)
         {
             Vector3 tilePosition = new Vector3(tile.Key.x, tile.Key.y, 0);

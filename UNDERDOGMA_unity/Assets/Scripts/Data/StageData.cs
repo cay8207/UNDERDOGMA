@@ -123,7 +123,7 @@ public class StageData
                     }
                     _tileDictionary
                         .Add(new(tilex, tiley),
-                                new TileObject(TileType.Enemy,
+                                new TileObject(TileType.Meat,
                                     Int32.Parse(tile.Value["Round"]),
                                         Int32.Parse(tile.Value["Pattern"]),
                                             returnTileDirection(tile.Value["TileDirection"]),
