@@ -34,8 +34,8 @@ public class Execution : MonoBehaviour
 
     [SerializeField] GameObject ExecutionPrefab;
     [SerializeField] GameObject ExecutionCanvas;
-    [SerializeField] GameObject ExecutionHealthText;
     [SerializeField] GameObject ExecutionCountPrefab;
+    [SerializeField] GameObject ExecutionTargetPrefab;
 
     [SerializeField] public Sprite CloseEye;
     [SerializeField] public Sprite OpenEye;
@@ -47,6 +47,13 @@ public class Execution : MonoBehaviour
     {
         get => _executionCountObjectList;
         set => _executionCountObjectList = value;
+    }
+
+    private List<GameObject> _executionTargetObjectList = new List<GameObject>();
+    public List<GameObject> ExecutionTargetObjectList
+    {
+        get => _executionTargetObjectList;
+        set => _executionTargetObjectList = value;
     }
 
     private bool _executionInProgress;
@@ -62,6 +69,8 @@ public class Execution : MonoBehaviour
 
     private Coroutine _executionCoroutine;
 
+    private Dictionary<Vector2Int, GameObject> _executionTargetDictionary = new Dictionary<Vector2Int, GameObject>();
+
     public void Start()
     {
         ExecutionSetUp();
@@ -71,6 +80,27 @@ public class Execution : MonoBehaviour
     {
         Vector2 CameraPosition = StageManager.Instance.MainCamera.transform.position;
         ExecutionObject.transform.position = new Vector3(CameraPosition.x, CameraPosition.y, 0.0f);
+
+        _executionTargetDictionary = ExecuteEnemies();
+
+        if (_executionTargetDictionary.Count > 0)
+        {
+            int count = 0;
+
+            foreach (var enemy in _executionTargetDictionary)
+            {
+                _executionTargetObjectList[count].transform.position = new Vector3(enemy.Key.x, enemy.Key.y, 0.0f);
+                Debug.Log("(Execution.cs) executionTarget: " + enemy.Value.name);
+
+                count++;
+            }
+
+            // 나머지 오브젝트는 숨겨준다. 
+            for (int i = count; i < 10; i++)
+            {
+                _executionTargetObjectList[i].transform.position = new Vector3(-9999.0f, -9999.0f, 0.0f);
+            }
+        }
     }
 
     public void ExecutionSetUp()
@@ -86,6 +116,14 @@ public class Execution : MonoBehaviour
             _executionCountObjectList.Add(ExecutionCountObject);
         }
 
+        // 처형당할 적들을 표시해줄 스프라이트. 일단 10개를 만들어서 구석에 두고, 하나씩 표시해준다. 
+        for (int i = 0; i < 10; i++)
+        {
+            GameObject ExecutionTargetObject = Instantiate(ExecutionTargetPrefab, new Vector3(-9999.0f, -9999.0f, 0.0f), Quaternion.identity);
+            ExecutionTargetObject.transform.SetParent(ExecutionCanvas.transform, false);
+            ExecutionTargetObject.transform.localScale = new Vector2(0.6f, 0.6f);
+            _executionTargetObjectList.Add(ExecutionTargetObject);
+        }
     }
 
     // 매개변수로 해당 스테이지와 현재 이동 수를 받아오면 처형 여부를 결정한다. 
@@ -135,21 +173,29 @@ public class Execution : MonoBehaviour
             {
                 if ((tile.EnemyData.EnemyType == EnemyType.NormalEnemy || tile.EnemyData.EnemyType == EnemyType.ChaserEnemy)
                     && tile.EnemyData.IsAlive == true)
-                    _targetHeart = tile.EnemyData.Heart;
-                _targetRow = gameObject.Key.x;
-                _targetCol = gameObject.Key.y;
-                _enemyType = tile.EnemyData.EnemyType;
+                {
+                    // 2.1. 만약 해당 적이 체력이 가장 높다면 기존 큐를 비우고 새롭게 추가한다. 
+                    if (tile.EnemyData.Heart > _targetHeart)
+                    {
+                        _targetHeart = tile.EnemyData.Heart;
+                        _targetRow = gameObject.Key.x;
+                        _targetCol = gameObject.Key.y;
+                        _enemyType = tile.EnemyData.EnemyType;
 
-                // 2.1. 만약 해당 적이 체력이 가장 높다면 기존 큐를 비우고 새롭게 추가한다. 
-                if (tile.EnemyData.Heart > _targetHeart)
-                {
-                    _executionTarget.Clear();
-                    _executionTarget.Add(new Vector2Int(_targetRow, _targetCol), gameObject.Value);
-                }
-                // 2.2. 만약 체력이 가장 높은 적과 같다면 큐에 넣어준다. 
-                else if (tile.EnemyData.Heart == _targetHeart)
-                {
-                    _executionTarget.Add(new Vector2Int(_targetRow, _targetCol), gameObject.Value);
+                        Debug.Log("체력이 가장 높은 적: " + gameObject.Value.name);
+                        _executionTarget.Clear();
+                        _executionTarget.Add(new Vector2Int(_targetRow, _targetCol), gameObject.Value);
+                    }
+                    // 2.2. 만약 체력이 가장 높은 적과 같다면 큐에 넣어준다. 
+                    else if (tile.EnemyData.Heart == _targetHeart)
+                    {
+                        _targetHeart = tile.EnemyData.Heart;
+                        _targetRow = gameObject.Key.x;
+                        _targetCol = gameObject.Key.y;
+                        _enemyType = tile.EnemyData.EnemyType;
+
+                        _executionTarget.Add(new Vector2Int(_targetRow, _targetCol), gameObject.Value);
+                    }
                 }
             }
         }
@@ -158,12 +204,22 @@ public class Execution : MonoBehaviour
         if (StageManager.Instance._character.GetComponent<Character>().Heart > _targetHeart)
         {
             _targetHeart = StageManager.Instance._character.GetComponent<Character>().Heart;
+            _targetRow = StageManager.Instance._character.GetComponent<Character>().Row;
+            _targetCol = StageManager.Instance._character.GetComponent<Character>().Col;
+
+            Debug.Log("체력이 가장 높은 캐릭터: " + StageManager.Instance._character.name + " 체력: " + _targetHeart);
+
             _executionTarget.Clear();
             _executionTarget.Add(new Vector2Int(_targetRow, _targetCol), StageManager.Instance._character);
         }
         // 4. 가장 높은 적과 같다면 함께 큐에 넣어준다. 
         else if (StageManager.Instance._character.GetComponent<Character>().Heart == _targetHeart)
         {
+            _targetHeart = StageManager.Instance._character.GetComponent<Character>().Heart;
+            _targetRow = StageManager.Instance._character.GetComponent<Character>().Row;
+            _targetCol = StageManager.Instance._character.GetComponent<Character>().Col;
+
+            Debug.Log("체력이 가장 높은 캐릭터: " + StageManager.Instance._character.name + " 체력: " + _targetHeart);
             _executionTarget.Add(new Vector2Int(_targetRow, _targetCol), StageManager.Instance._character);
         }
 

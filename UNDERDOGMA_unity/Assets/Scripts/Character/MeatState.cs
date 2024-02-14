@@ -17,6 +17,7 @@ public class MeatState : BaseState
     public override void OnStateEnter()
     {
         _character.EnqueueCoroutine(_character.CharacterEatMeat(_targetPosition));
+        _character.ChangeState(Character.State.Idle);
     }
 
     public override void OnStateUpdate()

@@ -1,9 +1,11 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using DG.Tweening;
 
 public class Meat : MonoBehaviour
 {
@@ -32,5 +34,20 @@ public class Meat : MonoBehaviour
 
         // 3. StageManager의 GameObjectDictionary에서도 제거해준다. 
         StageManager.Instance.GameObjectDictionary.Remove(targetPosition);
+    }
+
+    public IEnumerator MeatEat(Vector2Int targetPosition)
+    {
+        // gameObject.GetComponent<SpriteRenderer>().sprite = _deadDog;
+        StageManager.Instance.TempTileDictionary[targetPosition].MeatData.IsExist = false;
+
+        gameObject.GetComponentInChildren<SpriteRenderer>().DOFade(0, 0.5f);
+
+        yield return new WaitForSeconds(0.5f);
+
+        Destroy(StageManager.Instance.GameObjectDictionary[targetPosition]);
+        StageManager.Instance.GameObjectDictionary.Remove(targetPosition);
+
+        yield return null;
     }
 }

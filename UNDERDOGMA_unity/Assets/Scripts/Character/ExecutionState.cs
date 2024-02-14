@@ -14,8 +14,28 @@ public class ExecutionState : BaseState
 
     public override void OnStateEnter()
     {
+        ExecuteEnemies();
+    }
+
+    public override void OnStateUpdate()
+    {
+
+    }
+
+    public override void OnStateExit()
+    {
+
+    }
+
+    public void ExecuteEnemies()
+    {
         // 1. 처형할 적을 찾는다.
         Dictionary<Vector2Int, GameObject> _executionTarget = Execution.Instance.ExecuteEnemies();
+
+        foreach (var enemy in _executionTarget)
+        {
+            Debug.Log("(ExecutionState.cs) executionTarget: " + enemy.Value.name);
+        }
 
         // 2. 만약 큐에 character가 있다면 Death State로 넘어가야 한다. 
         if (_executionTarget.ContainsValue(StageManager.Instance._character))
@@ -52,15 +72,5 @@ public class ExecutionState : BaseState
 
             _character.ChangeState(Character.State.Idle);
         }
-    }
-
-    public override void OnStateUpdate()
-    {
-
-    }
-
-    public override void OnStateExit()
-    {
-
     }
 }

@@ -18,7 +18,6 @@ public class AttackState : BaseState
     {
         // 1. 캐릭터가 공격하는 애니메이션을 보여주고, 캐릭터의 체력을 변화시킨다. 
         _character.EnqueueCoroutine(_character.CharacterAttack(_targetPosition));
-        _character.HeartChange(TempTileDictionary[_targetPosition].EnemyData.Heart);
 
         // 2. 행동이 끝났으니 행동 카운트를 증가시켜준다. 
         _character.MoveCount++;

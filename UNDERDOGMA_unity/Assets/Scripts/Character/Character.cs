@@ -204,6 +204,8 @@ public class Character : MonoBehaviour
         _coroutineController.ExecuteCoroutine();
 
         _fsm.UpdateState();
+
+        // 처형당할 적을 표시해주는 코드. 
     }
 
     // 2. state machine과 관련된 함수들. 
@@ -362,6 +364,8 @@ public class Character : MonoBehaviour
         // 공격한 적을 죽인다. 
         EnemyManager.Instance.EnemyDeath(targetPosition);
 
+        HeartChange(StageManager.Instance.TempTileDictionary[targetPosition].EnemyData.Heart);
+
         _isCharacterCoroutineRunning = false;
     }
 
@@ -449,7 +453,8 @@ public class Character : MonoBehaviour
         Meat meat = StageManager.Instance.GameObjectDictionary[targetPosition].GetComponent<Meat>();
 
         HeartChange(meat.Amount);
-        meat.EatMeat(targetPosition);
+
+        MeatManager.Instance.EatMeat(targetPosition);
 
         // 5. 코루틴이 끝났다는 의미로 변수의 값을 변경해준다. 
         _isCharacterCoroutineRunning = false;

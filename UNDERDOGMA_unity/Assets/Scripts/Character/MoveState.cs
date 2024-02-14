@@ -18,12 +18,19 @@ public class MoveState : BaseState
 
     public override void OnStateEnter()
     {
-        CharacterMove(_key);
+        Vector2Int targetPositon = CharacterMove(_key);
 
         // 1. 고기가 있는 칸에 도달하는 경우 MeatState로 넘어간다.
         // 2. 그렇지 않은 경우 적에게 공격을 받는지 체크하는 Damaged State로 넘어간다.
 
-        _character.ChangeState(_nextState);
+        if (_nextState == Character.State.Meat)
+        {
+            _character.ChangeState(Character.State.Meat, targetPositon);
+        }
+        else if (_nextState == Character.State.Damaged)
+        {
+            _character.ChangeState(Character.State.Damaged);
+        }
     }
 
     public override void OnStateUpdate()
@@ -36,7 +43,7 @@ public class MoveState : BaseState
 
     }
 
-    private void CharacterMove(KeyCode key)
+    private Vector2Int CharacterMove(KeyCode key)
     {
         // 1. 캐릭터가 이동하지 않는 경우에는 적들에게 데미지를 받는 등의 이벤트가 발생하면 안된다. 
         Vector2Int targetPosition = CheckCharacterMove(key);
@@ -57,6 +64,8 @@ public class MoveState : BaseState
         }
 
         _character.UpdatePosition(targetPosition.x, targetPosition.y);
+
+        return targetPosition;
     }
 
     public Vector2Int CheckCharacterMove(KeyCode key)
