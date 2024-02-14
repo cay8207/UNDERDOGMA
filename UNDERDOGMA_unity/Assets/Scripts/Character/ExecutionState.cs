@@ -14,12 +14,15 @@ public class ExecutionState : BaseState
 
     public override void OnStateEnter()
     {
-        ExecuteEnemies();
+
     }
 
     public override void OnStateUpdate()
     {
-
+        if (_character.IsCharacterCoroutineRunning == false)
+        {
+            ExecuteEnemies();
+        }
     }
 
     public override void OnStateExit()
@@ -70,7 +73,7 @@ public class ExecutionState : BaseState
 
             _character.EnqueueCoroutine(_character.ExecutionEvent());
 
-            _character.ChangeState(Character.State.Idle);
+            _character.ChangeState(Character.State.Clear);
         }
     }
 }

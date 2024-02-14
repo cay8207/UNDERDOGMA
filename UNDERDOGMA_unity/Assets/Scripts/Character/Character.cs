@@ -114,7 +114,6 @@ public class Character : MonoBehaviour
     // 캐릭터가 움직인 횟수를 체크해서 ExecutionManager에 넘겨주면 거기에서 처형 여부를 판단. 
     private void Update()
     {
-
         if (!_isCharacterCoroutineRunning && !DialogueManager.Instance._isDialogueRunning)
         {
             Debug.Log("Character Coroutine doesn't running");
