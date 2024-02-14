@@ -2,21 +2,64 @@
   "TileDictionary": {
     "-1, 1": {
       "Type": "Enemy",
+      "Round": "0",
+      "Pattern": "0",
+      "TileDirection": "None",
+
       "EnemyType": "NormalEnemy",
       "IsAlive": true,
       "Attack": 1,
       "Heart": 8,
       "AttackDirection": "Right"
     },
-    "0, -1": { "Type": "Empty" },
-    "0, 0": { "Type": "Empty" },
-    "0, 1": { "Type": "Empty" },
-    "1, 1,": { "Type": "Empty" },
-    "2, -1": { "Type": "Empty" },
-    "2, 0": { "Type": "Empty" },
-    "2, 1": { "Type": "Empty" },
+    "0, -1": {
+      "Type": "Empty",
+      "Round": "0",
+      "Pattern": "0",
+      "TileDirection": "None"
+    },
+    "0, 0": {
+      "Type": "Empty",
+      "Round": "0",
+      "Pattern": "0",
+      "TileDirection": "None"
+    },
+    "0, 1": {
+      "Type": "Empty",
+      "Round": "0",
+      "Pattern": "0",
+      "TileDirection": "None"
+    },
+    "1, 1,": {
+      "Type": "Empty",
+      "Round": "0",
+      "Pattern": "0",
+      "TileDirection": "None"
+    },
+    "2, -1": {
+      "Type": "Empty",
+      "Round": "0",
+      "Pattern": "0",
+      "TileDirection": "None"
+    },
+    "2, 0": {
+      "Type": "Empty",
+      "Round": "0",
+      "Pattern": "0",
+      "TileDirection": "None"
+    },
+    "2, 1": {
+      "Type": "Empty",
+      "Round": "0",
+      "Pattern": "0",
+      "TileDirection": "None"
+    },
     "2, 2": {
       "Type": "Enemy",
+      "Round": "0",
+      "Pattern": "0",
+      "TileDirection": "None",
+
       "EnemyType": "NormalEnemy",
       "IsAlive": true,
       "Attack": 1,
@@ -25,6 +68,10 @@
     },
     "3, -1": {
       "Type": "Enemy",
+      "Round": "0",
+      "Pattern": "0",
+      "TileDirection": "None",
+
       "EnemyType": "NormalEnemy",
       "IsAlive": true,
       "Attack": 1,

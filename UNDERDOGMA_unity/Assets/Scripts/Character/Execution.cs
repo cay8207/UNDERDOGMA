@@ -71,11 +71,6 @@ public class Execution : MonoBehaviour
     {
         Vector2 CameraPosition = StageManager.Instance.MainCamera.transform.position;
         ExecutionObject.transform.position = new Vector3(CameraPosition.x, CameraPosition.y, 0.0f);
-
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            ExecutionStop();
-        }
     }
 
     public void ExecutionSetUp()
@@ -118,33 +113,15 @@ public class Execution : MonoBehaviour
         return false;
     }
 
-    public void ExecutionStop()
+    // 체력이 가장 높은 적 or 캐릭터들이 처형당해야 한다.
+    public Dictionary<Vector2Int, GameObject> ExecuteEnemies()
     {
-        // 코루틴이 진행중이라면 중지시킨다. 
-        if (_executionCoroutine != null)
-            StopCoroutine(_executionCoroutine);
-        ExecutionObject.GetComponent<Animator>().SetBool("InExecution", false);
-
-        // 만약 처형이 진행되다가 멈춰서 처형중임을 나타내는 변수가 true라면 false로 바꿔준다. 캐릭터가 이동 가능하도록. 
-        if (_executionInProgress == true)
-        {
-            // 처형 또한 진행되지 않았을 수 있기 때문에 처형을 진행해준다.
-            ExecuteEnemies();
-            _executionInProgress = false;
-        }
-    }
-
-    // 체력이 가장 높은 적 or 캐릭터가 처형당해야 한다.
-    public GameObject ExecuteEnemies()
-    {
-        Debug.Log("execute Enemies!");
-
         // 1. 체력이 가장 높은 오브젝트를 저장하는 변수들을 선언한다.
         int _targetHeart = 0;
         int _targetRow = 0;
         int _targetCol = 0;
         EnemyType _enemyType = EnemyType.NormalEnemy;
-        GameObject _executionTarget = null;
+        Dictionary<Vector2Int, GameObject> _executionTarget = new Dictionary<Vector2Int, GameObject>();
 
         // 2. 적들 중에서 체력이 가장 높은 적을 찾는다.
         foreach (var gameObject in StageManager.Instance.GameObjectDictionary)
@@ -154,29 +131,40 @@ public class Execution : MonoBehaviour
 
             var tile = StageManager.Instance.TempTileDictionary[new Vector2Int(_row, _col)];
 
-            if (tile.Type == TileType.Enemy && tile.EnemyData.IsAlive == true)
+            if (tile.Type == TileType.Enemy)
             {
+                if ((tile.EnemyData.EnemyType == EnemyType.NormalEnemy || tile.EnemyData.EnemyType == EnemyType.ChaserEnemy)
+                    && tile.EnemyData.IsAlive == true)
+                    _targetHeart = tile.EnemyData.Heart;
+                _targetRow = gameObject.Key.x;
+                _targetCol = gameObject.Key.y;
+                _enemyType = tile.EnemyData.EnemyType;
+
+                // 2.1. 만약 해당 적이 체력이 가장 높다면 기존 큐를 비우고 새롭게 추가한다. 
                 if (tile.EnemyData.Heart > _targetHeart)
                 {
-                    _targetHeart = tile.EnemyData.Heart;
-                    _targetRow = gameObject.Key.x;
-                    _targetCol = gameObject.Key.y;
-                    _enemyType = tile.EnemyData.EnemyType;
-                    _executionTarget = gameObject.Value;
+                    _executionTarget.Clear();
+                    _executionTarget.Add(new Vector2Int(_targetRow, _targetCol), gameObject.Value);
+                }
+                // 2.2. 만약 체력이 가장 높은 적과 같다면 큐에 넣어준다. 
+                else if (tile.EnemyData.Heart == _targetHeart)
+                {
+                    _executionTarget.Add(new Vector2Int(_targetRow, _targetCol), gameObject.Value);
                 }
             }
         }
 
-        // 3. 플레이어의 생명력이 가장 높은거라면 플레이어를 처형.
+        // 3. 플레이어의 생명력이 가장 높은거라면 기존 큐를 비워주고 처형해야 하는 오브젝트의 큐에 넣어준다. 
         if (StageManager.Instance._character.GetComponent<Character>().Heart > _targetHeart)
         {
             _targetHeart = StageManager.Instance._character.GetComponent<Character>().Heart;
-            _executionTarget = StageManager.Instance._character;
+            _executionTarget.Clear();
+            _executionTarget.Add(new Vector2Int(_targetRow, _targetCol), StageManager.Instance._character);
         }
-        // 4. 그게 아니라면 적을 처형.
-        else
+        // 4. 가장 높은 적과 같다면 함께 큐에 넣어준다. 
+        else if (StageManager.Instance._character.GetComponent<Character>().Heart == _targetHeart)
         {
-            EnemyManager.Instance.EnemyDeath(new Vector2Int(_targetRow, _targetCol));
+            _executionTarget.Add(new Vector2Int(_targetRow, _targetCol), StageManager.Instance._character);
         }
 
         return _executionTarget;

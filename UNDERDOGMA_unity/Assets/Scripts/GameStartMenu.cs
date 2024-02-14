@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -44,7 +45,7 @@ public class GameStartMenu : MonoBehaviour
             if (_selectedIndex > 0)
             {
                 _selectedIndex--;
-                ButtonSelectHighlight.GetComponent<Transform>().transform.position += new Vector3(0, 100, 0);
+                ButtonSelectHighlight.transform.DOMove(ButtonSelectHighlight.transform.position + new Vector3(0, 100, 0), 0.2f);
                 HighlightButton();
             }
         }
@@ -53,7 +54,9 @@ public class GameStartMenu : MonoBehaviour
             if (_selectedIndex < 2)
             {
                 _selectedIndex++;
-                ButtonSelectHighlight.GetComponent<Transform>().transform.position -= new Vector3(0, 100, 0);
+                Debug.Log(transform.position);
+                Debug.Log(transform.localPosition.ToString());
+                ButtonSelectHighlight.transform.DOMove(ButtonSelectHighlight.transform.position - new Vector3(0, 100, 0), 0.2f);
                 HighlightButton();
             }
         }
@@ -80,21 +83,21 @@ public class GameStartMenu : MonoBehaviour
     {
         if (_selectedIndex == 0)
         {
-            StartButtonText.rectTransform.sizeDelta = new Vector2(330.0f, 40.0f);
-            CreditsButtonText.rectTransform.sizeDelta = new Vector2(150.0f, 32.0f);
-            ExitButtonText.rectTransform.sizeDelta = new Vector2(90.0f, 32.0f);
+            StartButtonText.rectTransform.sizeDelta = new Vector2(231.0f, 28.0f);
+            CreditsButtonText.rectTransform.sizeDelta = new Vector2(120.0f, 26.0f);
+            ExitButtonText.rectTransform.sizeDelta = new Vector2(72.0f, 26.0f);
         }
         else if (_selectedIndex == 1)
         {
-            StartButtonText.rectTransform.sizeDelta = new Vector2(260.0f, 32.0f);
-            CreditsButtonText.rectTransform.sizeDelta = new Vector2(200.0f, 40.0f);
-            ExitButtonText.rectTransform.sizeDelta = new Vector2(90.0f, 32.0f);
+            StartButtonText.rectTransform.sizeDelta = new Vector2(208.0f, 26.0f);
+            CreditsButtonText.rectTransform.sizeDelta = new Vector2(140.0f, 28.0f);
+            ExitButtonText.rectTransform.sizeDelta = new Vector2(72.0f, 26.0f);
         }
         else if (_selectedIndex == 2)
         {
-            StartButtonText.rectTransform.sizeDelta = new Vector2(260.0f, 32.0f);
-            CreditsButtonText.rectTransform.sizeDelta = new Vector2(150.0f, 32.0f);
-            ExitButtonText.rectTransform.sizeDelta = new Vector2(120.0f, 40.0f);
+            StartButtonText.rectTransform.sizeDelta = new Vector2(208.0f, 26.0f);
+            CreditsButtonText.rectTransform.sizeDelta = new Vector2(120.0f, 26.0f);
+            ExitButtonText.rectTransform.sizeDelta = new Vector2(84.0f, 28.0f);
         }
     }
 

@@ -115,7 +115,7 @@ public class Character : MonoBehaviour
     private void Update()
     {
 
-        if (!_isCharacterCoroutineRunning)
+        if (!_isCharacterCoroutineRunning && !DialogueManager.Instance._isDialogueRunning)
         {
             Debug.Log("Character Coroutine doesn't running");
             switch (_curState)
@@ -142,7 +142,14 @@ public class Character : MonoBehaviour
                         Debug.Log("Next Position: " + WhatIsNextPosition(key));
                         if (WhatIsNextPosition(key) == TileType.Enemy)
                         {
-                            ChangeState(State.Attack, FindNextPosition(key, new Vector2Int(_row, _col)));
+                            if (Heart > StageManager.Instance.TempTileDictionary[FindNextPosition(key, new Vector2Int(_row, _col))].EnemyData.Heart)
+                            {
+                                ChangeState(State.Attack, FindNextPosition(key, new Vector2Int(_row, _col)));
+                            }
+                            else
+                            {
+
+                            }
                         }
                         else if (WhatIsNextPosition(key) == TileType.Wall)
                         {
@@ -261,7 +268,7 @@ public class Character : MonoBehaviour
 
         if (tileObject.Type == TileType.Enemy)
         {
-            if (tileObject.EnemyData.IsAlive == true && _heart > tileObject.EnemyData.Heart)
+            if (tileObject.EnemyData.IsAlive == true)
             {
                 // ChangeState(State.Attack, targetPosition);
                 return TileType.Enemy;
