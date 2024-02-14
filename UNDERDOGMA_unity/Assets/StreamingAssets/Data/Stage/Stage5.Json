@@ -1,18 +1,19 @@
 {
   "TileDictionary": {
     "0,0": {
-      "Type": "Meat",
-      "Round": "2",
-      "Pattern": "1",
-      "TileDirection": "Left",
-      "Amount": "3",
-      "IsExist": true
-    },
-    "1,0": {
       "Type": "Empty",
       "Round": "0",
       "Pattern": "0",
       "TileDirection": "None"
+    },
+    "1,0": {
+      "Type": "Meat",
+      "Round": "2",
+      "Pattern": "1",
+      "TileDirection": "Left",
+
+      "Amount": "3",
+      "IsExist": true
     },
     "2,0": {
       "Type": "Empty",
@@ -54,6 +55,6 @@
   },
   "ExecutionCount": 11,
   "CharacterRow": 0,
-  "CharacterCol": 2,
+  "CharacterCol": 0,
   "CharacterHeart": 4
 }
