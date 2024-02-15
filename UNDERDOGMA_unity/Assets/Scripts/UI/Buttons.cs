@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
+using Unity.VisualScripting;
 
 public class Buttons : MonoBehaviour
 {
@@ -36,5 +37,9 @@ public class Buttons : MonoBehaviour
 #else
         Application.Quit();
 #endif
+    }
+    public void ReturnToMainScreen()
+    {
+        SceneManager.LoadScene("GameStart");
     }
 }
