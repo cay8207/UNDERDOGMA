@@ -16,7 +16,7 @@
       "Type": "Empty",
       "Round": "1",
       "Pattern": "2",
-      "TileDirection": "Left"
+      "TileDirection": "Down"
     },
     "-1, 3": {
       "Type": "Enemy",
@@ -32,9 +32,9 @@
     },
     "-1, 0": {
       "Type": "Empty",
-      "Round": "0",
+      "Round": "1",
       "Pattern": "2",
-      "TileDirection": "None"
+      "TileDirection": "Down"
     },
     "-1, 1": {
       "Type": "Empty",
