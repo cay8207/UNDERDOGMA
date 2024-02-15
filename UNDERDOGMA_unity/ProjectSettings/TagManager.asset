@@ -50,8 +50,11 @@ TagManager:
   - name: Shadow
     uniqueID: 3796032155
     locked: 0
-  - name: Character & Enemy
+  - name: Enemy
     uniqueID: 3681329579
+    locked: 0
+  - name: Character
+    uniqueID: 2904212049
     locked: 0
   - name: Devil Eye
     uniqueID: 534990315
