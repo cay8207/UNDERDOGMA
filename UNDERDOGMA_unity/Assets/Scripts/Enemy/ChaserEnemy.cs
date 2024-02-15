@@ -34,7 +34,7 @@ public class ChaserEnemy : Enemy
         // 1. 만약 캐릭터가 추격자의 공격범위 칸에 있다면 공격한다.
         if (targetPosition == new Vector2Int(playerRow, playerCol))
         {
-            StartCoroutine(EnemyAttackAnimation());
+            StartCoroutine(EnemyAttackAnimation(targetPosition));
             return Attack;
         }
 
@@ -81,7 +81,7 @@ public class ChaserEnemy : Enemy
         {
             gameObject.transform.DOMove(new Vector3(targetPosition.x, targetPosition.y, 0) + new Vector3(-0.06f, 0.3f, 0), 1.0f, false);
 
-            StartCoroutine(EnemyAttackAnimation());
+            StartCoroutine(EnemyAttackAnimation(targetPosition));
 
             // 현재 DamagedState에서 foreach문을 도는중이기 때문에 ChaserEnemy의 정보를 업데이트 할 수 없음.
             // 따라서 EnemyManager에 저장해두고, 한번에 업데이트한다. 
@@ -98,9 +98,15 @@ public class ChaserEnemy : Enemy
         return 0;
     }
 
-    public override IEnumerator EnemyAttackAnimation()
+    public override IEnumerator EnemyAttackAnimation(Vector2Int targetPosition)
     {
-        StartCoroutine(base.EnemyAttackAnimation());
+        gameObject.GetComponent<Animator>().SetBool("IsAttack", true);
+
+        yield return new WaitForSeconds(0.65f);
+
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.Enemy_Attack);
+
+        gameObject.GetComponent<Animator>().SetBool("IsAttack", false);
 
         yield return null;
     }

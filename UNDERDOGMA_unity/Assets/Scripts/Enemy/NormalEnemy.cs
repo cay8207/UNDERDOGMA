@@ -31,7 +31,7 @@ public class NormalEnemy : Enemy
 
         if (targetPosition == new Vector2Int(playerRow, playerCol))
         {
-            StartCoroutine(EnemyAttackAnimation());
+            StartCoroutine(EnemyAttackAnimation(targetPosition));
             return Attack;
         }
 
@@ -39,9 +39,9 @@ public class NormalEnemy : Enemy
     }
 
     // 적을 공격하는 함수. 
-    public override IEnumerator EnemyAttackAnimation()
+    public override IEnumerator EnemyAttackAnimation(Vector2Int targetPosition)
     {
-        StartCoroutine(base.EnemyAttackAnimation());
+        StartCoroutine(base.EnemyAttackAnimation(targetPosition));
 
         yield return null;
     }

@@ -21,7 +21,7 @@ public class Meat : MonoBehaviour
 
     void Start()
     {
-        _amountText.GetComponent<TextMeshPro>().text = _amount.ToString();
+        _amountText.GetComponent<Text>().SetText(_amount);
     }
 
     public void EatMeat(Vector2Int targetPosition)

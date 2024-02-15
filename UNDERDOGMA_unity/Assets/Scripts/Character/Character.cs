@@ -210,6 +210,7 @@ public class Character : MonoBehaviour
             }
             else if (Input.GetKeyDown(KeyCode.R))
             {
+                AudioManager.Instance.PlaySfx(AudioManager.Sfx.Reset);
                 ChangeState(State.Reset);
             }
         }
@@ -375,6 +376,17 @@ public class Character : MonoBehaviour
 
         AudioManager.Instance.PlaySfx(AudioManager.Sfx.Eat);
 
+        Sequence CharacterAttackSequence = DOTween.Sequence();
+
+        CharacterAttackSequence
+                .AppendInterval(0.3f)
+                .Append(
+                    transform.DOMove(new Vector2(Row + (targetPosition.x - Row) * 0.5f, Col + (targetPosition.y - Col) * 0.5f) + new Vector2(-0.07f, 0.35f), 0.3f, false)
+                )
+                .Append(
+                    transform.DOMove(new Vector2(Row, Col) + new Vector2(-0.07f, 0.35f), 0.3f, false)
+                );
+
         // 캐릭터가 공격하는 애니메이션 재생. 
         GetComponent<Animator>().SetBool("IsAttack", true);
 
@@ -398,7 +410,24 @@ public class Character : MonoBehaviour
 
         _mainCamera.Shake(0.5f);
 
-        yield return new WaitForSeconds(0.5f);
+        Sequence CharacterDamagedSequence = DOTween.Sequence();
+
+        CharacterDamagedSequence
+                .Append(
+                    Execution.Instance.ExecutionClawObjectList[60].GetComponent<RectTransform>()
+                    .DOLocalMove(SetPositionSpriteToUI(Row, Col), 0.0f, false)
+                )
+                .Append(
+                    Execution.Instance.ExecutionClawObjectList[60].GetComponent<UnityEngine.UI.Image>()
+                    .DOFade(1.0f, 0.05f)
+                )
+                .Append(
+                    Execution.Instance.ExecutionClawObjectList[60].GetComponent<UnityEngine.UI.Image>()
+                    .DOFade(0.0f, 0.6f)
+                );
+
+
+        yield return new WaitForSeconds(0.65f);
 
         HeartChange(-amount);
 
@@ -480,56 +509,66 @@ public class Character : MonoBehaviour
 
             ExecutionClawSequenceList[count]
                 .Append(
-                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<UnityEngine.UI.Image>()
-                    .DOFade(1.0f, 0.0f)
+                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
+                    .DOLocalMove(SetPositionSpriteToUI(enemy.Key.x, enemy.Key.y), 0.0f, false)
                 )
+                .Append(
+                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<UnityEngine.UI.Image>()
+                    .DOFade(1.0f, 0.05f)
+                )
+                .Append(
+                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<UnityEngine.UI.Image>()
+                    .DOFade(0.0f, 0.6f)
+                );
+
+            count++;
+
+
+
+            ExecutionClawSequenceList.Add(DOTween.Sequence());
+
+            ExecutionClawSequenceList[count]
+                .AppendInterval(0.25f)
                 .Append(
                     Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
                     .DOLocalMove(SetPositionSpriteToUI(enemy.Key.x, enemy.Key.y), 0.0f, false)
                 )
                 .Append(
                     Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
-                    .DOLocalMove(SetPositionSpriteToUI(enemy.Key.x, enemy.Key.y) + new Vector3(-15.0f, 15.0f, 0.0f), 0.2f, false)
-                )
-                .Append(
-                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
-                    .DOLocalMove(SetPositionSpriteToUI(enemy.Key.x, enemy.Key.y) + new Vector3(15.0f, -15.0f, 0.0f), 0.2f, false)
-                )
-                .Append(
-                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
                     .DORotate(new Vector3(0.0f, 0.0f, 90.0f), 0.0f)
                 )
                 .Append(
-                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
-                    .DOLocalMove(SetPositionSpriteToUI(enemy.Key.x, enemy.Key.y) + new Vector3(15.0f, -15.0f, 0.0f), 0.2f, false)
+                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<UnityEngine.UI.Image>()
+                    .DOFade(1.0f, 0.05f)
                 )
                 .Append(
-                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
-                    .DOLocalMove(SetPositionSpriteToUI(enemy.Key.x, enemy.Key.y) + new Vector3(-15.0f, 15.0f, 0.0f), 0.2f, false)
-                )
-                .Append(
-                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
-                    .DORotate(new Vector3(0.0f, 0.0f, -90.0f), 0.0f)
-                )
-                .Append(
-                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
-                    .DOLocalMove(SetPositionSpriteToUI(enemy.Key.x, enemy.Key.y) + new Vector3(-15.0f, 15.0f, 0.0f), 0.2f, false)
-                )
-                .Append(
-                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
-                    .DOLocalMove(SetPositionSpriteToUI(enemy.Key.x, enemy.Key.y) + new Vector3(15.0f, -15.0f, 0.0f), 0.2f, false)
+                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<UnityEngine.UI.Image>()
+                    .DOFade(0.0f, 0.6f)
                 )
                 .Append(
                     Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
                     .DORotate(new Vector3(0.0f, 0.0f, 0.0f), 0.0f)
+                );
+
+            count++;
+
+
+
+            ExecutionClawSequenceList.Add(DOTween.Sequence());
+
+            ExecutionClawSequenceList[count]
+                .AppendInterval(0.5f)
+                .Append(
+                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
+                    .DOLocalMove(SetPositionSpriteToUI(enemy.Key.x, enemy.Key.y), 0.0f, false)
                 )
                 .Append(
                     Execution.Instance.ExecutionClawObjectList[count].GetComponent<UnityEngine.UI.Image>()
-                    .DOFade(0.0f, 0.0f)
+                    .DOFade(1.0f, 0.05f)
                 )
                 .Append(
-                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
-                    .DOLocalMove(new Vector3(-9999.0f, 9999.0f, 0.0f), 0.0f, false)
+                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<UnityEngine.UI.Image>()
+                    .DOFade(0.0f, 0.6f)
                 );
 
             count++;

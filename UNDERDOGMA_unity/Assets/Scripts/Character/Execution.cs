@@ -270,7 +270,7 @@ public class Execution : MonoBehaviour
         }
 
         // 3. 처형 대상들에게 나타날 스프라이트. 일단 10개를 만들어서 구석에 두고, 하나씩 표시해준다.
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 100; i++)
         {
             GameObject ExecutionClawObject = Instantiate(ExecutionClaw, new Vector3(-9999.0f, -9999.0f, 0.0f), Quaternion.identity);
             ExecutionClawObject.transform.SetParent(ExecutionCanvas.transform, false);

@@ -29,15 +29,15 @@ public class MiniBoss : Enemy
 
         if (targetPosition == new Vector2Int(playerRow, playerCol))
         {
-            StartCoroutine(EnemyAttackAnimation());
+            StartCoroutine(EnemyAttackAnimation(targetPosition));
             return Attack;
         }
         return 0;
     }
 
-    public override IEnumerator EnemyAttackAnimation()
+    public override IEnumerator EnemyAttackAnimation(Vector2Int targetPosition)
     {
-        StartCoroutine(base.EnemyAttackAnimation());
+        StartCoroutine(base.EnemyAttackAnimation(targetPosition));
 
         yield return null;
     }

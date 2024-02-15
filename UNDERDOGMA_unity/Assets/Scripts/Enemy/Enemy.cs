@@ -79,13 +79,22 @@ public abstract class Enemy : MonoBehaviour, IEnemyAttributesSetter, IEnemyPosit
 
     }
 
-    public virtual IEnumerator EnemyAttackAnimation()
+    public virtual IEnumerator EnemyAttackAnimation(Vector2Int targetPosition)
     {
-
         // 캐릭터를 공격하는 애니메이션 진행. 
         gameObject.GetComponent<Animator>().SetBool("IsAttack", true);
 
-        yield return new WaitForSeconds(1.0f);
+        Sequence CharacterAttackSequence = DOTween.Sequence();
+
+        CharacterAttackSequence
+                .Append(
+                    transform.DOMove(new Vector2(Row + (targetPosition.x - Row) * 0.5f, Col + (targetPosition.y - Col) * 0.5f) + new Vector2(-0.06f, 0.3f), 0.3f, false)
+                )
+                .Append(
+                    transform.DOMove(new Vector2(Row, Col) + new Vector2(-0.07f, 0.35f), 0.3f, false)
+                );
+
+        yield return new WaitForSeconds(0.65f);
 
         AudioManager.Instance.PlaySfx(AudioManager.Sfx.Enemy_Attack);
 
@@ -108,7 +117,6 @@ public abstract class Enemy : MonoBehaviour, IEnemyAttributesSetter, IEnemyPosit
         gameObject.GetComponent<Animator>().SetBool("IsDied", true);
 
         gameObject.GetComponent<SpriteRenderer>().DOFade(0, 0.5f);
-        gameObject.transform.GetChild(5).GetComponent<SpriteRenderer>().DOFade(0, 0.5f);
 
         yield return new WaitForSeconds(0.5f);
 

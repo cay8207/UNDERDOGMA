@@ -34,10 +34,7 @@ public class ResetState : BaseState
 
     public void ResetGame()
     {
-        // 1. 리셋 효과음을 실행시켜준다.
-        AudioManager.Instance.PlaySfx(AudioManager.Sfx.Reset);
-
-        // 2. 모든 오브젝트들을 파괴시켜준다.
+        // 1. 모든 오브젝트들을 파괴시켜준다.
         StageManager.Instance.DestroyAllObjectsAndTileInstantiate();
     }
 }
