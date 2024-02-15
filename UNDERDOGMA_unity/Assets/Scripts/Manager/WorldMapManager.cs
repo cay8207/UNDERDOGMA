@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using DG.Tweening;
 using System;
 
@@ -51,6 +52,10 @@ public class WorldMapManager : Singleton<WorldMapManager>
         {
             LoadSelectedWorld();
         }
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            Debug.Log(WorldMapImages[SelectedWorld - 1].transform.localScale);
+        }
     }
 
     public void SetInfoPos(int world)
@@ -75,6 +80,14 @@ public class WorldMapManager : Singleton<WorldMapManager>
     }
     public void LoadSelectedWorld()
     {
-        Debug.Log(SelectedWorld);
+        //Unlock 된 월드만 로드
+        if (WorldMapImages[SelectedWorld - 1].Unlocked)
+        {
+            SceneManager.LoadScene(WorldMapImages[SelectedWorld - 1].WorldScene);
+        }
+        else
+        {
+            Debug.Log("World locked!");
+        }
     }
 }

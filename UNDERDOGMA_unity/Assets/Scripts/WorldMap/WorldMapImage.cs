@@ -6,6 +6,7 @@ using DG.Tweening;
 public class WorldMapImage : MonoBehaviour
 {
     public bool Unlocked;
+    public string WorldScene;
     public int WorldNum;
 
     [SerializeField]
