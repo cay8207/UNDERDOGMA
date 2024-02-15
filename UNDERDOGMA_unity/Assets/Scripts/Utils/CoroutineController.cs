@@ -38,8 +38,6 @@ public class CoroutineController : MonoBehaviour
             {
                 StartCoroutine(_nowCoroutine);
             }
-
-            Debug.Log(_character.IsCharacterCoroutineRunning);
         }
     }
 }

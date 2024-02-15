@@ -29,7 +29,7 @@ public class DamagedState : BaseState
             }
             else
             {
-                _character.ChangeState(Character.State.Idle);
+                _character.ChangeState(Character.State.Clear);
 
             }
         }
