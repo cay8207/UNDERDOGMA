@@ -44,9 +44,9 @@
     },
     "-1, 2": {
       "Type": "Empty",
-      "Round": "1",
+      "Round": "0",
       "Pattern": "0",
-      "TileDirection": "Up"
+      "TileDirection": "None"
     },
     "0, -1": {
       "Type": "Empty",
