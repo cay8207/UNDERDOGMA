@@ -24,7 +24,6 @@ public class ResetState : BaseState
         {
             Debug.Log("Game Reset!");
             ResetGame();
-            _character.ChangeState(Character.State.Idle);
         }
     }
 

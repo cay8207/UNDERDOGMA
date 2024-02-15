@@ -97,12 +97,13 @@ public abstract class Enemy : MonoBehaviour, IEnemyAttributesSetter, IEnemyPosit
     {
         // 나중에 죽는 애니메이션 추가해야 함. 
         // gameObject.GetComponent<SpriteRenderer>().sprite = _deadDog;
-        StageManager.Instance.TempTileDictionary[targetPosition].EnemyData.IsAlive = false;
 
         if (deathByExecution == true)
         {
             yield return new WaitForSeconds(2.5f);
         }
+
+        StageManager.Instance.TempTileDictionary[targetPosition].EnemyData.IsAlive = false;
 
         gameObject.GetComponent<Animator>().SetBool("IsDied", true);
 

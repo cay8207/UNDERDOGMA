@@ -83,6 +83,13 @@ public class Character : MonoBehaviour
         set => _isCharacterCoroutineRunning = value;
     }
 
+    private bool _isCharacterResetCoroutineRunning = false;
+    public bool IsCharacterResetCoroutineRunning
+    {
+        get => _isCharacterResetCoroutineRunning;
+        set => _isCharacterResetCoroutineRunning = value;
+    }
+
     CoroutineController _coroutineController;
 
     private MainCamera _mainCamera;
@@ -457,14 +464,13 @@ public class Character : MonoBehaviour
 
         int count = 0;
 
+        List<Sequence> ExecutionClawSequenceList = new List<Sequence>();
+
         foreach (var enemy in executionTarget)
         {
-            Sequence ExecutionClawSequence = DOTween.Sequence();
+            ExecutionClawSequenceList.Add(DOTween.Sequence());
 
-
-            Debug.Log("(Character.cs) ExecutionTarget: ");
-
-            ExecutionClawSequence
+            ExecutionClawSequenceList[count]
                 .Append(
                     Execution.Instance.ExecutionClawObjectList[count].GetComponent<UnityEngine.UI.Image>()
                     .DOFade(1.0f, 0.0f)
@@ -483,7 +489,7 @@ public class Character : MonoBehaviour
                 )
                 .Append(
                     Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
-                    .DORotate(new Vector3(0.0f, 180.0f, 0.0f), 0.0f, RotateMode.FastBeyond360)
+                    .DORotate(new Vector3(0.0f, 0.0f, 90.0f), 0.0f)
                 )
                 .Append(
                     Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
@@ -495,7 +501,7 @@ public class Character : MonoBehaviour
                 )
                 .Append(
                     Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
-                    .DORotate(new Vector3(0.0f, 180.0f, 0.0f), 0.0f, RotateMode.FastBeyond360)
+                    .DORotate(new Vector3(0.0f, 0.0f, -90.0f), 0.0f)
                 )
                 .Append(
                     Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
@@ -504,6 +510,10 @@ public class Character : MonoBehaviour
                 .Append(
                     Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
                     .DOLocalMove(SetPositionSpriteToUI(enemy.Key.x, enemy.Key.y) + new Vector3(15.0f, -15.0f, 0.0f), 0.2f, false)
+                )
+                .Append(
+                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
+                    .DORotate(new Vector3(0.0f, 0.0f, 0.0f), 0.0f)
                 )
                 .Append(
                     Execution.Instance.ExecutionClawObjectList[count].GetComponent<UnityEngine.UI.Image>()
@@ -579,7 +589,18 @@ public class Character : MonoBehaviour
                 StageManager.Instance.ResetAnimationDownSide.GetComponent<RectTransform>()
                 .DOLocalMove(new Vector3(0.0f, -1100.0f, 0.0f), 1.0f, false));
 
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(0.5f);
+
+        _isCharacterResetCoroutineRunning = true;
+
+        GetComponent<SpriteRenderer>().enabled = false;
+        transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = false;
+        transform.GetChild(1).transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = false;
+        transform.GetChild(1).transform.GetChild(1).GetComponent<SpriteRenderer>().enabled = false;
+
+        yield return new WaitForSeconds(2.0f);
+
+        _isCharacterResetCoroutineRunning = false;
 
         _isCharacterCoroutineRunning = false;
     }
