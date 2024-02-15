@@ -2,15 +2,15 @@
   "TileDictionary": {
     "0,0": {
       "Type": "Empty",
-      "Round": "0",
+      "Round": "2",
       "Pattern": "0",
-      "TileDirection": "None"
+      "TileDirection": "Left"
     },
     "1,0": {
       "Type": "Empty",
-      "Round": "0",
+      "Round": "1",
       "Pattern": "0",
-      "TileDirection": "None"
+      "TileDirection": "Up"
     },
     "1,-1": {
       "Type": "Empty",
@@ -20,9 +20,9 @@
     },
     "1,-2": {
       "Type": "Empty",
-      "Round": "0",
+      "Round": "1",
       "Pattern": "0",
-      "TileDirection": "None"
+      "TileDirection": "Down"
     },
     "2,-2": {
       "Type": "Empty",
@@ -32,9 +32,9 @@
     },
     "3, -2": {
       "Type": "Enemy",
-      "Round": 1,
+      "Round": 2,
       "Pattern": 1,
-      "TileDirection": "Up",
+      "TileDirection": "Right",
 
       "EnemyType": "NormalEnemy",
       "IsAlive": true,

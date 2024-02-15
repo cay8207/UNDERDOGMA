@@ -2,13 +2,13 @@
   "TileDictionary": {
     "-1, -1": {
       "Type": "Empty",
-      "Round": "1",
+      "Round": "2",
       "Pattern": "1",
-      "TileDirection": "Down"
+      "TileDirection": "Left"
     },
     "-1, 1": {
       "Type": "Empty",
-      "Round": "1",
+      "Round": "2",
       "Pattern": "0",
       "TileDirection": "Left"
     },

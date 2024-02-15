@@ -27,7 +27,7 @@
       "EnemyType": "NormalEnemy",
       "IsAlive": true,
       "Attack": 1,
-      "Heart": 46,
+      "Heart": 6,
       "AttackDirection": "Right"
     },
     "-1, 0": {
