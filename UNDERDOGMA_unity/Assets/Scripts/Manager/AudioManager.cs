@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using UnityEngine;
 
 public class AudioManager : Singleton<AudioManager>
@@ -76,10 +77,15 @@ public class AudioManager : Singleton<AudioManager>
     public void ModifyBgmVolume(float volume)
     {
         bgmVolume = volume;
+        bgmPlayer.volume = bgmVolume;
     }
 
     public void ModifySfxVolume(float volume)
     {
         sfxVolume = volume;
+        for (int index = 0; index < sfxPlayers.Length; index++)
+        {
+            sfxPlayers[index].volume = sfxVolume;
+        }
     }
 }
