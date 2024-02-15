@@ -72,7 +72,7 @@ public class TutorialManager : MonoBehaviour
     {
         // 대화를 읽는다.
         // 대화를 읽는다.
-        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return)
+        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return) || Input.GetMouseButtonDown(0))
             && count < _dialogueData.DialogueList.Count && _isDialogueTextRunning == false)
         {
             // 모든 대화를 읽은 경우

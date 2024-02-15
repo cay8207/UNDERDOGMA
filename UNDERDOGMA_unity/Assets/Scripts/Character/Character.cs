@@ -371,6 +371,8 @@ public class Character : MonoBehaviour
         // 공격한 적을 죽인다. 
         EnemyManager.Instance.EnemyDeath(targetPosition);
 
+        yield return new WaitForSeconds(0.5f);
+
         HeartChange(StageManager.Instance.TempTileDictionary[targetPosition].EnemyData.Heart);
 
         _isCharacterCoroutineRunning = false;
