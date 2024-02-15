@@ -254,14 +254,7 @@ public class StageManager : MonoBehaviour
 
     public void DestroyAllObjectsAndTileInstantiate()
     {
-        // 맵에 존재하는 타일을 제외한 오브젝트들을 초기화시켜준다.
-        // 1. 만약 처형이 진행중이라면 처형을 멈추고, 처형에 관한 변수들을 초기화시켜준다.
-        for (int i = 0; i < Execution.Instance.ExecutionCount; i++)
-        {
-            Execution.Instance.ExecutionCountObjectList[i].GetComponent<Image>().sprite = Execution.Instance.CloseEye;
-            Execution.Instance.ExecutionCountObjectList[i].GetComponent<Image>().rectTransform.sizeDelta = new Vector2(69.0f, 17.0f);
-        }
-
+        // 1. 모든 코루틴 스탑. 
         foreach (var coroutine in EnemyManager.Instance.EnemyDeathCoroutineQueue)
         {
             if (coroutine != null)
@@ -270,7 +263,7 @@ public class StageManager : MonoBehaviour
             }
         }
 
-        // 2. enemy 게임오브젝트들을 파괴. 
+        // 2 enemy 게임오브젝트들을 파괴. 
         foreach (var gameObjectWithVector in _gameObjectDictionary)
         {
             gameObjectWithVector.Value.SetActive(false);
