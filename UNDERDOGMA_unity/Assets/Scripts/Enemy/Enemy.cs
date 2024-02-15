@@ -92,11 +92,17 @@ public abstract class Enemy : MonoBehaviour, IEnemyAttributesSetter, IEnemyPosit
         gameObject.GetComponent<Animator>().SetBool("IsAttack", false);
     }
 
-    public IEnumerator EnemyDeath(Vector2Int targetPosition)
+    // 첫번째 인자는 해당 위치에 있는 적을 찾기 위해서, 두번째 인자는 적이 처형될때에 잠시 대기하기 위해서. 
+    public IEnumerator EnemyDeath(Vector2Int targetPosition, bool deathByExecution)
     {
         // 나중에 죽는 애니메이션 추가해야 함. 
         // gameObject.GetComponent<SpriteRenderer>().sprite = _deadDog;
         StageManager.Instance.TempTileDictionary[targetPosition].EnemyData.IsAlive = false;
+
+        if (deathByExecution == true)
+        {
+            yield return new WaitForSeconds(2.5f);
+        }
 
         gameObject.GetComponent<Animator>().SetBool("IsDied", true);
 
