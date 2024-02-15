@@ -6,7 +6,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using DG.Tweening;
 using Unity.VisualScripting;
-using UnityEditor.PackageManager.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
@@ -98,13 +97,13 @@ public class StageManager : MonoBehaviour
     public void Awake()
     {
         Scene scene = SceneManager.GetActiveScene();
-        if(scene.name.Length == 6)
+        if (scene.name.Length == 6)
         {
             stage = int.Parse(scene.name.Substring(5, 1));
         }
-        else if(scene.name.Length == 7)
+        else if (scene.name.Length == 7)
         {
-            stage = int.Parse(scene.name.Substring(5, 1))*10+int.Parse(scene.name.Substring(6, 1));
+            stage = int.Parse(scene.name.Substring(5, 1)) * 10 + int.Parse(scene.name.Substring(6, 1));
         }
 
         string path = "Stage" + stage.ToString();
@@ -125,7 +124,7 @@ public class StageManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (isPauseCanvasOpened)
             {

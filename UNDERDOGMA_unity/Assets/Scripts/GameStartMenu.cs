@@ -45,7 +45,7 @@ public class GameStartMenu : MonoBehaviour
             if (_selectedIndex > 0)
             {
                 _selectedIndex--;
-                //ButtonSelectHighlight.transform.DOMove(ButtonSelectHighlight.transform.position + new Vector3(0, 100, 0), 0.2f);
+                ButtonSelectHighlight.transform.DOMove(ButtonSelectHighlight.transform.position + new Vector3(0, 100, 0), 0.2f);
                 HighlightButton();
             }
         }
@@ -56,7 +56,7 @@ public class GameStartMenu : MonoBehaviour
                 _selectedIndex++;
                 Debug.Log(transform.position);
                 Debug.Log(transform.localPosition.ToString());
-                //ButtonSelectHighlight.transform.DOMove(ButtonSelectHighlight.transform.position - new Vector3(0, 100, 0), 0.2f);
+                ButtonSelectHighlight.transform.DOMove(ButtonSelectHighlight.transform.position - new Vector3(0, 100, 0), 0.2f);
                 HighlightButton();
             }
         }
