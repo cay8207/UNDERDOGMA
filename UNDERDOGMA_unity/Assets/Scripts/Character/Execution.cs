@@ -114,30 +114,41 @@ public class Execution : MonoBehaviour
     {
         Vector2 CameraPosition = StageManager.Instance.MainCamera.transform.position;
 
-        if (ExecutionCount > 0)
+        if (StageManager.Instance._character.GetComponent<Character>().IsCharacterResetCoroutineRunning == false)
         {
-            _executionTargetDictionary = ExecuteEnemies();
-
-            if (_executionTargetDictionary.Count > 0)
+            if (ExecutionCount > 0)
             {
-                canFade = true;
+                _executionTargetDictionary = ExecuteEnemies();
 
-                int count = 0;
-
-                foreach (var enemy in _executionTargetDictionary)
+                if (_executionTargetDictionary.Count > 0)
                 {
-                    _executionTargetObjectList[count].transform.position = new Vector3(enemy.Key.x, enemy.Key.y + 0.2f, 0.0f);
+                    canFade = true;
 
-                    count++;
-                }
+                    int count = 0;
 
-                // 나머지 오브젝트는 숨겨준다. 
-                for (int i = count; i < 10; i++)
-                {
-                    _executionTargetObjectList[i].transform.position = new Vector3(-9999.0f, -9999.0f, 0.0f);
+                    foreach (var enemy in _executionTargetDictionary)
+                    {
+                        _executionTargetObjectList[count].transform.position = new Vector3(enemy.Key.x, enemy.Key.y + 0.2f, 0.0f);
+
+                        count++;
+                    }
+
+                    // 나머지 오브젝트는 숨겨준다. 
+                    for (int i = count; i < 10; i++)
+                    {
+                        _executionTargetObjectList[i].transform.position = new Vector3(-9999.0f, -9999.0f, 0.0f);
+                    }
                 }
             }
         }
+        else
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                _executionTargetObjectList[i].transform.position = new Vector3(-9999.0f, -9999.0f, 0.0f);
+            }
+        }
+
 
         if (canFade)
         {

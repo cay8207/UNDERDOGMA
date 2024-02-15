@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using DG.Tweening;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
@@ -277,6 +276,7 @@ public class StageManager : MonoBehaviour
 
         TileInstantiate();
     }
+
 
     private GameObject InstantiateEnemy(EnemyType enemyType, Vector3 position)
     {
