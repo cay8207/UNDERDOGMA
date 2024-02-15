@@ -161,6 +161,6 @@ public class TutorialManager : MonoBehaviour
         DialogueWindow.GetComponent<UnityEngine.UI.Image>().enabled = false;
         DialogueBackGround.GetComponent<UnityEngine.UI.Image>().enabled = false;
 
-        SceneManager.LoadScene("WorldMap");
+        SceneManager.LoadScene("Stage1");
     }
 }
