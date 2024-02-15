@@ -38,12 +38,14 @@ public class ChaserEnemy : Enemy
             return Attack;
         }
 
+        Debug.Log("(ChaserEnemy.cs) playerRow: " + playerRow + ", playerCol: " + playerCol);
+
         // 2. 만약 캐릭터가 추적자의 공격범위 칸에 있지 않고, 일직선상에 있지 않다면 공격하지 않고 함수를 중단한다.
-        if ((EnemyAttackDirection == AttackDirection.Up || EnemyAttackDirection == AttackDirection.Down) && Col != playerCol)
+        if ((EnemyAttackDirection == AttackDirection.Up || EnemyAttackDirection == AttackDirection.Down) && Row != playerRow)
         {
             return 0;
         }
-        else if ((EnemyAttackDirection == AttackDirection.Left || EnemyAttackDirection == AttackDirection.Right) && Row != playerRow)
+        else if ((EnemyAttackDirection == AttackDirection.Left || EnemyAttackDirection == AttackDirection.Right) && Col != playerCol)
         {
             return 0;
         }
@@ -52,6 +54,7 @@ public class ChaserEnemy : Enemy
         while (true)
         {
             targetPosition += directionOffsetDictionary[EnemyAttackDirection];
+            Debug.Log("(ChaserEnemy.cs) next position: " + targetPosition);
             TileType tileType = StageManager.Instance.TempTileDictionary[targetPosition].Type;
             if (tileType == TileType.Wall || tileType == TileType.Enemy || tileType == TileType.Meat)
             {
@@ -80,17 +83,10 @@ public class ChaserEnemy : Enemy
 
             StartCoroutine(EnemyAttackAnimation());
 
-            // 4.1. 원래 위치와 TileDictionary 정보를 바꾸어준다.
-            // 원래 위치는 타일만 있는것으로, 새로운 위치는 적의 정보를 넣어준다.
-            TileObject enemyInfo = StageManager.Instance.TempTileDictionary[new Vector2Int(Row, Col)];
-            StageManager.Instance.TempTileDictionary[new Vector2Int(Row, Col)] = new TileObject(TileType.Empty);
-            StageManager.Instance.TempTileDictionary[targetPosition] = enemyInfo;
+            // 현재 DamagedState에서 foreach문을 도는중이기 때문에 ChaserEnemy의 정보를 업데이트 할 수 없음.
+            // 따라서 EnemyManager에 저장해두고, 한번에 업데이트한다. 
 
-            // 4.2. gameObjectDictionary 정보를 수정해준다. 
-            // 적의 과거 위치인 Row, Col을 기반으로 해당 Dictionary의 Value를 가져오고, 
-            // 이를 새로운 위치인 playerRow-1, playerCol에 넣어준 후 기존의 위치에 있는 Dictionary 값은 삭제한다.
-            StageManager.Instance.GameObjectDictionary.Add(targetPosition, StageManager.Instance.GameObjectDictionary[new Vector2Int(Row, Col)]);
-            StageManager.Instance.GameObjectDictionary.Remove(new Vector2Int(Row, Col));
+            EnemyManager.Instance.ChaserEnemyMoveDictionary.Add(new Vector2Int(Row, Col), targetPosition);
 
             // 4.3. 일단 행과 열이 바뀌었음을 저장해준다. 
             Row = targetPosition.x;
