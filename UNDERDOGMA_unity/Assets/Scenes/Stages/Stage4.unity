@@ -1705,9 +1705,9 @@ MonoBehaviour:
   DialogueText: {fileID: 460317374}
   DialogueWindow: {fileID: 687396897}
   DialogueImage1: {fileID: 2052576130}
-  DialogueImage1Position: {x: -500, y: 0, z: 0}
+  DialogueImage1Position: {x: -650, y: 0, z: 0}
   DialogueImage2: {fileID: 382054374}
-  DialogueImage2Position: {x: 500, y: 0, z: 0}
+  DialogueImage2Position: {x: 650, y: 0, z: 0}
   Names:
   - "\uD0C0\uD0C4"
   - "\uD0C0\uD0C4"

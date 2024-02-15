@@ -609,7 +609,7 @@ public class Character : MonoBehaviour
 
         if (StageManager.Instance.stage == 11)
         {
-            SceneManager.LoadScene("WorldMap");
+            SceneManager.LoadScene("World1BossClear");
         }
         else if (StageManager.Instance.stage >= 12 && StageManager.Instance.stage <= 16)
         {
