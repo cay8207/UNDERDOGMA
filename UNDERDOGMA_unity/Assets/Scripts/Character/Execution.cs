@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using Unity.VisualScripting.FullSerializer.Internal;
 
 public class Execution : MonoBehaviour
 {
@@ -39,10 +40,15 @@ public class Execution : MonoBehaviour
     // 1.2. 처형 횟수를 표시해줄 프리팹.
     [SerializeField] GameObject ExecutionCountPrefab;
     // 1.3. 처형할 적들을 표시해줄 프리팹.
+    [SerializeField] TextMeshProUGUI ExecutionNum;
     [SerializeField] GameObject ExecutionTargetPrefab;
     [SerializeField] public Image ExecutionEffect;
     [SerializeField] public Image ExecutionWolf;
     [SerializeField] public GameObject ExecutionClaw;
+
+    [SerializeField] public GameObject RemainEnemyPrefab;
+    [SerializeField] public GameObject RemainEnemyText;
+    [SerializeField] public GameObject RemainEnemyBackGround;
 
     [SerializeField] public Sprite CloseEye;
     [SerializeField] public Sprite OpenEye;
@@ -68,6 +74,16 @@ public class Execution : MonoBehaviour
         set => _executionClawObjectList = value;
     }
 
+    private List<GameObject> _remainEnemyObjectList = new List<GameObject>();
+    public List<GameObject> RemainEnemyObjectList
+    {
+        get => _remainEnemyObjectList;
+        set => _remainEnemyObjectList = value;
+    }
+
+    private GameObject RemainEnemyBackgroundObject;
+    private GameObject RemainEnemyTextObject;
+
     private bool _executionInProgress;
     public bool ExecutionInProgress
     {
@@ -83,9 +99,13 @@ public class Execution : MonoBehaviour
 
     private Dictionary<Vector2Int, GameObject> _executionTargetDictionary = new Dictionary<Vector2Int, GameObject>();
 
+    private int fadeCount = 0;
+    private bool canFade = false;
+
     public void Start()
     {
         ExecutionSetUp();
+        SetupRemainEnemy();
     }
 
     public void Update()
@@ -98,11 +118,13 @@ public class Execution : MonoBehaviour
 
             if (_executionTargetDictionary.Count > 0)
             {
+                canFade = true;
+
                 int count = 0;
 
                 foreach (var enemy in _executionTargetDictionary)
                 {
-                    _executionTargetObjectList[count].transform.position = new Vector3(enemy.Key.x, enemy.Key.y, 0.0f);
+                    _executionTargetObjectList[count].transform.position = new Vector3(enemy.Key.x, enemy.Key.y + 0.2f, 0.0f);
 
                     count++;
                 }
@@ -114,19 +136,80 @@ public class Execution : MonoBehaviour
                 }
             }
         }
+
+        if (canFade)
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                if (fadeCount % 500 < 250)
+                {
+                    _executionTargetObjectList[i].GetComponent<SpriteRenderer>()
+                        .DOFade(0.8f - 0.0012f * (fadeCount % 500), 0.0f);
+                }
+                else
+                {
+                    _executionTargetObjectList[i].GetComponent<SpriteRenderer>()
+                        .DOFade(0.5f + 0.0012f * (fadeCount % 500 - 250), 0.0f);
+                }
+            }
+
+            fadeCount++;
+        }
+
+        updateRemainEnemy();
+
+        ExecutionNum.SetText((ExecutionCount - StageManager.Instance._character.GetComponent<Character>().MoveCount).ToString());
+    }
+
+    public void SetupRemainEnemy()
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            GameObject RemainEnemyObject = Instantiate(RemainEnemyPrefab, new Vector3(-9999.0f, -9999.0f, 0.0f), Quaternion.identity);
+            RemainEnemyObject.transform.SetParent(ExecutionCanvas.transform, false);
+            RemainEnemyObject.transform.localScale = new Vector2(0.6f, 0.6f);
+            _remainEnemyObjectList.Add(RemainEnemyObject);
+        }
+    }
+
+    public void updateRemainEnemy()
+    {
+        int _row = 0;
+        int _col = 0;
+        int _enemyCount = 0;
+
+        foreach (var gameObject in StageManager.Instance.GameObjectDictionary)
+        {
+            _row = gameObject.Key.x;
+            _col = gameObject.Key.y;
+
+            if (StageManager.Instance.TempTileDictionary[new Vector2Int(_row, _col)].Type == TileType.Enemy)
+            {
+                if (StageManager.Instance.TempTileDictionary[new Vector2Int(_row, _col)].EnemyData.IsAlive == true)
+                {
+                    _enemyCount++;
+                }
+
+            }
+        }
+
+        RemainEnemyBackgroundObject.transform.localPosition = new Vector3(-850.0f, 37.5f * (_enemyCount) + 75.0f, 0.0f);
+        RemainEnemyTextObject.transform.localPosition = new Vector3(-850.0f, 37.5f * (_enemyCount) + 75.0f, 0.0f);
+
+        for (int i = 0; i < _enemyCount; i++)
+        {
+            _remainEnemyObjectList[i].transform.localPosition = new Vector3(-850.0f, 37.5f * (_enemyCount) - 75.0f * i, 0.0f);
+        }
+        for (int i = _enemyCount; i < 10; i++)
+        {
+            _remainEnemyObjectList[i].transform.localPosition = new Vector3(-9999.0f, -9999.0f, 0.0f);
+        }
     }
 
     public void ExecutionSetUp()
     {
         // 1. 처형 카운트 설정 및 표시해줄 UI를 생성한다.
         _executionCount = StageManager.Instance._stageData.ExecutionCount;
-
-        for (int i = _executionCount - 1; i >= 0; i--)
-        {
-            GameObject ExecutionCountObject = Instantiate(ExecutionCountPrefab, new Vector3(37.5f * (_executionCount - 1) - 75.0f * i, 480.0f, 0.0f), Quaternion.identity);
-            ExecutionCountObject.transform.SetParent(ExecutionCanvas.transform, false);
-            _executionCountObjectList.Add(ExecutionCountObject);
-        }
 
         // 2. 처형당할 적들을 표시해줄 스프라이트. 일단 10개를 만들어서 구석에 두고, 하나씩 표시해준다. 
         for (int i = 0; i < 10; i++)
@@ -146,35 +229,16 @@ public class Execution : MonoBehaviour
             _executionClawObjectList.Add(ExecutionClawObject);
         }
 
-        // 3. 처형 애니메이션에 관련된 변수. 미리 꺼둔다. 
+        RemainEnemyBackgroundObject = Instantiate(RemainEnemyBackGround, new Vector3(-850.0f, 0.0f, 0.0f), Quaternion.identity);
+        RemainEnemyBackgroundObject.transform.SetParent(ExecutionCanvas.transform, false);
+        RemainEnemyTextObject = Instantiate(RemainEnemyText, new Vector3(-850.0f, 0.0f, 0.0f), Quaternion.identity);
+        RemainEnemyTextObject.transform.SetParent(ExecutionCanvas.transform, false);
+
+        // 4. 처형 애니메이션에 관련된 변수. 미리 꺼둔다. 
         ExecutionEffect.DOFade(0.0f, 0.0f);
         ExecutionWolf.DOFade(0.0f, 0.0f);
     }
 
-    // 매개변수로 해당 스테이지와 현재 이동 수를 받아오면 처형 여부를 결정한다. 
-    public bool ExecutionCheck(int moveCount)
-    {
-        // 이동 횟수가 처형 횟수보다 많거나 0 이하이면 로직이 잘못된 것. false를 반환. 
-        if (moveCount > _executionCount || moveCount <= 0)
-        {
-            return false;
-        }
-
-        // 처형 카운트. 즉 상단에 있는 눈이 추가로 떠지도록 한다. 
-        _executionCountObjectList[moveCount - 1].GetComponent<Image>().sprite = OpenEye;
-        _executionCountObjectList[moveCount - 1].GetComponent<Image>().rectTransform.sizeDelta = new Vector2(90.0f, 56.0f);
-
-        if (moveCount >= _executionCount)
-        {
-            for (int i = 0; i < moveCount; i++)
-            {
-                _executionCountObjectList[i].GetComponent<Image>().sprite = CloseEye;
-                _executionCountObjectList[i].GetComponent<Image>().rectTransform.sizeDelta = new Vector2(69.0f, 17.0f);
-            }
-            return true;
-        }
-        return false;
-    }
 
     // 체력이 가장 높은 적 or 캐릭터들이 처형당해야 한다.
     public Dictionary<Vector2Int, GameObject> ExecuteEnemies()

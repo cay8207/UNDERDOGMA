@@ -27,9 +27,6 @@ public class AttackState : BaseState
             // 1. 행동이 끝났으니 행동 카운트를 증가시켜준다. 
             _character.MoveCount++;
 
-            // 2. 캐릭터가 이동했으니 상단의 눈이 하나 떠지도록 하는 코드.
-            Execution.Instance.ExecutionCheck(_character.MoveCount);
-
             _character.ChangeState(Character.State.Damaged);
         }
     }

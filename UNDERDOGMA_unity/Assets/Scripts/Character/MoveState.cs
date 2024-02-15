@@ -59,9 +59,6 @@ public class MoveState : BaseState
 
             _character.HeartChange(-1);
 
-            // 캐릭터가 이동했으니 상단의 눈이 하나 떠지도록 하는 코드. 
-            Execution.Instance.ExecutionCheck(_character.MoveCount);
-
             AudioManager.Instance.PlaySfx(AudioManager.Sfx.Move);
         }
 
