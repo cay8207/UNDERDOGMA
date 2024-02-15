@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using DG.Tweening;
+using Unity.VisualScripting;
 using UnityEditor.PackageManager.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -92,7 +93,14 @@ public class StageManager : MonoBehaviour
     public void Awake()
     {
         Scene scene = SceneManager.GetActiveScene();
-        stage = int.Parse(scene.name.Substring(5, 1));
+        if(scene.name.Length == 6)
+        {
+            stage = int.Parse(scene.name.Substring(5, 1));
+        }
+        else if(scene.name.Length == 7)
+        {
+            stage = int.Parse(scene.name.Substring(5, 1))*10+int.Parse(scene.name.Substring(6, 1));
+        }
 
         string path = "Stage" + stage.ToString();
         _stageData = StageDataLoader.Instance.LoadStageData(path);

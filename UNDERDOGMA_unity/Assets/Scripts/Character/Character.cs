@@ -508,11 +508,11 @@ public class Character : MonoBehaviour
         {
             SceneManager.LoadScene("WorldMap");
         }
-        else if (StageManager.Instance.stage >= 12 || StageManager.Instance.stage <= 16)
+        else if (StageManager.Instance.stage >= 12 && StageManager.Instance.stage <= 16)
         {
             SceneManager.LoadScene("World1");
         }
-        else if (StageManager.Instance.stage >= 26 || StageManager.Instance.stage <= 32)
+        else if (StageManager.Instance.stage >= 26 && StageManager.Instance.stage <= 32)
         {
             SceneManager.LoadScene("World2");
         }
