@@ -595,6 +595,16 @@ public class Character : MonoBehaviour
 
         // _character.GetComponent<Animator>().SetBool("StageClear", false);
 
+        Sequence ClearSequence = DOTween.Sequence();
+
+        yield return new WaitForSeconds(1.0f);
+
+        ClearSequence
+            .Append(
+                Execution.Instance.Clear.GetComponent<UnityEngine.UI.Image>()
+                .DOFade(1.0f, 1.0f));
+
+
         yield return new WaitForSeconds(2.0f);
 
         if (StageManager.Instance.stage == 11)

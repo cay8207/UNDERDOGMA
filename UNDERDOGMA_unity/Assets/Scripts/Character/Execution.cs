@@ -52,6 +52,7 @@ public class Execution : MonoBehaviour
 
     [SerializeField] public Sprite CloseEye;
     [SerializeField] public Sprite OpenEye;
+    [SerializeField] public GameObject Clear;
 
     private List<GameObject> _executionCountObjectList = new List<GameObject>();
     public List<GameObject> ExecutionCountObjectList
@@ -106,6 +107,7 @@ public class Execution : MonoBehaviour
     {
         ExecutionSetUp();
         SetupRemainEnemy();
+        Clear.GetComponent<Image>().DOFade(0.0f, 0.0f);
     }
 
     public void Update()
@@ -158,7 +160,10 @@ public class Execution : MonoBehaviour
 
         updateRemainEnemy();
 
-        ExecutionNum.SetText((ExecutionCount - StageManager.Instance._character.GetComponent<Character>().MoveCount).ToString());
+        if (StageManager.Instance.stage != 1 && StageManager.Instance.stage != 2 && StageManager.Instance.stage != 3)
+        {
+            ExecutionNum.SetText((ExecutionCount - StageManager.Instance._character.GetComponent<Character>().MoveCount).ToString());
+        }
     }
 
     public void SetupRemainEnemy()
