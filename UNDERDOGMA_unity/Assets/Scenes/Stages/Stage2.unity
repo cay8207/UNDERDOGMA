@@ -1207,27 +1207,24 @@ MonoBehaviour:
   DialogueText: {fileID: 832763651}
   DialogueWindow: {fileID: 687396897}
   DialogueImage1: {fileID: 2052576130}
-  DialogueImage1Position: {x: -500, y: 0, z: 0}
+  DialogueImage1Position: {x: -650, y: 0, z: 0}
   DialogueImage2: {fileID: 382054374}
-  DialogueImage2Position: {x: 500, y: 0, z: 0}
+  DialogueImage2Position: {x: 650, y: 0, z: 0}
   Names:
-  - "\uC545\uB9C8"
-  - "\uC545\uB9C8"
-  - "\uC545\uB9C8"
-  - "\uB291\uB300"
-  - "\uC545\uB9C8"
+  - "\uD0C0\uD0C4"
+  - "\uD0C0\uD0C4"
+  - "\uD0C0\uD0C4"
+  - "\uB098\uC6B0"
   listSprites1:
   - {fileID: 21300000, guid: f58aad5dc284e664e9cc295c4f02e4f1, type: 3}
   - {fileID: 21300000, guid: f58aad5dc284e664e9cc295c4f02e4f1, type: 3}
   - {fileID: 21300000, guid: f58aad5dc284e664e9cc295c4f02e4f1, type: 3}
-  - {fileID: 21300000, guid: 8bdd28f66a0f0614cabf81a1161fba6d, type: 3}
-  - {fileID: 21300000, guid: 38f2338ce2cd69b45aae4c51f0e259ba, type: 3}
+  - {fileID: 21300000, guid: 67b78b33e434da1409fcd249ddd93012, type: 3}
   listSprites2:
-  - {fileID: 21300000, guid: dcd2a7b09cd92104ab3cc87007fe6ec0, type: 3}
-  - {fileID: 21300000, guid: dcd2a7b09cd92104ab3cc87007fe6ec0, type: 3}
-  - {fileID: 21300000, guid: dcd2a7b09cd92104ab3cc87007fe6ec0, type: 3}
-  - {fileID: 21300000, guid: ae979390243c50846b1fb24cfccbc7e0, type: 3}
-  - {fileID: 21300000, guid: dcd2a7b09cd92104ab3cc87007fe6ec0, type: 3}
+  - {fileID: 21300000, guid: 7f25627c23787ae4da6175526145b474, type: 3}
+  - {fileID: 21300000, guid: 7f25627c23787ae4da6175526145b474, type: 3}
+  - {fileID: 21300000, guid: 7f25627c23787ae4da6175526145b474, type: 3}
+  - {fileID: 21300000, guid: 0621b67d9d5674f4caf58952eb780625, type: 3}
   _isDialogueRunning: 0
   _isDialogueTextRunning: 0
 --- !u!4 &1031148994
