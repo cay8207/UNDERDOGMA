@@ -14,11 +14,10 @@ public class WorldMapManager : Singleton<WorldMapManager>
 
     [SerializeField]
     private int WorldMapInfoSpacing;
-    private Vector3 infoPos;
 
     private void Start()
     {
-        SelectedWorld = 2;
+        SelectedWorld = 1;
         SetInfoPos(SelectedWorld);
         for (int i = 1; i <= 5; i++)
         {
