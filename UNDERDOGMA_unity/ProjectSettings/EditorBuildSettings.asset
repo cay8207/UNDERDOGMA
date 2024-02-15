@@ -15,39 +15,111 @@ EditorBuildSettings:
     path: Assets/Scenes/WorldMap.unity
     guid: 6e3a9aafbea81834cab0d79f3e6031da
   - enabled: 1
-    path: Assets/Scenes/Stage1.unity
-    guid: 30658cbc858940e4fa32e0f54a732753
-  - enabled: 1
-    path: Assets/Scenes/Stage2.unity
-    guid: 258d1743fda047d428aad11011f836c6
-  - enabled: 1
-    path: Assets/Scenes/Stage3.unity
-    guid: 177d33a72bea4894e9b341ef2b8e0fec
-  - enabled: 1
-    path: Assets/Scenes/Stage4.unity
-    guid: cce290d7313341f4c97d52912ff22f7b
-  - enabled: 1
-    path: Assets/Scenes/Stage5.unity
-    guid: e0bddc7193b57ad4283f04f4ba3f007b
-  - enabled: 1
-    path: Assets/Scenes/Stages/Stage6.unity
-    guid: 7a3ad0fc545de174d9395e680e64fbbe
-  - enabled: 1
-    path: Assets/Scenes/Stage7.unity
-    guid: 3a099c68c7e40c547b3777914e250a02
-  - enabled: 1
-    path: Assets/Scenes/Stage8.unity
-    guid: 08302b3450fe1f548b4b444e9c6a92b3
-  - enabled: 1
-    path: Assets/Scenes/Stage9.unity
-    guid: 18d59d97bb931c64eb39552d07a0bea8
-  - enabled: 1
-    path: Assets/Scenes/Stage10.unity
-    guid: b7bbc36f0769732419184d08e78de3f1
-  - enabled: 1
     path: Assets/Scenes/Ending.unity
     guid: 3c33722900966fe4c88bfddcd4fd55f2
   - enabled: 1
     path: Assets/Scenes/Tutorial.unity
     guid: 98a9f8b1589eddc40b4213d3e1554d56
+  - enabled: 1
+    path: Assets/Scenes/WorldMaps/World1.unity
+    guid: bccdd8f14bf928c45af688052245072f
+  - enabled: 1
+    path: Assets/Scenes/WorldMaps/World2.unity
+    guid: 1a3afc1818a28d446bbd4965a929c200
+  - enabled: 1
+    path: Assets/Scenes/Stages/Stage1.unity
+    guid: 23346be95b8177c40beeabb1b3ec06b1
+  - enabled: 1
+    path: Assets/Scenes/Stages/Stage2.unity
+    guid: 0a0e9af87eb00f8498ae644f7d347630
+  - enabled: 1
+    path: Assets/Scenes/Stages/Stage3.unity
+    guid: af03980aa9e39dc49a1b22c5eaaa8288
+  - enabled: 1
+    path: Assets/Scenes/Stages/Stage4.unity
+    guid: 8abf3471e8a39f547ad2cd132d333928
+  - enabled: 1
+    path: Assets/Scenes/Stages/Stage5.unity
+    guid: ccd814539f74bc94abd8d5322c0deb1c
+  - enabled: 1
+    path: Assets/Scenes/Stages/Stage6.unity
+    guid: 7a3ad0fc545de174d9395e680e64fbbe
+  - enabled: 1
+    path: Assets/Scenes/Stages/Stage7.unity
+    guid: 7362ac0d991aafd4c895dfa4417d088e
+  - enabled: 1
+    path: Assets/Scenes/Stages/Stage8.unity
+    guid: 2d92a22c53208ba4d809d42264e5d6da
+  - enabled: 1
+    path: Assets/Scenes/Stages/Stage9.unity
+    guid: 96224cb481a933940b48f8f415b17f55
+  - enabled: 1
+    path: Assets/Scenes/Stages/Stage10.unity
+    guid: 69f77d02dd1832548b1e4e0dc15ddee8
+  - enabled: 1
+    path: Assets/Scenes/Stages/Stage11.unity
+    guid: bfaf6d0b9102f2c42bec8895bc31023d
+  - enabled: 1
+    path: Assets/Scenes/Stages/Stage12.unity
+    guid: e4f626fff9ab7c94c8e636d14c9ceca3
+  - enabled: 1
+    path: Assets/Scenes/Stages/Stage13.unity
+    guid: aaaa43b86a48a98489745de3047f7c29
+  - enabled: 1
+    path: Assets/Scenes/Stages/Stage14.unity
+    guid: 0b4391123d3b7d5489350f7dc4f3375d
+  - enabled: 1
+    path: Assets/Scenes/Stages/Stage15.unity
+    guid: 264c7e08543342c4eaee83d6b186c41a
+  - enabled: 1
+    path: Assets/Scenes/Stages/Stage16.unity
+    guid: 6866f9733dfef0b4c88554b7a4fdb106
+  - enabled: 1
+    path: Assets/Scenes/Stages/Stage17.unity
+    guid: 65d2f7835cd006d4e804bec40e7b56a6
+  - enabled: 1
+    path: Assets/Scenes/Stages/Stage18.unity
+    guid: dd5a431eaf0707440939b7277fa4be60
+  - enabled: 1
+    path: Assets/Scenes/Stages/Stage19.unity
+    guid: b71ca15baa20f614a8a9d9c2efdff591
+  - enabled: 1
+    path: Assets/Scenes/Stages/Stage20.unity
+    guid: 1547e3865bcd11d48a35ae07265dc795
+  - enabled: 1
+    path: Assets/Scenes/Stages/Stage21.unity
+    guid: 0e576caf7a8612b4fafeff4c655f8172
+  - enabled: 1
+    path: Assets/Scenes/Stages/Stage22.unity
+    guid: d7521fa8577b0204992396cf77f55d81
+  - enabled: 1
+    path: Assets/Scenes/Stages/Stage23.unity
+    guid: b7020f53e43436849bd91bef429a3cd7
+  - enabled: 1
+    path: Assets/Scenes/Stages/Stage24.unity
+    guid: 933a269d21d68a44cb897b677bb86f48
+  - enabled: 1
+    path: Assets/Scenes/Stages/Stage25.unity
+    guid: a0fc73f46bd62c345b8ad2f6e74be8d8
+  - enabled: 1
+    path: Assets/Scenes/Stages/Stage26.unity
+    guid: cc0dd6264c7852b4c97cef372711ab6d
+  - enabled: 1
+    path: Assets/Scenes/Stages/Stage27.unity
+    guid: 90a4901273cb3af4695cc96af00fee05
+  - enabled: 1
+    path: Assets/Scenes/Stages/Stage28.unity
+    guid: ba9b0aceb1439194eb2588756e14e777
+  - enabled: 1
+    path: Assets/Scenes/Stages/Stage29.unity
+    guid: 47d0bc68c30e4b541a97d528f6e5cc15
+  - enabled: 1
+    path: Assets/Scenes/Stages/Stage30.unity
+    guid: 3e94a3bb1aa7f594ab965b8e2f9f2b1d
+  - enabled: 1
+    path: Assets/Scenes/Stages/Stage31.unity
+    guid: 8ccc98a0954649b448a4ceb531755ae6
+  - enabled: 1
+    path: Assets/Scenes/Stages/Stage32.unity
+    guid: 1246f58c9597d084f83ba7485393709f
   m_configObjects: {}

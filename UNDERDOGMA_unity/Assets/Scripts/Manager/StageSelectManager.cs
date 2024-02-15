@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using static StageIcon;
 
 public class StageSelectManager : Singleton<StageSelectManager>
@@ -51,6 +52,6 @@ public class StageSelectManager : Singleton<StageSelectManager>
     }
     public void LoadSelectedStage()
     {
-        Debug.Log("Load");
+        SceneManager.LoadScene(SelectedStage.StageScene);
     }
 }

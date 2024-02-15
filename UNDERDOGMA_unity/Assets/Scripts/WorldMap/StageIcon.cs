@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class StageIcon : MonoBehaviour
 {
+    public string StageScene;
     public SpriteRenderer SelectMarker;
     public GameObject StageText;
     public bool IsSelected = false;
@@ -57,7 +58,6 @@ public class StageIcon : MonoBehaviour
                 break;
             default:
                 return null;
-                break;
         }
         return this;
     }
