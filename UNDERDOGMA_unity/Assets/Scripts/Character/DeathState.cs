@@ -16,12 +16,14 @@ public class DeathState : BaseState
     public override void OnStateEnter()
     {
         _character.EnqueueCoroutine(_character.CharacterDeath());
-        _character.ChangeState(Character.State.Reset);
     }
 
     public override void OnStateUpdate()
     {
-
+        if (_character.IsCharacterCoroutineRunning == false)
+        {
+            _character.ChangeState(Character.State.Reset);
+        }
     }
 
     public override void OnStateExit()

@@ -97,12 +97,13 @@ public class DialogueManager : Singleton<DialogueManager>
                 || StageManager.Instance.stage == 10 || StageManager.Instance.stage == 11)
         {
             // 대화를 읽는다.
-            if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return)
+            if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return) || Input.GetMouseButtonDown(0))
                 && count < _dialogueData.DialogueList.Count && _isDialogueTextRunning == false)
             {
                 // 모든 대화를 읽은 경우
-                if (count == _dialogueData.DialogueList.Count)
+                if (count == _dialogueData.DialogueList.Count - 1)
                 {
+                    count++;
                     // 모든 코루틴 종료
                     StopAllCoroutines();
                     ExitDialogue();
@@ -110,6 +111,7 @@ public class DialogueManager : Singleton<DialogueManager>
                 }
                 else
                 {
+                    count++;
                     // 아닌 경우 다음 다이얼로그 출력.
                     StopAllCoroutines();
                     StartCoroutine(StartDialogueCoroutine());
@@ -142,8 +144,6 @@ public class DialogueManager : Singleton<DialogueManager>
             DialogueText.text += _dialogueData.DialogueList[count][i]; // 한글자씩 출력
             yield return new WaitForSeconds(0.01f);
         }
-
-        count++;
 
         _isDialogueTextRunning = false;
     }

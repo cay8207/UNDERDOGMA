@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class Execution : MonoBehaviour
 {
@@ -32,15 +33,19 @@ public class Execution : MonoBehaviour
     }
     #endregion
 
-    [SerializeField] GameObject ExecutionPrefab;
+    // 1. 처형 애니메이션과 관련된 변수들. 
+    // 1.1. 관련 UI들을 담는 캔버스.
     [SerializeField] GameObject ExecutionCanvas;
+    // 1.2. 처형 횟수를 표시해줄 프리팹.
     [SerializeField] GameObject ExecutionCountPrefab;
+    // 1.3. 처형할 적들을 표시해줄 프리팹.
     [SerializeField] GameObject ExecutionTargetPrefab;
+    [SerializeField] public Image ExecutionEffect;
+    [SerializeField] public Image ExecutionWolf;
+    [SerializeField] public GameObject ExecutionClaw;
 
     [SerializeField] public Sprite CloseEye;
     [SerializeField] public Sprite OpenEye;
-
-    public GameObject ExecutionObject;
 
     private List<GameObject> _executionCountObjectList = new List<GameObject>();
     public List<GameObject> ExecutionCountObjectList
@@ -54,6 +59,13 @@ public class Execution : MonoBehaviour
     {
         get => _executionTargetObjectList;
         set => _executionTargetObjectList = value;
+    }
+
+    private List<GameObject> _executionClawObjectList = new List<GameObject>();
+    public List<GameObject> ExecutionClawObjectList
+    {
+        get => _executionClawObjectList;
+        set => _executionClawObjectList = value;
     }
 
     private bool _executionInProgress;
@@ -79,7 +91,6 @@ public class Execution : MonoBehaviour
     public void Update()
     {
         Vector2 CameraPosition = StageManager.Instance.MainCamera.transform.position;
-        ExecutionObject.transform.position = new Vector3(CameraPosition.x, CameraPosition.y, 0.0f);
 
         if (ExecutionCount > 0)
         {
@@ -92,7 +103,6 @@ public class Execution : MonoBehaviour
                 foreach (var enemy in _executionTargetDictionary)
                 {
                     _executionTargetObjectList[count].transform.position = new Vector3(enemy.Key.x, enemy.Key.y, 0.0f);
-                    Debug.Log("(Execution.cs) executionTarget: " + enemy.Value.name);
 
                     count++;
                 }
@@ -108,9 +118,8 @@ public class Execution : MonoBehaviour
 
     public void ExecutionSetUp()
     {
+        // 1. 처형 카운트 설정 및 표시해줄 UI를 생성한다.
         _executionCount = StageManager.Instance._stageData.ExecutionCount;
-
-        ExecutionObject = Instantiate(ExecutionPrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
 
         for (int i = _executionCount - 1; i >= 0; i--)
         {
@@ -119,7 +128,7 @@ public class Execution : MonoBehaviour
             _executionCountObjectList.Add(ExecutionCountObject);
         }
 
-        // 처형당할 적들을 표시해줄 스프라이트. 일단 10개를 만들어서 구석에 두고, 하나씩 표시해준다. 
+        // 2. 처형당할 적들을 표시해줄 스프라이트. 일단 10개를 만들어서 구석에 두고, 하나씩 표시해준다. 
         for (int i = 0; i < 10; i++)
         {
             GameObject ExecutionTargetObject = Instantiate(ExecutionTargetPrefab, new Vector3(-9999.0f, -9999.0f, 0.0f), Quaternion.identity);
@@ -127,6 +136,19 @@ public class Execution : MonoBehaviour
             ExecutionTargetObject.transform.localScale = new Vector2(0.6f, 0.6f);
             _executionTargetObjectList.Add(ExecutionTargetObject);
         }
+
+        // 3. 처형 대상들에게 나타날 스프라이트. 일단 10개를 만들어서 구석에 두고, 하나씩 표시해준다.
+        for (int i = 0; i < 10; i++)
+        {
+            GameObject ExecutionClawObject = Instantiate(ExecutionClaw, new Vector3(-9999.0f, -9999.0f, 0.0f), Quaternion.identity);
+            ExecutionClawObject.transform.SetParent(ExecutionCanvas.transform, false);
+            ExecutionClawObject.GetComponent<UnityEngine.UI.Image>().DOFade(0.0f, 0.0f);
+            _executionClawObjectList.Add(ExecutionClawObject);
+        }
+
+        // 3. 처형 애니메이션에 관련된 변수. 미리 꺼둔다. 
+        ExecutionEffect.DOFade(0.0f, 0.0f);
+        ExecutionWolf.DOFade(0.0f, 0.0f);
     }
 
     // 매개변수로 해당 스테이지와 현재 이동 수를 받아오면 처형 여부를 결정한다. 
@@ -185,7 +207,6 @@ public class Execution : MonoBehaviour
                         _targetCol = gameObject.Key.y;
                         _enemyType = tile.EnemyData.EnemyType;
 
-                        Debug.Log("체력이 가장 높은 적: " + gameObject.Value.name);
                         _executionTarget.Clear();
                         _executionTarget.Add(new Vector2Int(_targetRow, _targetCol), gameObject.Value);
                     }
@@ -210,8 +231,6 @@ public class Execution : MonoBehaviour
             _targetRow = StageManager.Instance._character.GetComponent<Character>().Row;
             _targetCol = StageManager.Instance._character.GetComponent<Character>().Col;
 
-            Debug.Log("체력이 가장 높은 캐릭터: " + StageManager.Instance._character.name + " 체력: " + _targetHeart);
-
             _executionTarget.Clear();
             _executionTarget.Add(new Vector2Int(_targetRow, _targetCol), StageManager.Instance._character);
         }
@@ -222,7 +241,6 @@ public class Execution : MonoBehaviour
             _targetRow = StageManager.Instance._character.GetComponent<Character>().Row;
             _targetCol = StageManager.Instance._character.GetComponent<Character>().Col;
 
-            Debug.Log("체력이 가장 높은 캐릭터: " + StageManager.Instance._character.name + " 체력: " + _targetHeart);
             _executionTarget.Add(new Vector2Int(_targetRow, _targetCol), StageManager.Instance._character);
         }
 

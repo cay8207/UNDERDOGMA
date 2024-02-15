@@ -23,7 +23,6 @@ public class ClearState : BaseState
             if (StageClearCheck() == true)
             {
                 _character.EnqueueCoroutine(_character.StageClear());
-                _character.ChangeState(Character.State.Idle);
             }
             else
             {
