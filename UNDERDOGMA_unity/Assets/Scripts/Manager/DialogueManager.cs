@@ -38,6 +38,9 @@ public class DialogueManager : Singleton<DialogueManager>
 
     // 현재 텍스트를 담아두는 변수. 
     [SerializeField] private Canvas DialogueCanvas;
+    [SerializeField] private UnityEngine.UI.Image DialogueBackGround;
+
+    [SerializeField] private TextMeshProUGUI Name;
     [SerializeField] private TextMeshProUGUI DialogueText;
     [SerializeField] private UnityEngine.UI.Image DialogueWindow;
     [SerializeField] private UnityEngine.UI.Image DialogueImage1;
@@ -46,6 +49,7 @@ public class DialogueManager : Singleton<DialogueManager>
     [SerializeField] private Vector3 DialogueImage2Position;
 
     // 대사와 함께 나올 스탠딩 cg들을 저장하는 배열. 
+    [SerializeField] private List<String> Names;
     [SerializeField] private List<Sprite> listSprites1;
     [SerializeField] private List<Sprite> listSprites2;
 
@@ -66,6 +70,8 @@ public class DialogueManager : Singleton<DialogueManager>
     public void Awake()
     {
         _isDialogueRunning = true;
+
+        SetActiveImages(false);
     }
 
     public void Start()
@@ -73,53 +79,62 @@ public class DialogueManager : Singleton<DialogueManager>
         string path = "Stage" + StageManager.Instance.stage.ToString();
         _dialogueData = DialogueDataLoader.Instance.LoadDialogueData(path);
 
-        StartCoroutine(StartDialogueCoroutine());
+        if (StageManager.Instance.stage == 1 || StageManager.Instance.stage == 4
+                || StageManager.Instance.stage == 10 || StageManager.Instance.stage == 11)
+        {
+            SetActiveImages(true);
+            StartCoroutine(StartDialogueCoroutine());
+        }
+        else
+        {
+            _isDialogueRunning = false;
+        }
     }
 
     private void Update()
     {
-        // 대화를 읽는다.
-        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return)
-            && count < _dialogueData.DialogueList.Count && _isDialogueTextRunning == false)
+        if (StageManager.Instance.stage == 1 || StageManager.Instance.stage == 4
+                || StageManager.Instance.stage == 10 || StageManager.Instance.stage == 11)
         {
-            // 모든 대화를 읽은 경우
-            if (count == _dialogueData.DialogueList.Count)
+            // 대화를 읽는다.
+            if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return)
+                && count < _dialogueData.DialogueList.Count && _isDialogueTextRunning == false)
             {
-                // 모든 코루틴 종료
-                StopAllCoroutines();
-                ExitDialogue();
-                _isDialogueRunning = false;
-            }
-            else
-            {
-                // 아닌 경우 다음 다이얼로그 출력.
-                StopAllCoroutines();
-                StartCoroutine(StartDialogueCoroutine());
+                // 모든 대화를 읽은 경우
+                if (count == _dialogueData.DialogueList.Count)
+                {
+                    // 모든 코루틴 종료
+                    StopAllCoroutines();
+                    ExitDialogue();
+                    _isDialogueRunning = false;
+                }
+                else
+                {
+                    // 아닌 경우 다음 다이얼로그 출력.
+                    StopAllCoroutines();
+                    StartCoroutine(StartDialogueCoroutine());
+                }
             }
         }
+
     }
 
     public IEnumerator StartDialogueCoroutine()
     {
         _isDialogueTextRunning = true;
 
+        Name.text = Names[count];
+
         DialogueText.text = "";
 
-        if (StageManager.Instance.stage == 1)
-        {
-            DialogueImage1.sprite = listSprites1[count];
-        }
-        else
-        {
-            DialogueImage1.rectTransform.localPosition = DialogueImage1Position;
-            DialogueImage2.rectTransform.localPosition = DialogueImage2Position;
+        DialogueImage1.rectTransform.localPosition = DialogueImage1Position;
+        DialogueImage2.rectTransform.localPosition = DialogueImage2Position;
 
-            DialogueImage1.rectTransform.sizeDelta = listSprites1[count].rect.size;
-            DialogueImage2.rectTransform.sizeDelta = listSprites2[count].rect.size;
+        DialogueImage1.rectTransform.sizeDelta = listSprites1[count].rect.size;
+        DialogueImage2.rectTransform.sizeDelta = listSprites2[count].rect.size;
 
-            DialogueImage1.sprite = listSprites1[count];
-            DialogueImage2.sprite = listSprites2[count];
-        }
+        DialogueImage1.sprite = listSprites1[count];
+        DialogueImage2.sprite = listSprites2[count];
 
         // 텍스트 출력 //
         for (int i = 0; i < _dialogueData.DialogueList[count].Length; i++)
@@ -144,10 +159,17 @@ public class DialogueManager : Singleton<DialogueManager>
         listSprites2.Clear();
         // 애니메이터 초기화
 
-        DialogueImage1.GetComponent<Image>().enabled = false;
-        DialogueImage2.GetComponent<Image>().enabled = false;
+        SetActiveImages(false);
+    }
 
-        DialogueText.GetComponent<TextMeshProUGUI>().enabled = false;
-        DialogueWindow.GetComponent<UnityEngine.UI.Image>().enabled = false;
+    public void SetActiveImages(bool isActive)
+    {
+        Name.GetComponent<TextMeshProUGUI>().enabled = isActive;
+        DialogueText.GetComponent<TextMeshProUGUI>().enabled = isActive;
+        DialogueWindow.GetComponent<UnityEngine.UI.Image>().enabled = isActive;
+        DialogueBackGround.GetComponent<UnityEngine.UI.Image>().enabled = isActive;
+
+        DialogueImage1.GetComponent<Image>().enabled = isActive;
+        DialogueImage2.GetComponent<Image>().enabled = isActive;
     }
 }

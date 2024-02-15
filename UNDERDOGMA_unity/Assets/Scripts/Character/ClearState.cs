@@ -13,20 +13,23 @@ public class ClearState : BaseState
 
     public override void OnStateEnter()
     {
-        if (StageClearCheck() == true)
-        {
-            _character.EnqueueCoroutine(_character.StageClear());
-            _character.ChangeState(Character.State.Idle);
-        }
-        else
-        {
-            _character.ChangeState(Character.State.Idle);
-        }
+
     }
 
     public override void OnStateUpdate()
     {
-
+        if (_character.IsCharacterCoroutineRunning == false)
+        {
+            if (StageClearCheck() == true)
+            {
+                _character.EnqueueCoroutine(_character.StageClear());
+                _character.ChangeState(Character.State.Idle);
+            }
+            else
+            {
+                _character.ChangeState(Character.State.Idle);
+            }
+        }
     }
 
     public override void OnStateExit()

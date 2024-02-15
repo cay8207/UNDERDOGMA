@@ -15,13 +15,15 @@ public class MapEditor : OdinEditorWindow
     [MenuItem("KinnyMoms/MapEditor")]
     private static void Init()
     {
-        MapEditor mapEditor =
-            (MapEditor)GetWindow(typeof(MapEditor));
+        MapEditor mapEditor = (MapEditor)GetWindow(typeof(MapEditor));
         mapEditor.Show();
     }
 
     [EnumToggleButtons, OnValueChanged("OnTypeChanged")]
     public MapEditorTile.TileType tileType;
+
+    [ShowIf("tileType", MapEditorTile.TileType.Empty), OnValueChanged("OnTileSpriteChanged")]
+    public List<Sprite> TileSprite;
 
     [ShowIf("tileType", MapEditorTile.TileType.Enemy), EnumToggleButtons, OnValueChanged("OnEnemyDirectionChanged")]
     public MapEditorTile.EnemyDirection enemyDirection;
@@ -57,6 +59,10 @@ public class MapEditor : OdinEditorWindow
             default:
                 break;
         }
+    }
+    public void OnTileSpriteChanged()
+    {
+        tile.SetTileSprite(TileSprite);
     }
     public void OnEnemyDirectionChanged()
     {

@@ -39,57 +39,60 @@ public class TutorialManager : MonoBehaviour
 
     // 현재 텍스트를 담아두는 변수. 
     [SerializeField] private Canvas DialogueCanvas;
-    [SerializeField] private TextMeshProUGUI DialogueText;
+    [SerializeField] private UnityEngine.UI.Image BlackScreen;
+    [SerializeField] private UnityEngine.UI.Image DialogueBackGround;
+    [SerializeField] private UnityEngine.UI.Image DialogueImage1;
+    [SerializeField] private Vector3 DialogueImage1Position;
     [SerializeField] private UnityEngine.UI.Image DialogueWindow;
-    [SerializeField] private UnityEngine.UI.Image DialogueImage;
-    [SerializeField] private UnityEngine.UI.Image DialogueArrow;
-
-    // 게임 처음에 나오는 불꽃 애니메이션.
-    [SerializeField] private GameObject flame;
+    [SerializeField] private TextMeshProUGUI Name;
+    [SerializeField] private TextMeshProUGUI DialogueText;
 
     // 대사와 함께 나올 스탠딩 cg들을 저장하는 배열. 
+    [SerializeField] private List<String> Names;
     [SerializeField] private List<Sprite> listSprites;
+
+
+    public bool _isDialogueRunning = false;
+    public bool _isDialogueTextRunning = false;
 
     private DialogueData _dialogueData;
 
     //  현재 몇번째 텍스트를 읽고 있는지 저장하기 위한 변수.
-    private int count = 0;
+    private int count = -1;
 
     public void Start()
     {
         string path = "Tutorial";
         _dialogueData = DialogueDataLoader.Instance.LoadDialogueData(path);
 
-        // 불꽃 애니메이션
-        flame.GetComponent<SpriteRenderer>().DOFade(1.0f, 5.0f).OnComplete(() =>
-        {
-            StartCoroutine(StartDialogueCoroutine());
-        });
+        StartCoroutine(StartDialogueCoroutine());
     }
 
     private void Update()
     {
         // 대화를 읽는다.
-        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return))
+        // 대화를 읽는다.
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return)
+            && count < _dialogueData.DialogueList.Count && _isDialogueTextRunning == false)
         {
-            count++;
-
-            if (count == 9)
-            {
-                flame.SetActive(false);
-                DialogueWindow.enabled = false;
-                DialogueImage.enabled = true;
-            }
-
             // 모든 대화를 읽은 경우
-            if (count == _dialogueData.DialogueList.Count)
+            if (count == _dialogueData.DialogueList.Count - 1)
             {
                 // 모든 코루틴 종료
                 StopAllCoroutines();
                 ExitDialogue();
+                _isDialogueRunning = false;
+            }
+            // 0인 상태에서 스페이스바를 눌렀을 경우 
+            else if (count == 0)
+            {
+                count++;
+                StopAllCoroutines();
+                StartCoroutine(BlackScreenFadeOutCoroutine());
             }
             else
             {
+                count++;
                 // 아닌 경우 다음 다이얼로그 출력.
                 StopAllCoroutines();
                 StartCoroutine(StartDialogueCoroutine());
@@ -99,20 +102,28 @@ public class TutorialManager : MonoBehaviour
 
     public IEnumerator StartDialogueCoroutine()
     {
-        DialogueArrow.enabled = false;
+        _isDialogueTextRunning = true;
+
+        if (count == -1)
+        {
+            yield return new WaitForSeconds(2.0f);
+
+            DialogueWindow.GetComponent<UnityEngine.UI.Image>().enabled = true;
+            DialogueText.GetComponent<TextMeshProUGUI>().enabled = true;
+            Name.GetComponent<TextMeshProUGUI>().enabled = true;
+
+            count++;
+        }
+
+        Name.text = Names[count];
 
         DialogueText.text = "";
 
-        if (listSprites[count] == null)
-        {
-            DialogueImage.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 0);
-            DialogueImage.sprite = null;
-        }
-        else
-        {
-            DialogueImage.GetComponent<RectTransform>().sizeDelta = listSprites[count].rect.size;
-            DialogueImage.sprite = listSprites[count];
-        }
+        DialogueImage1.rectTransform.localPosition = DialogueImage1Position;
+
+        DialogueImage1.rectTransform.sizeDelta = listSprites[count].rect.size;
+
+        DialogueImage1.sprite = listSprites[count];
 
         // 텍스트 출력 //
         for (int i = 0; i < _dialogueData.DialogueList[count].Length; i++)
@@ -121,25 +132,35 @@ public class TutorialManager : MonoBehaviour
             yield return new WaitForSeconds(0.01f);
         }
 
-        if (count < 9)
-        {
-            DialogueArrow.enabled = true;
-        }
+        _isDialogueTextRunning = false;
+    }
+
+    public IEnumerator BlackScreenFadeOutCoroutine()
+    {
+        _isDialogueTextRunning = true;
+
+        BlackScreen.DOFade(0.0f, 2.0f);
+        yield return new WaitForSeconds(2.0f);
+
+        StartCoroutine(StartDialogueCoroutine());
+
+        _isDialogueTextRunning = false;
     }
 
     public void ExitDialogue()
     {
-        //// 초기화 ////
         count = 0;
         DialogueText.text = "";
-        // 리스트 초기화 //
+
         _dialogueData.DialogueList.Clear();
         listSprites.Clear();
-        // 애니메이터 초기화 //
+
+        DialogueImage1.GetComponent<UnityEngine.UI.Image>().enabled = false;
 
         DialogueText.GetComponent<TextMeshProUGUI>().enabled = false;
         DialogueWindow.GetComponent<UnityEngine.UI.Image>().enabled = false;
+        DialogueBackGround.GetComponent<UnityEngine.UI.Image>().enabled = false;
 
-        SceneManager.LoadScene("Stage1");
+        SceneManager.LoadScene("WorldMap");
     }
 }

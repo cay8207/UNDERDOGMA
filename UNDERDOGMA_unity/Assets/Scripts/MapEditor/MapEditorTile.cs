@@ -30,7 +30,7 @@ public class MapEditorTile : MonoBehaviour
         public Sprite Meat;
     }
 
-    [Header ("Coordinate")]
+    [Header("Coordinate")]
     [SerializeField]
     int x;
     [SerializeField]
@@ -39,6 +39,9 @@ public class MapEditorTile : MonoBehaviour
     [Header("Sprites")]
     [SerializeField]
     TileSprites tileSprites;
+
+    [SerializeField]
+    List<Sprite> tileShape;
 
     [Header("Settings")]
     [SerializeField]
@@ -136,10 +139,20 @@ public class MapEditorTile : MonoBehaviour
         }
     }
 
+    public void SetTileSprite(List<Sprite> tileSprite)
+    {
+        tileSprites.None = tileSprite[0];
+        tileSprites.Empty = tileSprite[1];
+        tileSprites.Player = tileSprite[2];
+        tileSprites.Enemy = tileSprite[3];
+        tileSprites.Meat = tileSprite[4];
+        tileImage.sprite = GetCurrentSprite();
+    }
+
     public void SetEnemyDirection(EnemyDirection direction)
     {
         CurrentEnemyDirection = direction;
-        for(int i = 0; i < 4; i++)
+        for (int i = 0; i < 4; i++)
         {
             enemyUI.transform.Find("Direction").transform.GetChild(i).gameObject.SetActive(false);
         }

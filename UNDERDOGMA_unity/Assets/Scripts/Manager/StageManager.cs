@@ -53,8 +53,6 @@ public class StageManager : MonoBehaviour
     [SerializeField] GameObject MiniBossPrefab;
     [SerializeField] List<Sprite> TileSprites;
 
-    // 1.3. 현재 스테이지를 저장하기 위한 변수.
-    [SerializeField] public int stage;
 
     // 1.4. 리셋 애니메이션을 보여주기 위한 오브젝트. 
     [SerializeField] public GameObject ResetAnimationUpSide;
@@ -68,7 +66,10 @@ public class StageManager : MonoBehaviour
 
     // 3. 스테이지의 데이터, 오브젝트 등을 저장하기 위한 변수들.
 
-    // 3.1. 기본적인 타일 구조는 StageData의 TileDictionary에 저장되어있다.
+    // 3.1. 현재 스테이지를 저장하기 위한 변수.
+    public int stage;
+
+    // 3.2. 기본적인 타일 구조는 StageData의 TileDictionary에 저장되어있다.
     // 하지만 게임을 진행하면서 데이터가 계속해서 바뀌어야 하는데, 리셋할때에는 또 초기 정보가 필요하다.
     // 그래서 변경해도 상관없도록 복사한 Dictionary를 하나 만들어서 데이터를 그쪽에서 관리하고,
     // 기존의 TileDictionary는 리셋할때에만 사용한다. 
@@ -79,7 +80,7 @@ public class StageManager : MonoBehaviour
         set => _tempTileDictionary = value;
     }
 
-    // 3.2. 현재 게임에 존재하는 모든 오브젝트들을 관리하는 dictionary.
+    // 3.3. 현재 게임에 존재하는 모든 오브젝트들을 관리하는 dictionary.
     private Dictionary<Vector2Int, GameObject> _gameObjectDictionary = new Dictionary<Vector2Int, GameObject>();
     public Dictionary<Vector2Int, GameObject> GameObjectDictionary
     {
@@ -90,6 +91,9 @@ public class StageManager : MonoBehaviour
     // Start is called before the first frame update
     public void Awake()
     {
+        Scene scene = SceneManager.GetActiveScene();
+        stage = int.Parse(scene.name.Substring(5, 1));
+
         string path = "Stage" + stage.ToString();
         _stageData = StageDataLoader.Instance.LoadStageData(path);
 

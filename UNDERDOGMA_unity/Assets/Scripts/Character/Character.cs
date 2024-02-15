@@ -504,7 +504,7 @@ public class Character : MonoBehaviour
 
         yield return new WaitForSeconds(2.0f);
 
-        if (StageManager.Instance.stage == 10)
+        if (StageManager.Instance.stage == 11)
         {
             SceneManager.LoadScene("Ending");
         }

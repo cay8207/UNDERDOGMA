@@ -17,12 +17,12 @@ public class WorldMapManager : Singleton<WorldMapManager>
 
     private void Start()
     {
-        //WorldMapInfo¸¦ ÀÚµ¿À¸·Î ¹Þ¾Æ¿À´Â ±â´ÉÀº ±ÍÂú¾Æ¼­ ¸ø ¸¸µê
-        SelectedWorld = 1;
+        //WorldMapInfoï¿½ï¿½ ï¿½Úµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¾Æ¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Æ¼ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        SelectedWorld = 2;
         SetInfoPos(SelectedWorld);
         for (int i = 1; i <= 5; i++)
         {
-            if(i == SelectedWorld)
+            if (i == SelectedWorld)
             {
                 WorldMapImages[i - 1].InitializeWorldImage(true);
             }
