@@ -45,4 +45,14 @@ public class Buttons : MonoBehaviour
         Time.timeScale = 1f;
         SceneManager.LoadScene("GameStart");
     }
+
+    public void GoToCredit()
+    {
+        SceneManager.LoadScene("Credit");
+    }
+
+    public void GoToTutorial()
+    {
+        SceneManager.LoadScene("Tutorial");
+    }
 }

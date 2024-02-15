@@ -14,9 +14,9 @@ public class GameStartMenu : MonoBehaviour
     [SerializeField] Button creditsButton;
     [SerializeField] Button exitButton;
 
-    [SerializeField] Image StartButtonText;
-    [SerializeField] Image CreditsButtonText;
-    [SerializeField] Image ExitButtonText;
+    //[SerializeField] Image StartButtonText;
+    //[SerializeField] Image CreditsButtonText;
+    //[SerializeField] Image ExitButtonText;
 
     [SerializeField] GameObject ButtonSelectHighlight;
 
@@ -26,11 +26,6 @@ public class GameStartMenu : MonoBehaviour
     {
         Managers.Instance.Init();
         GameManager.Instance.Init();
-
-        // 각 버튼에 클릭 리스너 등록
-        startButton.onClick.AddListener(StartGame);
-        creditsButton.onClick.AddListener(ShowCredits);
-        exitButton.onClick.AddListener(ExitGame);
 
         AudioManager.Instance.Init();
         AudioManager.Instance.PlayBgm(true);
@@ -45,7 +40,6 @@ public class GameStartMenu : MonoBehaviour
             if (_selectedIndex > 0)
             {
                 _selectedIndex--;
-                ButtonSelectHighlight.transform.DOMove(ButtonSelectHighlight.transform.position + new Vector3(0, 100, 0), 0.2f);
                 HighlightButton();
             }
         }
@@ -54,9 +48,7 @@ public class GameStartMenu : MonoBehaviour
             if (_selectedIndex < 2)
             {
                 _selectedIndex++;
-                Debug.Log(transform.position);
-                Debug.Log(transform.localPosition.ToString());
-                ButtonSelectHighlight.transform.DOMove(ButtonSelectHighlight.transform.position - new Vector3(0, 100, 0), 0.2f);
+                //ButtonSelectHighlight.transform.DOMove(ButtonSelectHighlight.transform.position - new Vector3(0, 100, 0), 0.2f);
                 HighlightButton();
             }
         }
@@ -64,65 +56,60 @@ public class GameStartMenu : MonoBehaviour
         {
             if (_selectedIndex == 0)
             {
-                StartGame();
+                startButton.GetComponent<Buttons>().GoToTutorial();
             }
             else if (_selectedIndex == 1)
             {
-                ShowCredits();
+                creditsButton.GetComponent<Buttons>().GoToCredit();
             }
             else if (_selectedIndex == 2)
             {
-                ExitGame();
+                exitButton.GetComponent<Buttons>().ExitGame();
             }
             Debug.Log("Audio Start!");
             AudioManager.Instance.PlaySfx(AudioManager.Sfx.UI_Toggle);
         }
     }
 
+    public void selectStartButton()
+    {
+        _selectedIndex = 0;
+        HighlightButton();
+    }
+    public void selectCreditsButton()
+    {
+        _selectedIndex = 1;
+        HighlightButton();
+    }
+    public void selectExitButton()
+    {
+        _selectedIndex = 2;
+        HighlightButton();
+    }
+
     void HighlightButton()
     {
         if (_selectedIndex == 0)
         {
-            StartButtonText.rectTransform.sizeDelta = new Vector2(231.0f, 28.0f);
-            CreditsButtonText.rectTransform.sizeDelta = new Vector2(120.0f, 26.0f);
-            ExitButtonText.rectTransform.sizeDelta = new Vector2(72.0f, 26.0f);
+            ButtonSelectHighlight.transform.DOMove(startButton.transform.position, 0.2f);
+            startButton.GetComponent<Buttons>().MakeButtonBigger();
+            creditsButton.GetComponent<Buttons>().MakeButtonOriginalSize();
+            exitButton.GetComponent<Buttons>().MakeButtonOriginalSize();
+
         }
         else if (_selectedIndex == 1)
         {
-            StartButtonText.rectTransform.sizeDelta = new Vector2(208.0f, 26.0f);
-            CreditsButtonText.rectTransform.sizeDelta = new Vector2(140.0f, 28.0f);
-            ExitButtonText.rectTransform.sizeDelta = new Vector2(72.0f, 26.0f);
+            ButtonSelectHighlight.transform.DOMove(creditsButton.transform.position, 0.2f);
+            startButton.GetComponent<Buttons>().MakeButtonOriginalSize();
+            creditsButton.GetComponent<Buttons>().MakeButtonBigger();
+            exitButton.GetComponent<Buttons>().MakeButtonOriginalSize();
         }
         else if (_selectedIndex == 2)
         {
-            StartButtonText.rectTransform.sizeDelta = new Vector2(208.0f, 26.0f);
-            CreditsButtonText.rectTransform.sizeDelta = new Vector2(120.0f, 26.0f);
-            ExitButtonText.rectTransform.sizeDelta = new Vector2(84.0f, 28.0f);
+            ButtonSelectHighlight.transform.DOMove(exitButton.transform.position, 0.2f);
+            startButton.GetComponent<Buttons>().MakeButtonOriginalSize();
+            creditsButton.GetComponent<Buttons>().MakeButtonOriginalSize();
+            exitButton.GetComponent<Buttons>().MakeButtonBigger();
         }
-    }
-
-    // '게임 시작' 버튼 클릭 시 호출되는 함수
-    void StartGame()
-    {
-        SceneManager.LoadScene("Tutorial");
-        Debug.Log("Stage1 Scene Loaded");
-    }
-
-    // '크레딧' 버튼 클릭 시 호출되는 함수
-    void ShowCredits()
-    {
-        // 원하는 Scene으로 이동
-        SceneManager.LoadScene("Credit");
-        AudioManager.Instance.PlayBgm(true);
-    }
-
-    // '게임 종료' 버튼 클릭 시 호출되는 함수
-    void ExitGame()
-    {
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
-        Application.Quit();
-#endif
     }
 }
