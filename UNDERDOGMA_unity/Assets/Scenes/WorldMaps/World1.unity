@@ -5016,7 +5016,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4912161200879605888, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_text
-      value: STAGE3
+      value: STAGE  3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
@@ -5216,7 +5216,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4912161200879605888, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_text
-      value: STAGE2
+      value: STAGE  2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
@@ -5399,7 +5399,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4912161200879605888, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_text
-      value: STAGE9
+      value: STAGE  9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
@@ -5496,7 +5496,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4912161200879605888, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_text
-      value: EXTRA3
+      value: EXTRA  3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
@@ -5577,7 +5577,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4912161200879605888, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_text
-      value: EXTRA2
+      value: EXTRA  2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
@@ -5767,7 +5767,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4912161200879605888, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_text
-      value: STAGE4
+      value: STAGE  4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
@@ -5873,7 +5873,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4912161200879605888, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_text
-      value: STAGE6
+      value: STAGE  6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
@@ -6120,7 +6120,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4912161200879605888, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_text
-      value: EXTRA5
+      value: EXTRA  5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
@@ -6576,7 +6576,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4912161200879605888, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_text
-      value: STAGE5
+      value: STAGE  5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
@@ -6645,8 +6645,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "1. \uD56D\uAD6C"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 3d13762bfddec69488d3c41b6172628e, type: 2}
-  m_sharedMaterial: {fileID: 4819869948633311439, guid: 3d13762bfddec69488d3c41b6172628e, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 04c7fa96092c4df4ab8957becda6725e, type: 2}
+  m_sharedMaterial: {fileID: -4021121503419889103, guid: 04c7fa96092c4df4ab8957becda6725e, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -6676,11 +6676,11 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
-  m_characterSpacing: 0
+  m_characterSpacing: -10
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -6797,7 +6797,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4912161200879605888, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_text
-      value: EXTRA1
+      value: EXTRA  1
       objectReference: {fileID: 0}
     - target: {fileID: 5661682286696744705, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_IsActive
@@ -6911,7 +6911,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4912161200879605888, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_text
-      value: STAGE7
+      value: STAGE  7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
@@ -7012,7 +7012,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4912161200879605888, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_text
-      value: STAGE8
+      value: STAGE  8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
@@ -7119,7 +7119,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4912161200879605888, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_text
-      value: EXTRA4
+      value: EXTRA  4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
@@ -7377,7 +7377,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: e76ccc7a1e45f9c4b85aace7be1c6c7c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
