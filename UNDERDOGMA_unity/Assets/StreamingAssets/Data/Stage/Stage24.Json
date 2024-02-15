@@ -1,47 +1,110 @@
 {
   "TileDictionary": {
-    "0,0": [0],
-    "0,-1": [0],
-    "1,0": [0],
-    "1,1": [0],
-    "1,-1": [0],
-    "1,-2": [0],
-    "2,-2": [0],
-    "2,-1": [0],
-    "2,0": [0],
-    "2,1": [0],
-    "2,2": [0],
-    "3,-3": [0],
-    "3,-1": [0],
-    "3,1": [0],
-    "3,0": [0],
-    "4,0": [0],
-    "4,-1": [0],
-    "0,-1": [1, 0, 1, 3, 3, 3],
-    "1,1": [1, 0, 1, 1, 3, 1],
-    "2,0": [1, 0, 1, 1, 3, 1],
-    "3,1": [1, 0, 1, 3, 5, 1],
-    "3,-2": [1, 0, 1, 2, 7, 0],
-    "2,2": [1, 2, 1, 1, 9, 1],
+    "-1, 0": {
+      "Type": "Empty",
+      "Round": "2",
+      "Pattern": "2",
+      "TileDirection": "Left"
+    },
+    "0, 0": {
+      "Type": "Empty",
+      "Round": "0",
+      "Pattern": "0",
+      "TileDirection": "None"
+    },
+    "0, 1": {
+      "Type": "Empty",
+      "Round": "0",
+      "Pattern": "1",
+      "TileDirection": "None"
+    },
+    "0, 2": {
+      "Type": "Empty",
+      "Round": "1",
+      "Pattern": "2",
+      "TileDirection": "Left"
+    },
+    "1, 0": {
+      "Type": "Empty",
+      "Round": "0",
+      "Pattern": "1",
+      "TileDirection": "None"
+    },
+    "1, 2": {
+      "Type": "Empty",
+      "Round": "0",
+      "Pattern": "0",
+      "TileDirection": "None"
+    },
+    "2, 0": {
+      "Type": "Empty",
+      "Round": "1",
+      "Pattern": "2",
+      "TileDirection": "Right"
+    },
+    "2, 1": {
+      "Type": "Empty",
+      "Round": "0",
+      "Pattern": "0",
+      "TileDirection": "None"
+    },
+    "2, 2": {
+      "Type": "Empty",
+      "Round": "0",
+      "Pattern": "1",
+      "TileDirection": "None"
+    },
+    "3, 2": {
+      "Type": "Empty",
+      "Round": "0",
+      "Pattern": "2",
+      "TileDirection": "None"
+    },
+    "2, 3": {
+      "Type": "Enemy",
+      "Round": "2",
+      "Pattern": "2",
+      "TileDirection": "Up",
 
-    "-1,0": [-1],
-    "-1,-1": [-1],
-    "0,-2": [-1],
-    "0,1": [-1],
-    "1,2": [-1],
-    "1,-3": [-1],
-    "2,-3": [-1],
-    "2,3": [-1],
-    "3,2": [-1],
-    "3,-3": [-1],
-    "4,1": [-1],
-    "4,-2": [-1],
-    "5,0": [-1],
-    "5,-1": [-1]
+      "EnemyType": "ChaserEnemy",
+      "IsAlive": true,
+      "Attack": 1,
+      "Heart": 3,
+      "AttackDirection": "Down"
+    },
+    "4, 2": {
+      "Type": "Enemy",
+      "Round": "2",
+      "Pattern": "0",
+      "TileDirection": "Right",
+
+      "EnemyType": "ChaserEnemy",
+      "IsAlive": true,
+      "Attack": 1,
+      "Heart": 3,
+      "AttackDirection": "Left"
+    },
+    
+    "-2, 0": { "Type": "Wall" },
+    "-1, -1": { "Type": "Wall" },
+    "-1, 1": { "Type": "Wall" },
+    "-1, 2": { "Type": "Wall" },
+    "0, -1": { "Type": "Wall" },
+    "0, 3": { "Type": "Wall" },
+    "1, -1": { "Type": "Wall" },
+    "1, 1": { "Type": "Wall" },
+    "1, 3": { "Type": "Wall" },
+    "2, -1": { "Type": "Wall" },
+    "2, 4": { "Type": "Wall" },
+    "3, 0": { "Type": "Wall" },
+    "3, 1": { "Type": "Wall" },
+    "3, 3": { "Type": "Wall" },
+    "4, 1": { "Type": "Wall" },
+    "4, 3": { "Type": "Wall" },
+    "5, 2": { "Type": "Wall" }
   },
-  "ExecutionCount": 4,
-  "ExecutionHealth": 7,
+  "ExecutionCount": 6,
   "CharacterRow": 0,
   "CharacterCol": 0,
-  "CharacterHeart": 7
+  "CharacterHeart": 6
 }

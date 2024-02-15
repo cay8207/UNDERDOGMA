@@ -6,7 +6,7 @@
       "Pattern": "2",
       "TileDirection": "Right",
 
-      "Amount": "5",
+      "Amount": "8",
       "IsExist": true
     },
     "-1, -1": {
@@ -86,5 +86,5 @@
   "ExecutionCount": 4,
   "CharacterRow": 0,
   "CharacterCol": 0,
-  "CharacterHeart": 10
+  "CharacterHeart": 7
 }
