@@ -15,6 +15,8 @@ public class WorldMapImage : MonoBehaviour
     private SpriteRenderer notSelected;
     [SerializeField]
     private SpriteRenderer locked;
+    [SerializeField]
+    private SpriteRenderer lockImage;
 
     private float sizeMultiplier = 1.03f;
     private Vector3 originalScale;
@@ -27,12 +29,14 @@ public class WorldMapImage : MonoBehaviour
             selected.enabled = true;
             notSelected.enabled = true;
             locked.enabled = false;
+            lockImage.enabled = false;
         }
         else
         {
             selected.enabled = false;
             notSelected.enabled = false;
             locked.enabled = true;
+            lockImage.enabled = true;
         }
     }
 
