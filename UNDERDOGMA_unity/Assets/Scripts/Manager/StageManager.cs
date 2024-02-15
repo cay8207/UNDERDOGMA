@@ -131,11 +131,13 @@ public class StageManager : MonoBehaviour
             {
                 pauseCanvas.SetActive(false);
                 isPauseCanvasOpened = false;
+                Time.timeScale = 1f;
             }
             else
             {
                 pauseCanvas.SetActive(true);
                 isPauseCanvasOpened = true;
+                Time.timeScale = 0;
             }
         }
     }
