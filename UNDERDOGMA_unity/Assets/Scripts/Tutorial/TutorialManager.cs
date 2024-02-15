@@ -90,6 +90,12 @@ public class TutorialManager : MonoBehaviour
                 StopAllCoroutines();
                 StartCoroutine(BlackScreenFadeOutCoroutine());
             }
+            else if (count == 2)
+            {
+                count++;
+                StopAllCoroutines();
+                StartCoroutine(BlackScreenFadeInCoroutine());
+            }
             else
             {
                 count++;
@@ -147,6 +153,18 @@ public class TutorialManager : MonoBehaviour
         _isDialogueTextRunning = false;
     }
 
+    public IEnumerator BlackScreenFadeInCoroutine()
+    {
+        _isDialogueTextRunning = true;
+
+        BlackScreen.DOFade(1.0f, 2.0f);
+        yield return new WaitForSeconds(2.0f);
+
+        StartCoroutine(StartDialogueCoroutine());
+
+        _isDialogueTextRunning = false;
+    }
+
     public void ExitDialogue()
     {
         count = 0;
@@ -156,7 +174,7 @@ public class TutorialManager : MonoBehaviour
         listSprites.Clear();
 
         DialogueImage1.GetComponent<UnityEngine.UI.Image>().enabled = false;
-
+        Name.GetComponent<TextMeshProUGUI>().enabled = false;
         DialogueText.GetComponent<TextMeshProUGUI>().enabled = false;
         DialogueWindow.GetComponent<UnityEngine.UI.Image>().enabled = false;
         DialogueBackGround.GetComponent<UnityEngine.UI.Image>().enabled = false;
