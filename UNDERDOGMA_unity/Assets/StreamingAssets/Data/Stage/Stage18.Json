@@ -1,12 +1,12 @@
 {
   "TileDictionary": {
-    "-1, 0": {
+    "0, -1": {
       "Type": "Meat",
       "Round": "1",
       "Pattern": "2",
       "TileDirection": "Left",
 
-      "Amount": "2",
+      "Amount": "4",
       "IsExist": true
     },
     "-1, -1": {
@@ -15,7 +15,7 @@
       "Pattern": "1",
       "TileDirection": "Down"
     },
-    "0, -1": {
+    "-1, 0": {
       "Type": "Empty",
       "Round": "1",
       "Pattern": "2",
