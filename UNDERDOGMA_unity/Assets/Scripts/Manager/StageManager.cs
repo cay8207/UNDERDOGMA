@@ -65,6 +65,9 @@ public class StageManager : MonoBehaviour
 
     public StageData _stageData;
 
+    // 2.1. 일시정지 메뉴
+    [SerializeField] GameObject pauseCanvas;
+
     // 3. 스테이지의 데이터, 오브젝트 등을 저장하기 위한 변수들.
 
     // 3.1. 현재 스테이지를 저장하기 위한 변수.
@@ -111,6 +114,9 @@ public class StageManager : MonoBehaviour
         AudioManager.Instance.PlayBgm(true);
 
         TileInstantiate();
+
+        Instantiate(pauseCanvas);
+
     }
 
     // Update is called once per frame

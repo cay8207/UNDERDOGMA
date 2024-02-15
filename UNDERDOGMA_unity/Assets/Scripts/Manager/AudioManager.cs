@@ -72,4 +72,14 @@ public class AudioManager : Singleton<AudioManager>
             break;
         }
     }
+
+    public void ModifyBgmVolume(float volume)
+    {
+        bgmVolume = volume;
+    }
+
+    public void ModifySfxVolume(float volume)
+    {
+        sfxVolume = volume;
+    }
 }
