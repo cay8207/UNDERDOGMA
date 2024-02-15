@@ -40,7 +40,11 @@ public class Execution : MonoBehaviour
     // 1.2. 처형 횟수를 표시해줄 프리팹.
     [SerializeField] GameObject ExecutionCountPrefab;
     // 1.3. 처형할 적들을 표시해줄 프리팹.
+    [SerializeField] Image ExecutionBackGround;
+    [SerializeField] TextMeshProUGUI ExecutionDescription;
     [SerializeField] TextMeshProUGUI ExecutionNum;
+    [SerializeField] TextMeshProUGUI ExecutionText;
+    [SerializeField] Image ControlDescription;
     [SerializeField] GameObject ExecutionTargetPrefab;
     [SerializeField] public Image ExecutionEffect;
     [SerializeField] public Image ExecutionWolf;
@@ -209,16 +213,45 @@ public class Execution : MonoBehaviour
             }
         }
 
-        RemainEnemyBackgroundObject.transform.localPosition = new Vector3(-850.0f, 37.5f * (_enemyCount) + 75.0f, 0.0f);
-        RemainEnemyTextObject.transform.localPosition = new Vector3(-850.0f, 37.5f * (_enemyCount) + 75.0f, 0.0f);
+        if (StageManager.Instance._character.GetComponent<Character>().IsCharacterExcutionCoroutineRunning == true)
+        {
+            ExecutionBackGround.enabled = false;
+            ExecutionDescription.enabled = false;
+            ExecutionNum.enabled = false;
+            ExecutionText.enabled = false;
+            ControlDescription.enabled = false;
 
-        for (int i = 0; i < _enemyCount; i++)
-        {
-            _remainEnemyObjectList[i].transform.localPosition = new Vector3(-850.0f, 37.5f * (_enemyCount) - 75.0f * i, 0.0f);
+            RemainEnemyBackgroundObject.transform.localPosition = new Vector3(-9999.0f, -9999.0f, 0.0f);
+            RemainEnemyTextObject.transform.localPosition = new Vector3(-9999.0f, -9999.0f, 0.0f);
+
+            for (int i = 0; i < _enemyCount; i++)
+            {
+                _remainEnemyObjectList[i].transform.localPosition = new Vector3(-9999.0f, -9999.0f, 0.0f);
+            }
+            for (int i = _enemyCount; i < 10; i++)
+            {
+                _remainEnemyObjectList[i].transform.localPosition = new Vector3(-9999.0f, -9999.0f, 0.0f);
+            }
         }
-        for (int i = _enemyCount; i < 10; i++)
+        else
         {
-            _remainEnemyObjectList[i].transform.localPosition = new Vector3(-9999.0f, -9999.0f, 0.0f);
+            ExecutionBackGround.enabled = true;
+            ExecutionDescription.enabled = true;
+            ExecutionNum.enabled = true;
+            ExecutionText.enabled = true;
+            ControlDescription.enabled = true;
+
+            RemainEnemyBackgroundObject.transform.localPosition = new Vector3(-850.0f, 37.5f * (_enemyCount) + 75.0f, 0.0f);
+            RemainEnemyTextObject.transform.localPosition = new Vector3(-850.0f, 37.5f * (_enemyCount) + 75.0f, 0.0f);
+
+            for (int i = 0; i < _enemyCount; i++)
+            {
+                _remainEnemyObjectList[i].transform.localPosition = new Vector3(-850.0f, 37.5f * (_enemyCount) - 75.0f * i, 0.0f);
+            }
+            for (int i = _enemyCount; i < 10; i++)
+            {
+                _remainEnemyObjectList[i].transform.localPosition = new Vector3(-9999.0f, -9999.0f, 0.0f);
+            }
         }
     }
 

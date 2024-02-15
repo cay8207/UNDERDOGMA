@@ -1982,7 +1982,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ExecutionCanvas: {fileID: 185529058}
   ExecutionCountPrefab: {fileID: 2722413630067619314, guid: c5e4d10f80bfb204daf9d4a8549b1a9e, type: 3}
+  ExecutionBackGround: {fileID: 2041384975}
+  ExecutionDescription: {fileID: 6424933}
   ExecutionNum: {fileID: 899326975}
+  ExecutionText: {fileID: 724660552}
+  ControlDescription: {fileID: 1004651934}
   ExecutionTargetPrefab: {fileID: 3660475419637654646, guid: bab168e94e046eb448af6e87787533f9, type: 3}
   ExecutionEffect: {fileID: 1825913829}
   ExecutionWolf: {fileID: 1630125924}

@@ -83,6 +83,13 @@ public class Character : MonoBehaviour
         set => _isCharacterCoroutineRunning = value;
     }
 
+    private bool _isCharacterExecutionCoroutineRunning;
+    public bool IsCharacterExcutionCoroutineRunning
+    {
+        get => _isCharacterExecutionCoroutineRunning;
+        set => _isCharacterExecutionCoroutineRunning = value;
+    }
+
     private bool _isCharacterResetCoroutineRunning = false;
     public bool IsCharacterResetCoroutineRunning
     {
@@ -429,13 +436,12 @@ public class Character : MonoBehaviour
     {
         _isCharacterCoroutineRunning = true;
 
-        // 1. 공격, 피격 등의 애니메이션이 끝나기를 기다리기 위해 1초간 기다린다. 
-        yield return new WaitForSeconds(1.0f);
+        _isCharacterExecutionCoroutineRunning = true;
 
-        // 2. 처형 효과음 재생.
+        // 1. 처형 효과음 재생.
         AudioManager.Instance.PlaySfx(AudioManager.Sfx.Execute);
 
-        // 3. 처형 애니메이션 재생. 
+        // 2. 처형 애니메이션 재생. 
         Sequence ExecutionEffectSequence = DOTween.Sequence();
         Sequence ExecutionWolfSequence = DOTween.Sequence();
 
@@ -461,6 +467,8 @@ public class Character : MonoBehaviour
                 );
 
         yield return new WaitForSeconds(1.5f);
+
+        _isCharacterExecutionCoroutineRunning = false;
 
         int count = 0;
 
@@ -528,10 +536,10 @@ public class Character : MonoBehaviour
         }
 
 
-        // 4. 애니메이션을 1.2초간 재생. 
+        // 3. 애니메이션을 1.2초간 재생. 
         yield return new WaitForSeconds(1.2f);
 
-        // 5. 처형 이벤트 종료. 캐릭터는 다시 움직일 수 있다. 
+        // 4. 처형 이벤트 종료. 캐릭터는 다시 움직일 수 있다. 
         _isCharacterCoroutineRunning = false;
     }
 
