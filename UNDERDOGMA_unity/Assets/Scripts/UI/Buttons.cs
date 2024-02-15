@@ -25,4 +25,16 @@ public class Buttons : MonoBehaviour
     {
         this.GetComponent<RectTransform>().DOScale(OriginalScale, 0.5f).SetEase(ease);
     }
+    public void ReturnToStageMap()
+    {
+        SceneManager.LoadScene("World" + (StageManager.Instance.stage <= 16 ? 1 : 2).ToString());
+    }
+    public void ExitGame()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
+    }
 }

@@ -18,7 +18,6 @@ public class WorldMapManager : Singleton<WorldMapManager>
 
     private void Start()
     {
-        //WorldMapInfo�� �ڵ����� �޾ƿ��� ����� �����Ƽ� �� ����
         SelectedWorld = 2;
         SetInfoPos(SelectedWorld);
         for (int i = 1; i <= 5; i++)
@@ -60,7 +59,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
 
     public void SetInfoPos(int world)
     {
-        WorldMapInfo.transform.DOMoveY((world - 1) * WorldMapInfoSpacing, 0.5f, false).SetEase(Ease.OutCubic);
+        WorldMapInfo.transform.DOMoveY((world - 1) * WorldMapInfoSpacing * (-1), 0.5f, false).SetEase(Ease.OutCubic);
     }
     public void SetWorldMapImage(int world)
     {

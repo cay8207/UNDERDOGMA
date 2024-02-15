@@ -65,6 +65,11 @@ public class StageManager : MonoBehaviour
 
     public StageData _stageData;
 
+    // 2.1. 일시정지 메뉴
+    [SerializeField] private GameObject pauseCanvasPrefab;
+    private GameObject pauseCanvas;
+    private bool isPauseCanvasOpened;
+
     // 3. 스테이지의 데이터, 오브젝트 등을 저장하기 위한 변수들.
 
     // 3.1. 현재 스테이지를 저장하기 위한 변수.
@@ -111,12 +116,30 @@ public class StageManager : MonoBehaviour
         AudioManager.Instance.PlayBgm(true);
 
         TileInstantiate();
+
+        pauseCanvas = Instantiate(pauseCanvasPrefab);
+        pauseCanvas.SetActive(false);
+        isPauseCanvasOpened = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (isPauseCanvasOpened)
+            {
+                pauseCanvas.SetActive(false);
+                isPauseCanvasOpened = false;
+                Time.timeScale = 1f;
+            }
+            else
+            {
+                pauseCanvas.SetActive(true);
+                isPauseCanvasOpened = true;
+                Time.timeScale = 0;
+            }
+        }
     }
 
     // 타일들을 모두 탐색해서, 가장 맵의 끝에 있는 타일의 x, y값을 찾아서 그 중간값을 카메라의 위치로 설정해준다.
