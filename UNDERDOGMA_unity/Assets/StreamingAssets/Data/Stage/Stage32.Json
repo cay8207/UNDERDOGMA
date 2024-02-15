@@ -150,7 +150,7 @@
       "EnemyType": "NormalEnemy",
       "IsAlive": true,
       "Attack": 1,
-      "Heart": 11,
+      "Heart": 10,
       "AttackDirection": "Left"
     },
     "-1, -2": { "Type": "Wall" },

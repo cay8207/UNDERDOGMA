@@ -23,19 +23,19 @@
     },
     "0, 0": {
       "Type": "Empty",
-      "Round": "1",
+      "Round": "0",
       "Pattern": "1",
       "TileDirection": "None"
     },
     "0, 1": {
       "Type": "Empty",
-      "Round": "1",
+      "Round": "0",
       "Pattern": "2",
       "TileDirection": "None"
     },
     "0, 2": {
       "Type": "Empty",
-      "Round": "1",
+      "Round": "0",
       "Pattern": "0",
       "TileDirection": "None"
     },
@@ -102,7 +102,7 @@
       "EnemyType": "NormalEnemy",
       "IsAlive": true,
       "Attack": 1,
-      "Heart": 2,
+      "Heart": 1,
       "AttackDirection": "Down"
     },
     "2, 3": {
