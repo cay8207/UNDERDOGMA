@@ -56,7 +56,7 @@ public class ExecutionState : BaseState
             // 2.2. 그리고 모든 적을 죽인다.
             foreach (var enemy in _executionTarget)
             {
-                EnemyManager.Instance.EnemyDeath(enemy.Key);
+                EnemyManager.Instance.EnemyDeath(enemy.Key, true);
             }
 
             _character.EnqueueCoroutine(_character.ExecutionEvent(_executionTarget));
@@ -68,7 +68,7 @@ public class ExecutionState : BaseState
         {
             foreach (var enemy in _executionTarget)
             {
-                EnemyManager.Instance.EnemyDeath(enemy.Key);
+                EnemyManager.Instance.EnemyDeath(enemy.Key, true);
             }
 
             _character.EnqueueCoroutine(_character.ExecutionEvent(_executionTarget));

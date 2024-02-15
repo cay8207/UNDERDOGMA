@@ -369,7 +369,7 @@ public class Character : MonoBehaviour
         GetComponent<Animator>().SetBool("IsAttack", false);
 
         // 공격한 적을 죽인다. 
-        EnemyManager.Instance.EnemyDeath(targetPosition);
+        EnemyManager.Instance.EnemyDeath(targetPosition, false);
 
         yield return new WaitForSeconds(0.5f);
 
@@ -475,23 +475,11 @@ public class Character : MonoBehaviour
                 )
                 .Append(
                     Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
-                    .DOLocalMove(SetPositionSpriteToUI(enemy.Key.x, enemy.Key.y) + new Vector3(-20.0f, 20.0f, 0.0f), 0.2f, false)
+                    .DOLocalMove(SetPositionSpriteToUI(enemy.Key.x, enemy.Key.y) + new Vector3(-15.0f, 15.0f, 0.0f), 0.2f, false)
                 )
                 .Append(
                     Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
-                    .DOLocalMove(SetPositionSpriteToUI(enemy.Key.x, enemy.Key.y) + new Vector3(20.0f, -20.0f, 0.0f), 0.2f, false)
-                )
-                .Append(
-                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
-                    .DORotate(new Vector3(0.0f, 180.0f, 0.0f), 0.0f, RotateMode.FastBeyond360)
-                )
-                .Append(
-                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
-                    .DOLocalMove(SetPositionSpriteToUI(enemy.Key.x, enemy.Key.y) + new Vector3(20.0f, -20.0f, 0.0f), 0.2f, false)
-                )
-                .Append(
-                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
-                    .DOLocalMove(SetPositionSpriteToUI(enemy.Key.x, enemy.Key.y) + new Vector3(-20.0f, 20.0f, 0.0f), 0.2f, false)
+                    .DOLocalMove(SetPositionSpriteToUI(enemy.Key.x, enemy.Key.y) + new Vector3(15.0f, -15.0f, 0.0f), 0.2f, false)
                 )
                 .Append(
                     Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
@@ -499,11 +487,23 @@ public class Character : MonoBehaviour
                 )
                 .Append(
                     Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
-                    .DOLocalMove(SetPositionSpriteToUI(enemy.Key.x, enemy.Key.y) + new Vector3(-20.0f, 20.0f, 0.0f), 0.2f, false)
+                    .DOLocalMove(SetPositionSpriteToUI(enemy.Key.x, enemy.Key.y) + new Vector3(15.0f, -15.0f, 0.0f), 0.2f, false)
                 )
                 .Append(
                     Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
-                    .DOLocalMove(SetPositionSpriteToUI(enemy.Key.x, enemy.Key.y) + new Vector3(20.0f, -20.0f, 0.0f), 0.2f, false)
+                    .DOLocalMove(SetPositionSpriteToUI(enemy.Key.x, enemy.Key.y) + new Vector3(-15.0f, 15.0f, 0.0f), 0.2f, false)
+                )
+                .Append(
+                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
+                    .DORotate(new Vector3(0.0f, 180.0f, 0.0f), 0.0f, RotateMode.FastBeyond360)
+                )
+                .Append(
+                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
+                    .DOLocalMove(SetPositionSpriteToUI(enemy.Key.x, enemy.Key.y) + new Vector3(-15.0f, 15.0f, 0.0f), 0.2f, false)
+                )
+                .Append(
+                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
+                    .DOLocalMove(SetPositionSpriteToUI(enemy.Key.x, enemy.Key.y) + new Vector3(15.0f, -15.0f, 0.0f), 0.2f, false)
                 )
                 .Append(
                     Execution.Instance.ExecutionClawObjectList[count].GetComponent<UnityEngine.UI.Image>()

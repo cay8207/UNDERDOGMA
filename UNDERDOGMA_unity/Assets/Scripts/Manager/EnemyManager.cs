@@ -11,21 +11,21 @@ public class EnemyManager : Singleton<EnemyManager>
     public Dictionary<Vector2Int, GameObject> GameObjectDictionary => StageManager.Instance.GameObjectDictionary;
     public Dictionary<Vector2Int, Vector2Int> ChaserEnemyMoveDictionary = new Dictionary<Vector2Int, Vector2Int>();
 
-    public void EnemyDeath(Vector2Int targetPosition)
+    public void EnemyDeath(Vector2Int targetPosition, bool deathByExecution)
     {
         Coroutine EnemyDeathCoroutine = null;
 
         if (StageManager.Instance.TempTileDictionary[targetPosition].EnemyData.EnemyType == EnemyType.NormalEnemy)
         {
-            EnemyDeathCoroutine = StartCoroutine(GameObjectDictionary[targetPosition].GetComponent<NormalEnemy>().EnemyDeath(targetPosition));
+            EnemyDeathCoroutine = StartCoroutine(GameObjectDictionary[targetPosition].GetComponent<NormalEnemy>().EnemyDeath(targetPosition, deathByExecution));
         }
         else if (StageManager.Instance.TempTileDictionary[targetPosition].EnemyData.EnemyType == EnemyType.ChaserEnemy)
         {
-            EnemyDeathCoroutine = StartCoroutine(GameObjectDictionary[targetPosition].GetComponent<ChaserEnemy>().EnemyDeath(targetPosition));
+            EnemyDeathCoroutine = StartCoroutine(GameObjectDictionary[targetPosition].GetComponent<ChaserEnemy>().EnemyDeath(targetPosition, deathByExecution));
         }
         else if (StageManager.Instance.TempTileDictionary[targetPosition].EnemyData.EnemyType == EnemyType.MiniBoss)
         {
-            EnemyDeathCoroutine = StartCoroutine(GameObjectDictionary[targetPosition].GetComponent<MiniBoss>().EnemyDeath(targetPosition));
+            EnemyDeathCoroutine = StartCoroutine(GameObjectDictionary[targetPosition].GetComponent<MiniBoss>().EnemyDeath(targetPosition, deathByExecution));
         }
 
         EnemyDeathCoroutineQueue.Enqueue(EnemyDeathCoroutine);
