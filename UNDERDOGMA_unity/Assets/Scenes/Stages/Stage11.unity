@@ -1155,6 +1155,7 @@ MonoBehaviour:
   ResetAnimationUpSide: {fileID: 1240037534}
   ResetAnimationDownSide: {fileID: 532385163}
   _character: {fileID: 0}
+  pauseCanvasPrefab: {fileID: 4873085900247007723, guid: 10a847f128fd9f1478d11db406ad072a, type: 3}
   stage: 1
 --- !u!4 &869504210
 Transform:
