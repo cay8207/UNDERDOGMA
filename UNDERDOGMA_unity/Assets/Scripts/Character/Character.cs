@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using DG.Tweening;
 using UnityEngine.SceneManagement;
+using System.Drawing;
 
 public class Character : MonoBehaviour
 {
@@ -116,7 +117,6 @@ public class Character : MonoBehaviour
     {
         if (!_isCharacterCoroutineRunning && !DialogueManager.Instance._isDialogueRunning)
         {
-            Debug.Log("Character Coroutine doesn't running");
             switch (_curState)
             {
                 case State.Idle:
@@ -237,6 +237,7 @@ public class Character : MonoBehaviour
     // moveState의 경우에는 어느 방향인지 키에 대한 정보도 필요하다. 
     public void ChangeState(State nextState, KeyCode key)
     {
+        _curState = nextState;
         switch (nextState)
         {
             case State.Move:
@@ -248,6 +249,7 @@ public class Character : MonoBehaviour
     // AttackState, MeatState의 경우에는 어느 위치에 있는 오브젝트에 대해 상호작용해야 하는지에 대한 정보도 필요하다. 
     public void ChangeState(State nextState, Vector2Int targetPosition)
     {
+        _curState = nextState;
         switch (nextState)
         {
             case State.Attack:
@@ -324,6 +326,12 @@ public class Character : MonoBehaviour
         _heartText.GetComponent<Text>().SetText(_heart);
     }
 
+    public Vector3 SetPositionSpriteToUI(float x, float y)
+    {
+        float resultx = (x - _mainCamera.transform.position.x) * 1920.0f / 14.0f;
+        float resulty = (y - _mainCamera.transform.position.y) * 1080.0f / 8.0f;
+        return new Vector3(resultx, resulty, 0.0f);
+    }
 
     // 3. 애니메이션과 관련된 함수들. 
     #region Animation
@@ -408,7 +416,7 @@ public class Character : MonoBehaviour
     }
 
     // 처형되는 애니메이션을 재생한다. 
-    public IEnumerator ExecutionEvent()
+    public IEnumerator ExecutionEvent(Dictionary<Vector2Int, GameObject> executionTarget)
     {
         _isCharacterCoroutineRunning = true;
 
@@ -418,15 +426,98 @@ public class Character : MonoBehaviour
         // 2. 처형 효과음 재생.
         AudioManager.Instance.PlaySfx(AudioManager.Sfx.Execute);
 
-        // 3. 애니메이션을 3초간 재생. 
-        Execution.Instance.ExecutionObject.GetComponent<Animator>().SetBool("InExecution", true);
+        // 3. 처형 애니메이션 재생. 
+        Sequence ExecutionEffectSequence = DOTween.Sequence();
+        Sequence ExecutionWolfSequence = DOTween.Sequence();
 
-        yield return new WaitForSeconds(3.0f);
+        Debug.Log("(Character.cs) Execution Sequence start!");
+        ExecutionEffectSequence
+            .Append(
+                Execution.Instance.ExecutionEffect
+                .DOFade(1.0f, 0.5f))
+            .AppendInterval(0.5f)
+            .Append(
+                Execution.Instance.ExecutionEffect
+                .DOFade(0.0f, 0.5f)
+                );
 
-        // 4. 애니메이션 종료.
-        Execution.Instance.ExecutionObject.GetComponent<Animator>().SetBool("InExecution", false);
+        ExecutionWolfSequence
+            .Append(
+                Execution.Instance.ExecutionWolf
+                .DOFade(1.0f, 0.5f))
+            .AppendInterval(0.5f)
+            .Append(
+                Execution.Instance.ExecutionWolf
+                .DOFade(0.0f, 0.5f)
+                );
 
-        Execution.Instance.ExecutionObject.GetComponent<SpriteRenderer>().sprite = null;
+        yield return new WaitForSeconds(1.5f);
+
+        int count = 0;
+
+        foreach (var enemy in executionTarget)
+        {
+            Sequence ExecutionClawSequence = DOTween.Sequence();
+
+
+            Debug.Log("(Character.cs) ExecutionTarget: ");
+
+            ExecutionClawSequence
+                .Append(
+                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<UnityEngine.UI.Image>()
+                    .DOFade(1.0f, 0.0f)
+                )
+                .Append(
+                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
+                    .DOLocalMove(SetPositionSpriteToUI(enemy.Key.x, enemy.Key.y), 0.0f, false)
+                )
+                .Append(
+                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
+                    .DOLocalMove(SetPositionSpriteToUI(enemy.Key.x, enemy.Key.y) + new Vector3(-20.0f, 20.0f, 0.0f), 0.2f, false)
+                )
+                .Append(
+                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
+                    .DOLocalMove(SetPositionSpriteToUI(enemy.Key.x, enemy.Key.y) + new Vector3(20.0f, -20.0f, 0.0f), 0.2f, false)
+                )
+                .Append(
+                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
+                    .DORotate(new Vector3(0.0f, 180.0f, 0.0f), 0.0f, RotateMode.FastBeyond360)
+                )
+                .Append(
+                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
+                    .DOLocalMove(SetPositionSpriteToUI(enemy.Key.x, enemy.Key.y) + new Vector3(20.0f, -20.0f, 0.0f), 0.2f, false)
+                )
+                .Append(
+                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
+                    .DOLocalMove(SetPositionSpriteToUI(enemy.Key.x, enemy.Key.y) + new Vector3(-20.0f, 20.0f, 0.0f), 0.2f, false)
+                )
+                .Append(
+                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
+                    .DORotate(new Vector3(0.0f, 180.0f, 0.0f), 0.0f, RotateMode.FastBeyond360)
+                )
+                .Append(
+                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
+                    .DOLocalMove(SetPositionSpriteToUI(enemy.Key.x, enemy.Key.y) + new Vector3(-20.0f, 20.0f, 0.0f), 0.2f, false)
+                )
+                .Append(
+                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
+                    .DOLocalMove(SetPositionSpriteToUI(enemy.Key.x, enemy.Key.y) + new Vector3(20.0f, -20.0f, 0.0f), 0.2f, false)
+                )
+                .Append(
+                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<UnityEngine.UI.Image>()
+                    .DOFade(0.0f, 0.0f)
+                )
+                .Append(
+                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
+                    .DOLocalMove(new Vector3(-9999.0f, 9999.0f, 0.0f), 0.0f, false)
+                );
+
+            count++;
+        }
+
+
+        // 4. 애니메이션을 1.2초간 재생. 
+        yield return new WaitForSeconds(1.2f);
 
         // 5. 처형 이벤트 종료. 캐릭터는 다시 움직일 수 있다. 
         _isCharacterCoroutineRunning = false;

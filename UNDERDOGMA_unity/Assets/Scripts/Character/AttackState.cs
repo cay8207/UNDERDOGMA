@@ -30,7 +30,7 @@ public class AttackState : BaseState
             // 2. 캐릭터가 이동했으니 상단의 눈이 하나 떠지도록 하는 코드.
             Execution.Instance.ExecutionCheck(_character.MoveCount);
 
-            _character.ChangeState(Character.State.Clear);
+            _character.ChangeState(Character.State.Damaged);
         }
     }
 

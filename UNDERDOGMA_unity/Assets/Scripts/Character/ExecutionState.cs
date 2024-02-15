@@ -59,7 +59,7 @@ public class ExecutionState : BaseState
                 EnemyManager.Instance.EnemyDeath(enemy.Key);
             }
 
-            _character.EnqueueCoroutine(_character.ExecutionEvent());
+            _character.EnqueueCoroutine(_character.ExecutionEvent(_executionTarget));
 
             _character.ChangeState(Character.State.Death);
         }
@@ -71,7 +71,7 @@ public class ExecutionState : BaseState
                 EnemyManager.Instance.EnemyDeath(enemy.Key);
             }
 
-            _character.EnqueueCoroutine(_character.ExecutionEvent());
+            _character.EnqueueCoroutine(_character.ExecutionEvent(_executionTarget));
 
             _character.ChangeState(Character.State.Clear);
         }
