@@ -17,7 +17,7 @@ public class Buttons : MonoBehaviour
     public void ReturnToWorldMap()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene("WorldMap");
+        SceneManager.LoadScene("Mingyu");
     }
     public void MakeButtonBigger()
     {
@@ -54,5 +54,6 @@ public class Buttons : MonoBehaviour
     public void GoToTutorial()
     {
         SceneManager.LoadScene("Tutorial");
+        AudioManager.Instance.Destroy();
     }
 }

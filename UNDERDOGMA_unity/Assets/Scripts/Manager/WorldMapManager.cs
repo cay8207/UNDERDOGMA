@@ -5,8 +5,34 @@ using UnityEngine.SceneManagement;
 using DG.Tweening;
 using System;
 
-public class WorldMapManager : Singleton<WorldMapManager>
+public class WorldMapManager : MonoBehaviour
 {
+    #region Singleton
+    // 싱글톤 패턴.
+    // 싱글톤 클래스를 구현해두긴 했지만, stageManager와 executionMangaer, DialogueManager는 
+    // dontdestroyonload가 필요없기 때문에 클래스 내부에 싱글톤 패턴을 간단히 구현.
+    private static WorldMapManager _instance;
+
+    public static WorldMapManager Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = (WorldMapManager)FindObjectOfType(typeof(WorldMapManager));
+                if (_instance == null)
+                {
+                    GameObject singletonObject = new GameObject($"{typeof(WorldMapManager)} (Singleton)");
+                    _instance = singletonObject.AddComponent<WorldMapManager>();
+                    singletonObject.transform.parent = null;
+                }
+            }
+
+            return _instance;
+        }
+    }
+    #endregion
+
     public GameObject WorldMapInfo;
     public List<GameObject> WorldMapInfos = new List<GameObject>();
     public List<WorldMapImage> WorldMapImages = new List<WorldMapImage>();
@@ -78,7 +104,6 @@ public class WorldMapManager : Singleton<WorldMapManager>
     }
     public void LoadSelectedWorld()
     {
-        //Unlock �� ���常 �ε�
         if (WorldMapImages[SelectedWorld - 1].Unlocked)
         {
             SceneManager.LoadScene(WorldMapImages[SelectedWorld - 1].WorldScene);

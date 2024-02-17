@@ -27,6 +27,9 @@ EditorBuildSettings:
     path: Assets/Scenes/WorldMaps/World2.unity
     guid: c49887579e7466341ada54fb5daffd73
   - enabled: 1
+    path: Assets/Scenes/Mingyu.unity
+    guid: b6ddad9b1bd60c34c879fff5441299c5
+  - enabled: 1
     path: Assets/Scenes/Stages/Stage1.unity
     guid: 6c0497074a436624ea2dce1c3dddac0c
   - enabled: 1

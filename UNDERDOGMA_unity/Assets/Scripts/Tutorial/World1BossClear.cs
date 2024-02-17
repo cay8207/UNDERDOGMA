@@ -189,7 +189,7 @@ public class World1BossClear : MonoBehaviour
         DialogueWindow.GetComponent<UnityEngine.UI.Image>().enabled = false;
         DialogueBackGround.GetComponent<UnityEngine.UI.Image>().enabled = false;
 
-        SceneManager.LoadScene("WorldMap");
+        SceneManager.LoadScene("Mingyu");
     }
 
     public void SetActiveImages(bool isActive)

@@ -1825,7 +1825,7 @@ MonoBehaviour:
   - {fileID: 91486725}
   - {fileID: 1778166967}
   - {fileID: 623419249}
-  SelectedWorld: 2
+  SelectedWorld: 1
   WorldMapInfoSpacing: 10
 --- !u!4 &2102691374
 Transform:

@@ -110,9 +110,6 @@ public class StageManager : MonoBehaviour
 
         SetCameraPosition();
 
-        AudioManager.Instance.Init();
-        AudioManager.Instance.PlayBgm(true);
-
         TileInstantiate();
 
         pauseCanvas = Instantiate(pauseCanvasPrefab);
