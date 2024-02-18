@@ -387,12 +387,14 @@ public class Character : MonoBehaviour
                     transform.DOMove(new Vector2(Row, Col) + new Vector2(-0.07f, 0.35f), 0.3f, false)
                 );
 
-        // 캐릭터가 공격하는 애니메이션 재생. 
+        // 캐릭터가 공격하는 애니메이션 재생.
+        if (targetPosition.x > Row) transform.GetComponent<SpriteRenderer>().flipX = true;
         GetComponent<Animator>().SetBool("IsAttack", true);
 
         yield return new WaitForSeconds(0.9f);
 
         GetComponent<Animator>().SetBool("IsAttack", false);
+        if (targetPosition.x > Row) transform.GetComponent<SpriteRenderer>().flipX = false;
 
         // 공격한 적을 죽인다. 
         EnemyManager.Instance.EnemyDeath(targetPosition, false);
