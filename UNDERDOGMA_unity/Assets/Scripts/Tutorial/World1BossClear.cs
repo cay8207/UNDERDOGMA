@@ -147,6 +147,7 @@ public class World1BossClear : MonoBehaviour
             yield return new WaitForSeconds(0.01f);
         }
 
+        yield return new WaitForSeconds(0.5f); //다이얼로그 끝나고 바로 넘어가지 않도록 처리
         _isDialogueTextRunning = false;
     }
 
@@ -158,8 +159,6 @@ public class World1BossClear : MonoBehaviour
         yield return new WaitForSeconds(2.0f);
 
         StartCoroutine(StartDialogueCoroutine());
-
-        _isDialogueTextRunning = false;
     }
 
     public IEnumerator BlackScreenFadeInCoroutine()
@@ -170,8 +169,6 @@ public class World1BossClear : MonoBehaviour
         yield return new WaitForSeconds(2.0f);
 
         StartCoroutine(StartDialogueCoroutine());
-
-        _isDialogueTextRunning = false;
     }
 
     public void ExitDialogue()
