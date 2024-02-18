@@ -101,54 +101,54 @@ public class MinGyuManager : MonoBehaviour
         switch (index)
         {
             case 0:
-                World1.GetComponent<RectTransform>().DOScale(1.2f, 0.0f);
+                World1.GetComponent<RectTransform>().DOScale(1.03f, 0.5f);
                 World1.GetComponent<Image>().sprite = World1select;
-                World2.GetComponent<RectTransform>().DOScale(1.0f, 0.0f);
+                World2.GetComponent<RectTransform>().DOScale(1.0f, 0.5f);
                 World2.GetComponent<Image>().sprite = World2unselect;
-                World3.GetComponent<RectTransform>().DOScale(1.0f, 0.0f);
-                World4.GetComponent<RectTransform>().DOScale(1.0f, 0.0f);
-                World5.GetComponent<RectTransform>().DOScale(1.0f, 0.0f);
-                Worlds.transform.DOLocalMove(new Vector3(0, 0, 0), 0.2f);
+                World3.GetComponent<RectTransform>().DOScale(1.0f, 0.5f);
+                World4.GetComponent<RectTransform>().DOScale(1.0f, 0.5f);
+                World5.GetComponent<RectTransform>().DOScale(1.0f, 0.5f);
+                Worlds.transform.DOLocalMove(new Vector3(0, 0, 0), 0.5f);
                 break;
             case 1:
-                World1.GetComponent<RectTransform>().DOScale(1.0f, 0.0f);
+                World1.GetComponent<RectTransform>().DOScale(1.0f, 0.5f);
                 World1.GetComponent<Image>().sprite = World1unselect;
-                World2.GetComponent<RectTransform>().DOScale(1.2f, 0.0f);
+                World2.GetComponent<RectTransform>().DOScale(1.03f, 0.5f);
                 World2.GetComponent<Image>().sprite = World2select;
-                World3.GetComponent<RectTransform>().DOScale(1.0f, 0.0f);
-                World4.GetComponent<RectTransform>().DOScale(1.0f, 0.0f);
-                World5.GetComponent<RectTransform>().DOScale(1.0f, 0.0f);
-                Worlds.transform.DOLocalMove(new Vector3(0, -960.0f, 0), 0.2f);
+                World3.GetComponent<RectTransform>().DOScale(1.0f, 0.5f);
+                World4.GetComponent<RectTransform>().DOScale(1.0f, 0.5f);
+                World5.GetComponent<RectTransform>().DOScale(1.0f, 0.5f);
+                Worlds.transform.DOLocalMove(new Vector3(0, -1080.0f, 0), 0.5f);
                 break;
             case 2:
-                World1.GetComponent<RectTransform>().DOScale(1.0f, 0.0f);
+                World1.GetComponent<RectTransform>().DOScale(1.0f, 0.5f);
                 World1.GetComponent<Image>().sprite = World1unselect;
-                World2.GetComponent<RectTransform>().DOScale(1.0f, 0.0f);
+                World2.GetComponent<RectTransform>().DOScale(1.0f, 0.5f);
                 World2.GetComponent<Image>().sprite = World2unselect;
-                World3.GetComponent<RectTransform>().DOScale(1.2f, 0.0f);
-                World4.GetComponent<RectTransform>().DOScale(1.0f, 0.0f);
-                World5.GetComponent<RectTransform>().DOScale(1.0f, 0.0f);
-                Worlds.transform.DOLocalMove(new Vector3(0, -1920.0f, 0), 0.2f);
+                World3.GetComponent<RectTransform>().DOScale(1.03f, 0.5f);
+                World4.GetComponent<RectTransform>().DOScale(1.0f, 0.5f);
+                World5.GetComponent<RectTransform>().DOScale(1.0f, 0.5f);
+                Worlds.transform.DOLocalMove(new Vector3(0, -2160.0f, 0), 0.5f);
                 break;
             case 3:
-                World1.GetComponent<RectTransform>().DOScale(1.0f, 0.0f);
+                World1.GetComponent<RectTransform>().DOScale(1.0f, 0.5f);
                 World1.GetComponent<Image>().sprite = World1unselect;
-                World2.GetComponent<RectTransform>().DOScale(1.0f, 0.0f);
+                World2.GetComponent<RectTransform>().DOScale(1.0f, 0.5f);
                 World2.GetComponent<Image>().sprite = World2unselect;
-                World3.GetComponent<RectTransform>().DOScale(1.0f, 0.0f);
-                World4.GetComponent<RectTransform>().DOScale(1.2f, 0.0f);
-                World5.GetComponent<RectTransform>().DOScale(1.0f, 0.0f);
-                Worlds.transform.DOLocalMove(new Vector3(0, -2880.0f, 0), 0.2f);
+                World3.GetComponent<RectTransform>().DOScale(1.0f, 0.5f);
+                World4.GetComponent<RectTransform>().DOScale(1.03f, 0.5f);
+                World5.GetComponent<RectTransform>().DOScale(1.0f, 0.5f);
+                Worlds.transform.DOLocalMove(new Vector3(0, -3240.0f, 0), 0.5f);
                 break;
             case 4:
-                World1.GetComponent<RectTransform>().DOScale(1.0f, 0.0f);
+                World1.GetComponent<RectTransform>().DOScale(1.0f, 0.5f);
                 World1.GetComponent<Image>().sprite = World1unselect;
-                World2.GetComponent<RectTransform>().DOScale(1.0f, 0.0f);
+                World2.GetComponent<RectTransform>().DOScale(1.0f, 0.5f);
                 World2.GetComponent<Image>().sprite = World2unselect;
-                World3.GetComponent<RectTransform>().DOScale(1.0f, 0.0f);
-                World4.GetComponent<RectTransform>().DOScale(1.0f, 0.0f);
-                World5.GetComponent<RectTransform>().DOScale(1.2f, 0.0f);
-                Worlds.transform.DOLocalMove(new Vector3(0, -3840.0f, 0), 0.2f);
+                World3.GetComponent<RectTransform>().DOScale(1.0f, 0.5f);
+                World4.GetComponent<RectTransform>().DOScale(1.0f, 0.5f);
+                World5.GetComponent<RectTransform>().DOScale(1.03f, 0.5f);
+                Worlds.transform.DOLocalMove(new Vector3(0, -4320.0f, 0), 0.5f);
                 break;
         }
     }
