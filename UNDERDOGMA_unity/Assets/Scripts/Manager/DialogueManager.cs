@@ -88,6 +88,7 @@ public class DialogueManager : Singleton<DialogueManager>
         else
         {
             _isDialogueRunning = false;
+            StageManager.Instance.ActivateTooltip();
         }
     }
 
@@ -160,6 +161,7 @@ public class DialogueManager : Singleton<DialogueManager>
         // 애니메이터 초기화
 
         SetActiveImages(false);
+        StageManager.Instance.ActivateTooltip();
     }
 
     public void SetActiveImages(bool isActive)

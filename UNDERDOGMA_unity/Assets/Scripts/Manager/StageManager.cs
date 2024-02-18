@@ -57,6 +57,8 @@ public class StageManager : MonoBehaviour
     [SerializeField] public GameObject ResetAnimationUpSide;
     [SerializeField] public GameObject ResetAnimationDownSide;
 
+    // 1.5. 툴팁 애니메이션을 위한 오브젝트.
+    [SerializeField] GameObject toolTip;
 
     // 2. 위의 변수와 다르게 _character는 생성된 게임오브젝트를 저장하기 위한 변수. 
     public GameObject _character;
@@ -369,5 +371,26 @@ public class StageManager : MonoBehaviour
         }
 
         return null;
+    }
+
+    //툴팁 활성화 함수
+    public void ActivateTooltip()
+    {
+        if(toolTip != null)
+        {
+            Sequence sequenceActivateTooltip = DOTween.Sequence()
+    .Append(toolTip.GetComponent<RectTransform>().DOAnchorPosX(0, 0.5f))
+    .Append(toolTip.GetComponent<Image>().DOColor(new Color(1.0f, 0.486f, 0.0f), 0.25f))
+    .AppendInterval(0.2f)
+    .Append(toolTip.GetComponent<Image>().DOColor(new Color(1.0f, 1.0f, 1.0f), 0.25f))
+    .AppendInterval(0.2f)
+    .Append(toolTip.GetComponent<Image>().DOColor(new Color(1.0f, 0.486f, 0.0f), 0.25f))
+    .AppendInterval(0.2f)
+    .Append(toolTip.GetComponent<Image>().DOColor(new Color(1.0f, 1.0f, 1.0f), 0.25f))
+    .AppendInterval(0.2f)
+    .Append(toolTip.GetComponent<Image>().DOColor(new Color(1.0f, 0.486f, 0.0f), 0.25f))
+    .AppendInterval(0.2f)
+    .Append(toolTip.GetComponent<Image>().DOColor(new Color(1.0f, 1.0f, 1.0f), 0.25f));
+        }
     }
 }
