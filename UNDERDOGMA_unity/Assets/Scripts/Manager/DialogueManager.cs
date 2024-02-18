@@ -145,7 +145,7 @@ public class DialogueManager : Singleton<DialogueManager>
             DialogueText.text += _dialogueData.DialogueList[count][i]; // 한글자씩 출력
             yield return new WaitForSeconds(0.01f);
         }
-
+        yield return new WaitForSeconds(0.5f); //텍스트 바로 안넘어가게
         _isDialogueTextRunning = false;
     }
 
