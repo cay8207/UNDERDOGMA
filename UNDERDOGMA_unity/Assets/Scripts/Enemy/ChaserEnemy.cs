@@ -102,9 +102,9 @@ public class ChaserEnemy : Enemy
     {
         gameObject.GetComponent<Animator>().SetBool("IsAttack", true);
 
-        yield return new WaitForSeconds(0.65f);
-
         AudioManager.Instance.PlaySfx(AudioManager.Sfx.Enemy_Attack);
+
+        yield return new WaitForSeconds(0.65f);
 
         gameObject.GetComponent<Animator>().SetBool("IsAttack", false);
 
