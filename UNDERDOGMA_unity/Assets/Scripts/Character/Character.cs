@@ -512,6 +512,7 @@ public class Character : MonoBehaviour
                     Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
                     .DOLocalMove(SetPositionSpriteToUI(enemy.Key.x, enemy.Key.y), 0.0f, false)
                 )
+                .AppendCallback(() => AudioManager.Instance.PlaySfx(AudioManager.Sfx.Enemy_Attack))
                 .Append(
                     Execution.Instance.ExecutionClawObjectList[count].GetComponent<UnityEngine.UI.Image>()
                     .DOFade(1.0f, 0.05f)
@@ -537,6 +538,7 @@ public class Character : MonoBehaviour
                     Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
                     .DORotate(new Vector3(0.0f, 0.0f, 90.0f), 0.0f)
                 )
+                .AppendCallback(() => AudioManager.Instance.PlaySfx(AudioManager.Sfx.Enemy_Attack))
                 .Append(
                     Execution.Instance.ExecutionClawObjectList[count].GetComponent<UnityEngine.UI.Image>()
                     .DOFade(1.0f, 0.05f)
@@ -562,6 +564,7 @@ public class Character : MonoBehaviour
                     Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
                     .DOLocalMove(SetPositionSpriteToUI(enemy.Key.x, enemy.Key.y), 0.0f, false)
                 )
+                .AppendCallback(() => AudioManager.Instance.PlaySfx(AudioManager.Sfx.Enemy_Attack))
                 .Append(
                     Execution.Instance.ExecutionClawObjectList[count].GetComponent<UnityEngine.UI.Image>()
                     .DOFade(1.0f, 0.05f)
