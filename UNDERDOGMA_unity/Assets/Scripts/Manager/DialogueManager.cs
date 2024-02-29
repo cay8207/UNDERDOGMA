@@ -88,6 +88,7 @@ public class DialogueManager : Singleton<DialogueManager>
         else
         {
             _isDialogueRunning = false;
+            StageManager.Instance.ActivateTooltip();
         }
     }
 
@@ -144,7 +145,7 @@ public class DialogueManager : Singleton<DialogueManager>
             DialogueText.text += _dialogueData.DialogueList[count][i]; // 한글자씩 출력
             yield return new WaitForSeconds(0.01f);
         }
-
+        yield return new WaitForSeconds(0.5f); //텍스트 바로 안넘어가게
         _isDialogueTextRunning = false;
     }
 
@@ -160,6 +161,7 @@ public class DialogueManager : Singleton<DialogueManager>
         // 애니메이터 초기화
 
         SetActiveImages(false);
+        StageManager.Instance.ActivateTooltip();
     }
 
     public void SetActiveImages(bool isActive)

@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class AudioManager : Singleton<AudioManager>
 {
@@ -20,6 +22,22 @@ public class AudioManager : Singleton<AudioManager>
     int channelIndex;
 
     public enum Sfx { Eat, Enemy_Attack, Execute, Meat, Move, Music, Reset, Title, UI_Toggle }
+
+    public void Awake()
+    {
+        if (AudioManager.Instance != this)
+            Destroy(gameObject);
+
+        DontDestroyOnLoad(gameObject);
+
+        Init();
+        PlayBgm(true);
+    }
+
+    public void Destroy()
+    {
+        Destroy(gameObject);
+    }
 
     public void Init()
     {
@@ -76,10 +94,15 @@ public class AudioManager : Singleton<AudioManager>
     public void ModifyBgmVolume(float volume)
     {
         bgmVolume = volume;
+        bgmPlayer.volume = bgmVolume;
     }
 
     public void ModifySfxVolume(float volume)
     {
         sfxVolume = volume;
+        for (int index = 0; index < sfxPlayers.Length; index++)
+        {
+            sfxPlayers[index].volume = sfxVolume;
+        }
     }
 }

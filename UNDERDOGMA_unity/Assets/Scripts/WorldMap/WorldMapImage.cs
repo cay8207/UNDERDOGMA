@@ -53,6 +53,7 @@ public class WorldMapImage : MonoBehaviour
 
     public void InitializeWorldImage(bool isSelected)
     {
+        transform.localScale = originalScale;
         if (isSelected)
         {
             selected.DOFade(1, 0f);

@@ -83,6 +83,20 @@ public class Character : MonoBehaviour
         set => _isCharacterCoroutineRunning = value;
     }
 
+    private bool _isCharacterExecutionCoroutineRunning;
+    public bool IsCharacterExcutionCoroutineRunning
+    {
+        get => _isCharacterExecutionCoroutineRunning;
+        set => _isCharacterExecutionCoroutineRunning = value;
+    }
+
+    private bool _isCharacterResetCoroutineRunning = false;
+    public bool IsCharacterResetCoroutineRunning
+    {
+        get => _isCharacterResetCoroutineRunning;
+        set => _isCharacterResetCoroutineRunning = value;
+    }
+
     CoroutineController _coroutineController;
 
     private MainCamera _mainCamera;
@@ -196,6 +210,7 @@ public class Character : MonoBehaviour
             }
             else if (Input.GetKeyDown(KeyCode.R))
             {
+                AudioManager.Instance.PlaySfx(AudioManager.Sfx.Reset);
                 ChangeState(State.Reset);
             }
         }
@@ -361,12 +376,25 @@ public class Character : MonoBehaviour
 
         AudioManager.Instance.PlaySfx(AudioManager.Sfx.Eat);
 
-        // 캐릭터가 공격하는 애니메이션 재생. 
+        Sequence CharacterAttackSequence = DOTween.Sequence();
+
+        CharacterAttackSequence
+                .AppendInterval(0.3f)
+                .Append(
+                    transform.DOMove(new Vector2(Row + (targetPosition.x - Row) * 0.5f, Col + (targetPosition.y - Col) * 0.5f) + new Vector2(-0.07f, 0.35f), 0.3f, false)
+                )
+                .Append(
+                    transform.DOMove(new Vector2(Row, Col) + new Vector2(-0.07f, 0.35f), 0.3f, false)
+                );
+
+        // 캐릭터가 공격하는 애니메이션 재생.
+        if (targetPosition.x > Row) transform.GetComponent<SpriteRenderer>().flipX = true;
         GetComponent<Animator>().SetBool("IsAttack", true);
 
         yield return new WaitForSeconds(0.9f);
 
         GetComponent<Animator>().SetBool("IsAttack", false);
+        if (targetPosition.x > Row) transform.GetComponent<SpriteRenderer>().flipX = false;
 
         // 공격한 적을 죽인다. 
         EnemyManager.Instance.EnemyDeath(targetPosition, false);
@@ -384,7 +412,24 @@ public class Character : MonoBehaviour
 
         _mainCamera.Shake(0.5f);
 
-        yield return new WaitForSeconds(0.5f);
+        Sequence CharacterDamagedSequence = DOTween.Sequence();
+
+        CharacterDamagedSequence
+                .Append(
+                    Execution.Instance.ExecutionClawObjectList[60].GetComponent<RectTransform>()
+                    .DOLocalMove(SetPositionSpriteToUI(Row, Col), 0.0f, false)
+                )
+                .Append(
+                    Execution.Instance.ExecutionClawObjectList[60].GetComponent<UnityEngine.UI.Image>()
+                    .DOFade(1.0f, 0.05f)
+                )
+                .Append(
+                    Execution.Instance.ExecutionClawObjectList[60].GetComponent<UnityEngine.UI.Image>()
+                    .DOFade(0.0f, 0.6f)
+                );
+
+
+        yield return new WaitForSeconds(0.65f);
 
         HeartChange(-amount);
 
@@ -422,13 +467,12 @@ public class Character : MonoBehaviour
     {
         _isCharacterCoroutineRunning = true;
 
-        // 1. 공격, 피격 등의 애니메이션이 끝나기를 기다리기 위해 1초간 기다린다. 
-        yield return new WaitForSeconds(1.0f);
+        _isCharacterExecutionCoroutineRunning = true;
 
-        // 2. 처형 효과음 재생.
+        // 1. 처형 효과음 재생.
         AudioManager.Instance.PlaySfx(AudioManager.Sfx.Execute);
 
-        // 3. 처형 애니메이션 재생. 
+        // 2. 처형 애니메이션 재생. 
         Sequence ExecutionEffectSequence = DOTween.Sequence();
         Sequence ExecutionWolfSequence = DOTween.Sequence();
 
@@ -455,73 +499,91 @@ public class Character : MonoBehaviour
 
         yield return new WaitForSeconds(1.5f);
 
+        _isCharacterExecutionCoroutineRunning = false;
+
         int count = 0;
+
+        List<Sequence> ExecutionClawSequenceList = new List<Sequence>();
 
         foreach (var enemy in executionTarget)
         {
-            Sequence ExecutionClawSequence = DOTween.Sequence();
+            ExecutionClawSequenceList.Add(DOTween.Sequence());
 
-
-            Debug.Log("(Character.cs) ExecutionTarget: ");
-
-            ExecutionClawSequence
+            ExecutionClawSequenceList[count]
+                .Append(
+                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
+                    .DOLocalMove(SetPositionSpriteToUI(enemy.Key.x, enemy.Key.y), 0.0f, false)
+                )
+                .AppendCallback(() => AudioManager.Instance.PlaySfx(AudioManager.Sfx.Enemy_Attack))
                 .Append(
                     Execution.Instance.ExecutionClawObjectList[count].GetComponent<UnityEngine.UI.Image>()
-                    .DOFade(1.0f, 0.0f)
+                    .DOFade(1.0f, 0.05f)
                 )
+                .Append(
+                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<UnityEngine.UI.Image>()
+                    .DOFade(0.0f, 0.6f)
+                );
+
+            count++;
+
+
+
+            ExecutionClawSequenceList.Add(DOTween.Sequence());
+
+            ExecutionClawSequenceList[count]
+                .AppendInterval(0.25f)
                 .Append(
                     Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
                     .DOLocalMove(SetPositionSpriteToUI(enemy.Key.x, enemy.Key.y), 0.0f, false)
                 )
                 .Append(
                     Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
-                    .DOLocalMove(SetPositionSpriteToUI(enemy.Key.x, enemy.Key.y) + new Vector3(-15.0f, 15.0f, 0.0f), 0.2f, false)
+                    .DORotate(new Vector3(0.0f, 0.0f, 90.0f), 0.0f)
                 )
+                .AppendCallback(() => AudioManager.Instance.PlaySfx(AudioManager.Sfx.Enemy_Attack))
                 .Append(
-                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
-                    .DOLocalMove(SetPositionSpriteToUI(enemy.Key.x, enemy.Key.y) + new Vector3(15.0f, -15.0f, 0.0f), 0.2f, false)
-                )
-                .Append(
-                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
-                    .DORotate(new Vector3(0.0f, 180.0f, 0.0f), 0.0f, RotateMode.FastBeyond360)
-                )
-                .Append(
-                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
-                    .DOLocalMove(SetPositionSpriteToUI(enemy.Key.x, enemy.Key.y) + new Vector3(15.0f, -15.0f, 0.0f), 0.2f, false)
-                )
-                .Append(
-                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
-                    .DOLocalMove(SetPositionSpriteToUI(enemy.Key.x, enemy.Key.y) + new Vector3(-15.0f, 15.0f, 0.0f), 0.2f, false)
-                )
-                .Append(
-                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
-                    .DORotate(new Vector3(0.0f, 180.0f, 0.0f), 0.0f, RotateMode.FastBeyond360)
-                )
-                .Append(
-                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
-                    .DOLocalMove(SetPositionSpriteToUI(enemy.Key.x, enemy.Key.y) + new Vector3(-15.0f, 15.0f, 0.0f), 0.2f, false)
-                )
-                .Append(
-                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
-                    .DOLocalMove(SetPositionSpriteToUI(enemy.Key.x, enemy.Key.y) + new Vector3(15.0f, -15.0f, 0.0f), 0.2f, false)
+                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<UnityEngine.UI.Image>()
+                    .DOFade(1.0f, 0.05f)
                 )
                 .Append(
                     Execution.Instance.ExecutionClawObjectList[count].GetComponent<UnityEngine.UI.Image>()
-                    .DOFade(0.0f, 0.0f)
+                    .DOFade(0.0f, 0.6f)
                 )
                 .Append(
                     Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
-                    .DOLocalMove(new Vector3(-9999.0f, 9999.0f, 0.0f), 0.0f, false)
+                    .DORotate(new Vector3(0.0f, 0.0f, 0.0f), 0.0f)
+                );
+
+            count++;
+
+
+
+            ExecutionClawSequenceList.Add(DOTween.Sequence());
+
+            ExecutionClawSequenceList[count]
+                .AppendInterval(0.5f)
+                .Append(
+                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
+                    .DOLocalMove(SetPositionSpriteToUI(enemy.Key.x, enemy.Key.y), 0.0f, false)
+                )
+                .AppendCallback(() => AudioManager.Instance.PlaySfx(AudioManager.Sfx.Enemy_Attack))
+                .Append(
+                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<UnityEngine.UI.Image>()
+                    .DOFade(1.0f, 0.05f)
+                )
+                .Append(
+                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<UnityEngine.UI.Image>()
+                    .DOFade(0.0f, 0.6f)
                 );
 
             count++;
         }
 
 
-        // 4. 애니메이션을 1.2초간 재생. 
+        // 3. 애니메이션을 1.2초간 재생. 
         yield return new WaitForSeconds(1.2f);
 
-        // 5. 처형 이벤트 종료. 캐릭터는 다시 움직일 수 있다. 
+        // 4. 처형 이벤트 종료. 캐릭터는 다시 움직일 수 있다. 
         _isCharacterCoroutineRunning = false;
     }
 
@@ -579,7 +641,18 @@ public class Character : MonoBehaviour
                 StageManager.Instance.ResetAnimationDownSide.GetComponent<RectTransform>()
                 .DOLocalMove(new Vector3(0.0f, -1100.0f, 0.0f), 1.0f, false));
 
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(0.5f);
+
+        _isCharacterResetCoroutineRunning = true;
+
+        GetComponent<SpriteRenderer>().enabled = false;
+        transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = false;
+        transform.GetChild(1).transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = false;
+        transform.GetChild(1).transform.GetChild(1).GetComponent<SpriteRenderer>().enabled = false;
+
+        yield return new WaitForSeconds(2.0f);
+
+        _isCharacterResetCoroutineRunning = false;
 
         _isCharacterCoroutineRunning = false;
     }
@@ -609,7 +682,7 @@ public class Character : MonoBehaviour
 
         if (StageManager.Instance.stage == 11)
         {
-            SceneManager.LoadScene("WorldMap");
+            SceneManager.LoadScene("World1BossClear");
         }
         else if (StageManager.Instance.stage >= 12 && StageManager.Instance.stage <= 16)
         {

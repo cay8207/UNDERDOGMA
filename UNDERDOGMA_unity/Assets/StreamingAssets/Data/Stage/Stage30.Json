@@ -141,7 +141,7 @@
       "EnemyType": "ChaserEnemy",
       "IsAlive": true,
       "Attack": 1,
-      "Heart": 3,
+      "Heart": 6,
       "AttackDirection": "Left"
     },
     "5, -2": {
@@ -208,6 +208,6 @@
   "ExecutionCount": 4,
   "CharacterRow": 0,
   "CharacterCol": 0,
-  "CharacterHeart": 8
+  "CharacterHeart": 9
 }
 

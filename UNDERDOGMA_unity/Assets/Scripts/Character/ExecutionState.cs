@@ -43,20 +43,13 @@ public class ExecutionState : BaseState
         // 2. 만약 큐에 character가 있다면 Death State로 넘어가야 한다. 
         if (_executionTarget.ContainsValue(StageManager.Instance._character))
         {
-            // 2.1. 캐릭터를 dictionary에서 삭제한다. 
-            foreach (var gameObject in _executionTarget)
-            {
-                if (gameObject.Value == StageManager.Instance._character)
-                {
-                    _executionTarget.Remove(gameObject.Key);
-                    break;
-                }
-            }
-
             // 2.2. 그리고 모든 적을 죽인다.
             foreach (var enemy in _executionTarget)
             {
-                EnemyManager.Instance.EnemyDeath(enemy.Key, true);
+                if (enemy.Value != StageManager.Instance._character)
+                {
+                    EnemyManager.Instance.EnemyDeath(enemy.Key, true);
+                }
             }
 
             _character.EnqueueCoroutine(_character.ExecutionEvent(_executionTarget));

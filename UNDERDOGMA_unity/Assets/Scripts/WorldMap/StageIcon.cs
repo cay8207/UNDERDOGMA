@@ -9,7 +9,6 @@ public class StageIcon : MonoBehaviour
     public SpriteRenderer SelectMarker;
     public GameObject StageText;
     public bool IsSelected = false;
-    [Header("Connection")]
     [SerializeField] private StageIcon iconUp;
     [SerializeField] private StageIcon iconDown;
     [SerializeField] private StageIcon iconLeft;
@@ -39,13 +38,13 @@ public class StageIcon : MonoBehaviour
         Left,
         Right
     }
-    
+
     public StageIcon GetStageIcon(StageDirection stageDirection)
     {
         switch (stageDirection)
         {
             case StageDirection.Up:
-                if(iconUp != null) return iconUp;
+                if (iconUp != null) return iconUp;
                 break;
             case StageDirection.Down:
                 if (iconDown != null) return iconDown;

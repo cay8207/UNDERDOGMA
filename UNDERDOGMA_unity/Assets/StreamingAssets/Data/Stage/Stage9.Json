@@ -92,9 +92,9 @@
     },
     "3, 2": {
       "Type": "Empty",
-      "Round": "0",
+      "Round": "2",
       "Pattern": "2",
-      "TileDirection": "None"
+      "TileDirection": "Right"
     },
 
     "-2, 0": { "Type": "Wall" },

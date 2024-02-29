@@ -40,7 +40,11 @@ public class Execution : MonoBehaviour
     // 1.2. 처형 횟수를 표시해줄 프리팹.
     [SerializeField] GameObject ExecutionCountPrefab;
     // 1.3. 처형할 적들을 표시해줄 프리팹.
+    [SerializeField] Image ExecutionBackGround;
+    [SerializeField] TextMeshProUGUI ExecutionDescription;
     [SerializeField] TextMeshProUGUI ExecutionNum;
+    [SerializeField] TextMeshProUGUI ExecutionText;
+    [SerializeField] Image ControlDescription;
     [SerializeField] GameObject ExecutionTargetPrefab;
     [SerializeField] public Image ExecutionEffect;
     [SerializeField] public Image ExecutionWolf;
@@ -114,30 +118,41 @@ public class Execution : MonoBehaviour
     {
         Vector2 CameraPosition = StageManager.Instance.MainCamera.transform.position;
 
-        if (ExecutionCount > 0)
+        if (StageManager.Instance._character.GetComponent<Character>().IsCharacterResetCoroutineRunning == false)
         {
-            _executionTargetDictionary = ExecuteEnemies();
-
-            if (_executionTargetDictionary.Count > 0)
+            if (ExecutionCount > 0)
             {
-                canFade = true;
+                _executionTargetDictionary = ExecuteEnemies();
 
-                int count = 0;
-
-                foreach (var enemy in _executionTargetDictionary)
+                if (_executionTargetDictionary.Count > 0)
                 {
-                    _executionTargetObjectList[count].transform.position = new Vector3(enemy.Key.x, enemy.Key.y + 0.2f, 0.0f);
+                    canFade = true;
 
-                    count++;
-                }
+                    int count = 0;
 
-                // 나머지 오브젝트는 숨겨준다. 
-                for (int i = count; i < 10; i++)
-                {
-                    _executionTargetObjectList[i].transform.position = new Vector3(-9999.0f, -9999.0f, 0.0f);
+                    foreach (var enemy in _executionTargetDictionary)
+                    {
+                        _executionTargetObjectList[count].transform.position = new Vector3(enemy.Key.x, enemy.Key.y + 0.2f, 0.0f);
+
+                        count++;
+                    }
+
+                    // 나머지 오브젝트는 숨겨준다. 
+                    for (int i = count; i < 10; i++)
+                    {
+                        _executionTargetObjectList[i].transform.position = new Vector3(-9999.0f, -9999.0f, 0.0f);
+                    }
                 }
             }
         }
+        else
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                _executionTargetObjectList[i].transform.position = new Vector3(-9999.0f, -9999.0f, 0.0f);
+            }
+        }
+
 
         if (canFade)
         {
@@ -198,16 +213,45 @@ public class Execution : MonoBehaviour
             }
         }
 
-        RemainEnemyBackgroundObject.transform.localPosition = new Vector3(-850.0f, 37.5f * (_enemyCount) + 75.0f, 0.0f);
-        RemainEnemyTextObject.transform.localPosition = new Vector3(-850.0f, 37.5f * (_enemyCount) + 75.0f, 0.0f);
+        if (StageManager.Instance._character.GetComponent<Character>().IsCharacterExcutionCoroutineRunning == true)
+        {
+            ExecutionBackGround.enabled = false;
+            ExecutionDescription.enabled = false;
+            ExecutionNum.enabled = false;
+            ExecutionText.enabled = false;
+            ControlDescription.enabled = false;
 
-        for (int i = 0; i < _enemyCount; i++)
-        {
-            _remainEnemyObjectList[i].transform.localPosition = new Vector3(-850.0f, 37.5f * (_enemyCount) - 75.0f * i, 0.0f);
+            RemainEnemyBackgroundObject.transform.localPosition = new Vector3(-9999.0f, -9999.0f, 0.0f);
+            RemainEnemyTextObject.transform.localPosition = new Vector3(-9999.0f, -9999.0f, 0.0f);
+
+            for (int i = 0; i < _enemyCount; i++)
+            {
+                _remainEnemyObjectList[i].transform.localPosition = new Vector3(-9999.0f, -9999.0f, 0.0f);
+            }
+            for (int i = _enemyCount; i < 10; i++)
+            {
+                _remainEnemyObjectList[i].transform.localPosition = new Vector3(-9999.0f, -9999.0f, 0.0f);
+            }
         }
-        for (int i = _enemyCount; i < 10; i++)
+        else
         {
-            _remainEnemyObjectList[i].transform.localPosition = new Vector3(-9999.0f, -9999.0f, 0.0f);
+            ExecutionBackGround.enabled = true;
+            ExecutionDescription.enabled = true;
+            ExecutionNum.enabled = true;
+            ExecutionText.enabled = true;
+            ControlDescription.enabled = true;
+
+            RemainEnemyBackgroundObject.transform.localPosition = new Vector3(-850.0f, 37.5f * (_enemyCount) + 75.0f, 0.0f);
+            RemainEnemyTextObject.transform.localPosition = new Vector3(-850.0f, 37.5f * (_enemyCount) + 75.0f, 0.0f);
+
+            for (int i = 0; i < _enemyCount; i++)
+            {
+                _remainEnemyObjectList[i].transform.localPosition = new Vector3(-850.0f, 37.5f * (_enemyCount) - 75.0f * i, 0.0f);
+            }
+            for (int i = _enemyCount; i < 10; i++)
+            {
+                _remainEnemyObjectList[i].transform.localPosition = new Vector3(-9999.0f, -9999.0f, 0.0f);
+            }
         }
     }
 
@@ -226,7 +270,7 @@ public class Execution : MonoBehaviour
         }
 
         // 3. 처형 대상들에게 나타날 스프라이트. 일단 10개를 만들어서 구석에 두고, 하나씩 표시해준다.
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 100; i++)
         {
             GameObject ExecutionClawObject = Instantiate(ExecutionClaw, new Vector3(-9999.0f, -9999.0f, 0.0f), Quaternion.identity);
             ExecutionClawObject.transform.SetParent(ExecutionCanvas.transform, false);

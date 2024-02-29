@@ -137,7 +137,7 @@ public class TutorialManager : MonoBehaviour
             DialogueText.text += _dialogueData.DialogueList[count][i]; // 한글자씩 출력
             yield return new WaitForSeconds(0.01f);
         }
-
+        yield return new WaitForSeconds(0.5f); //다이얼로그 끝나고 바로 넘어가지 않도록 처리
         _isDialogueTextRunning = false;
     }
 
@@ -149,8 +149,6 @@ public class TutorialManager : MonoBehaviour
         yield return new WaitForSeconds(2.0f);
 
         StartCoroutine(StartDialogueCoroutine());
-
-        _isDialogueTextRunning = false;
     }
 
     public IEnumerator BlackScreenFadeInCoroutine()
@@ -161,8 +159,6 @@ public class TutorialManager : MonoBehaviour
         yield return new WaitForSeconds(2.0f);
 
         StartCoroutine(StartDialogueCoroutine());
-
-        _isDialogueTextRunning = false;
     }
 
     public void ExitDialogue()

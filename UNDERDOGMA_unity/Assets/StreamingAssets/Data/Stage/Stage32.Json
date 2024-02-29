@@ -6,7 +6,7 @@
       "Pattern": "1",
       "TileDirection": "Left",
 
-      "Amount": "3",
+      "Amount": "4",
       "IsExist": true
     },
     "0, 0": {
@@ -150,7 +150,7 @@
       "EnemyType": "NormalEnemy",
       "IsAlive": true,
       "Attack": 1,
-      "Heart": 11,
+      "Heart": 10,
       "AttackDirection": "Left"
     },
     "-1, -2": { "Type": "Wall" },

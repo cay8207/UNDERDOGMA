@@ -16,7 +16,8 @@ public class Buttons : MonoBehaviour
     }
     public void ReturnToWorldMap()
     {
-        SceneManager.LoadScene("WorldMap");
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("Mingyu");
     }
     public void MakeButtonBigger()
     {
@@ -28,6 +29,7 @@ public class Buttons : MonoBehaviour
     }
     public void ReturnToStageMap()
     {
+        Time.timeScale = 1f;
         SceneManager.LoadScene("World" + (StageManager.Instance.stage <= 16 ? 1 : 2).ToString());
     }
     public void ExitGame()
@@ -40,6 +42,18 @@ public class Buttons : MonoBehaviour
     }
     public void ReturnToMainScreen()
     {
+        Time.timeScale = 1f;
         SceneManager.LoadScene("GameStart");
+    }
+
+    public void GoToCredit()
+    {
+        SceneManager.LoadScene("Credit");
+    }
+
+    public void GoToTutorial()
+    {
+        SceneManager.LoadScene("Tutorial");
+        AudioManager.Instance.Destroy();
     }
 }

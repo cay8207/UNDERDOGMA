@@ -4,8 +4,33 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using static StageIcon;
 
-public class StageSelectManager : Singleton<StageSelectManager>
+public class StageSelectManager : MonoBehaviour
 {
+    #region Singleton
+    // 싱글톤 패턴.
+    // 싱글톤 클래스를 구현해두긴 했지만, stageManager와 executionMangaer, DialogueManager는 
+    // dontdestroyonload가 필요없기 때문에 클래스 내부에 싱글톤 패턴을 간단히 구현.
+    private static StageSelectManager _instance;
+
+    public static StageSelectManager Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = (StageSelectManager)FindObjectOfType(typeof(StageSelectManager));
+                if (_instance == null)
+                {
+                    GameObject singletonObject = new GameObject($"{typeof(StageSelectManager)} (Singleton)");
+                    _instance = singletonObject.AddComponent<StageSelectManager>();
+                    singletonObject.transform.parent = null;
+                }
+            }
+
+            return _instance;
+        }
+    }
+    #endregion
     public StageIcon SelectedStage;
     public StageIcon NextSelectedStage;
     void Start()
@@ -34,7 +59,7 @@ public class StageSelectManager : Singleton<StageSelectManager>
             NextSelectedStage = SelectedStage.GetStageIcon(StageIcon.StageDirection.Right);
         }
 
-        if(NextSelectedStage != SelectedStage)
+        if (NextSelectedStage != SelectedStage)
         {
             SwitchSelectedStage();
         }

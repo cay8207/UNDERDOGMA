@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using DG.Tweening;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
@@ -58,6 +57,8 @@ public class StageManager : MonoBehaviour
     [SerializeField] public GameObject ResetAnimationUpSide;
     [SerializeField] public GameObject ResetAnimationDownSide;
 
+    // 1.5. 툴팁 애니메이션을 위한 오브젝트.
+    [SerializeField] GameObject toolTip;
 
     // 2. 위의 변수와 다르게 _character는 생성된 게임오브젝트를 저장하기 위한 변수. 
     public GameObject _character;
@@ -110,9 +111,6 @@ public class StageManager : MonoBehaviour
         _stageData = StageDataLoader.Instance.LoadStageData(path);
 
         SetCameraPosition();
-
-        AudioManager.Instance.Init();
-        AudioManager.Instance.PlayBgm(true);
 
         TileInstantiate();
 
@@ -254,14 +252,7 @@ public class StageManager : MonoBehaviour
 
     public void DestroyAllObjectsAndTileInstantiate()
     {
-        // 맵에 존재하는 타일을 제외한 오브젝트들을 초기화시켜준다.
-        // 1. 만약 처형이 진행중이라면 처형을 멈추고, 처형에 관한 변수들을 초기화시켜준다.
-        for (int i = 0; i < Execution.Instance.ExecutionCount; i++)
-        {
-            Execution.Instance.ExecutionCountObjectList[i].GetComponent<Image>().sprite = Execution.Instance.CloseEye;
-            Execution.Instance.ExecutionCountObjectList[i].GetComponent<Image>().rectTransform.sizeDelta = new Vector2(69.0f, 17.0f);
-        }
-
+        // 1. 모든 코루틴 스탑. 
         foreach (var coroutine in EnemyManager.Instance.EnemyDeathCoroutineQueue)
         {
             if (coroutine != null)
@@ -270,7 +261,7 @@ public class StageManager : MonoBehaviour
             }
         }
 
-        // 2. enemy 게임오브젝트들을 파괴. 
+        // 2 enemy 게임오브젝트들을 파괴. 
         foreach (var gameObjectWithVector in _gameObjectDictionary)
         {
             gameObjectWithVector.Value.SetActive(false);
@@ -284,6 +275,7 @@ public class StageManager : MonoBehaviour
 
         TileInstantiate();
     }
+
 
     private GameObject InstantiateEnemy(EnemyType enemyType, Vector3 position)
     {
@@ -379,5 +371,26 @@ public class StageManager : MonoBehaviour
         }
 
         return null;
+    }
+
+    //툴팁 활성화 함수
+    public void ActivateTooltip()
+    {
+        if(toolTip != null)
+        {
+            Sequence sequenceActivateTooltip = DOTween.Sequence()
+    .Append(toolTip.GetComponent<RectTransform>().DOAnchorPosX(0, 0.5f))
+    .Append(toolTip.GetComponent<Image>().DOColor(new Color(1.0f, 0.486f, 0.0f), 0.25f))
+    .AppendInterval(0.2f)
+    .Append(toolTip.GetComponent<Image>().DOColor(new Color(1.0f, 1.0f, 1.0f), 0.25f))
+    .AppendInterval(0.2f)
+    .Append(toolTip.GetComponent<Image>().DOColor(new Color(1.0f, 0.486f, 0.0f), 0.25f))
+    .AppendInterval(0.2f)
+    .Append(toolTip.GetComponent<Image>().DOColor(new Color(1.0f, 1.0f, 1.0f), 0.25f))
+    .AppendInterval(0.2f)
+    .Append(toolTip.GetComponent<Image>().DOColor(new Color(1.0f, 0.486f, 0.0f), 0.25f))
+    .AppendInterval(0.2f)
+    .Append(toolTip.GetComponent<Image>().DOColor(new Color(1.0f, 1.0f, 1.0f), 0.25f));
+        }
     }
 }
