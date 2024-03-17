@@ -52,7 +52,6 @@ public class MapEditorTile : MonoBehaviour
     private Image tileImage;
 
     private int enemyHP = 0;
-    private int enemyAtk = 0;
     private int meatHP = 0;
 
     private MapEditor mapEditor;
@@ -98,11 +97,7 @@ public class MapEditorTile : MonoBehaviour
         get { return enemyHP; }
         set { enemyHP = value; }
     }
-    public int EnemyAtk
-    {
-        get { return enemyAtk; }
-        set { enemyHP = value; }
-    }
+
     public int MeatHP
     {
         get { return meatHP; }
@@ -163,14 +158,9 @@ public class MapEditorTile : MonoBehaviour
         EnemyHP = hp;
         enemyUI.transform.Find("HP").transform.GetChild(1).transform.GetComponent<TextMeshProUGUI>().text = hp.ToString();
     }
-    public void SetEnemyAtk(int atk)
-    {
-        EnemyAtk = atk;
-        enemyUI.transform.Find("ATK").transform.GetChild(1).transform.GetComponent<TextMeshProUGUI>().text = atk.ToString();
-    }
     public void SetMeatHP(int hp)
     {
         MeatHP = hp;
-        meatUI.transform.GetChild(0).transform.GetComponent<TextMeshProUGUI>().text = hp.ToString();
+        meatUI.transform.GetChild(1).transform.GetComponent<TextMeshProUGUI>().text = hp.ToString();
     }
 }
