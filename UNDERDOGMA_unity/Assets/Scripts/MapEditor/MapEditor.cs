@@ -25,6 +25,9 @@ public class MapEditor : OdinEditorWindow
     [ShowIf("tileType", MapEditorTile.TileType.Empty)/*, OnValueChanged("OnTileSpriteChanged")*/]
     //public List<Sprite> TileSprite;
 
+    [ShowIf("tileType", MapEditorTile.TileType.Enemy), EnumToggleButtons, OnValueChanged("OnEnemyTypeChanged")]
+    public MapEditorTile.EnemyType enemyType;
+
     [ShowIf("tileType", MapEditorTile.TileType.Enemy), EnumToggleButtons, OnValueChanged("OnEnemyDirectionChanged")]
     public MapEditorTile.EnemyDirection enemyDirection;
 
@@ -62,6 +65,10 @@ public class MapEditor : OdinEditorWindow
         tile.SetTileSprite(TileSprite);
     }
     */
+        public void OnEnemyTypeChanged()
+    {
+        tile.SetEnemyType(enemyType);
+    }
     public void OnEnemyDirectionChanged()
     {
         tile.SetEnemyDirection(enemyDirection);

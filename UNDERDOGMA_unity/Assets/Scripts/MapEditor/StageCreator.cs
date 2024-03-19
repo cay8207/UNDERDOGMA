@@ -11,9 +11,14 @@ public class StageCreator : MonoBehaviour
     public TMP_InputField inputField_X;
     public TMP_InputField inputField_Y;
     public Button createButton;
+    public List<MapEditorTile> Tiles = new List<MapEditorTile>();
+    [HideInInspector] public int RowSize;
+    [HideInInspector] public int ColSize;
 
     void Start()
     {
+        RowSize = 0;
+        ColSize = 0;
         InitializeGrid();
     }
 
@@ -24,14 +29,15 @@ public class StageCreator : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
+        Tiles.Clear();
     }
 
     public void CreateButtonClick()
     {
-        int column = 0;
-        int row = 0;
-        bool resultCol = int.TryParse(inputField_X.text, out column);
-        bool resultRow = int.TryParse(inputField_Y.text, out row);
+        ColSize= 0;
+        RowSize = 0;
+        bool resultCol = int.TryParse(inputField_X.text, out ColSize);
+        bool resultRow = int.TryParse(inputField_Y.text, out RowSize);
         if (resultCol == false)
         {
             Debug.Log("X에 정수값을 입력하세요.");
@@ -42,8 +48,7 @@ public class StageCreator : MonoBehaviour
             Debug.Log("Y에 정수값을 입력하세요.");
             return;
         }
-
-        CreateStage(column, row);
+        CreateStage(ColSize, RowSize);
     }
 
     private void CreateStage(int col, int row)
@@ -57,6 +62,7 @@ public class StageCreator : MonoBehaviour
             temp.transform.SetParent(grid.gameObject.transform);
             temp.GetComponent<MapEditorTile>().X = i % col;
             temp.GetComponent<MapEditorTile>().Y = i / col;
+            Tiles.Add(temp.GetComponent<MapEditorTile>());
         }
     }
 }
