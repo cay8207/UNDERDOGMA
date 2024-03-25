@@ -9,15 +9,14 @@ using UnityEngine;
 public class MainCamera : MonoBehaviour
 {
     public GameObject _character;
-    private Vector3 originalTransform;
+    public Vector3 originalTransform;
     private float shakeDuration = 0f;
     private float shakeMagnitude = 0.2f;
     private float dampingSpeed = 1.0f;
 
-    void Start()
+    void Awake()
     {
-        _character = StageManager.Instance._character;
-        originalTransform = transform.position;
+
     }
 
     // 호출하여 쉐이크 시작
@@ -28,6 +27,8 @@ public class MainCamera : MonoBehaviour
 
     void Update()
     {
+        Debug.Log(transform.position.x + " " + transform.position.y + " " + transform.position.z);
+
         if (shakeDuration > 0)
         {
             transform.localPosition = originalTransform + UnityEngine.Random.insideUnitSphere * shakeMagnitude;

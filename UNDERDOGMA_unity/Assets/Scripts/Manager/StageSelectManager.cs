@@ -77,6 +77,6 @@ public class StageSelectManager : MonoBehaviour
     }
     public void LoadSelectedStage()
     {
-        SceneManager.LoadScene(SelectedStage.StageScene);
+        LoadingManager.Instance.LoadStage(SelectedStage.StageNumber);
     }
 }

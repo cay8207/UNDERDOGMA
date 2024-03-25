@@ -6,33 +6,12 @@ using UnityEngine.UI;
 using DG.Tweening;
 using Unity.VisualScripting.FullSerializer.Internal;
 
-public class Execution : MonoBehaviour
+public class ExecutionManager : MonoBehaviour
 {
-    #region Singleton
-    // 싱글톤 패턴.
-    // 싱글톤 클래스를 구현해두긴 했지만, stageManager와 executionMangaer, DialogueManager는 
-    // dontdestroyonload가 필요없기 때문에 클래스 내부에 싱글톤 패턴을 간단히 구현.
-    private static Execution _instance;
+    // 싱글톤 패턴. 인스턴스를 하나만 만들어서 사용한다. 
+    private static ExecutionManager _instance;
 
-    public static Execution Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                _instance = (Execution)FindObjectOfType(typeof(Execution));
-                if (_instance == null)
-                {
-                    GameObject singletonObject = new GameObject($"{typeof(Execution)} (Singleton)");
-                    _instance = singletonObject.AddComponent<Execution>();
-                    singletonObject.transform.parent = null;
-                }
-            }
-
-            return _instance;
-        }
-    }
-    #endregion
+    public static ExecutionManager Instance => _instance;
 
     // 1. 처형 애니메이션과 관련된 변수들. 
     // 1.1. 관련 UI들을 담는 캔버스.
@@ -56,7 +35,6 @@ public class Execution : MonoBehaviour
 
     [SerializeField] public Sprite CloseEye;
     [SerializeField] public Sprite OpenEye;
-    [SerializeField] public GameObject Clear;
 
     private List<GameObject> _executionCountObjectList = new List<GameObject>();
     public List<GameObject> ExecutionCountObjectList
@@ -107,11 +85,29 @@ public class Execution : MonoBehaviour
     private int fadeCount = 0;
     private bool canFade = false;
 
+    public StageData _stageData;
+
+    public void Awake()
+    {
+        if (_instance == null)
+        {
+            _instance = this;
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
+    }
+
     public void Start()
     {
-        ExecutionSetUp();
+
+    }
+
+    public void Init(int stage)
+    {
+        ExecutionSetUp(stage);
         SetupRemainEnemy();
-        Clear.GetComponent<Image>().DOFade(0.0f, 0.0f);
     }
 
     public void Update()
@@ -175,10 +171,12 @@ public class Execution : MonoBehaviour
 
         updateRemainEnemy();
 
-        if (StageManager.Instance.stage != 1 && StageManager.Instance.stage != 2 && StageManager.Instance.stage != 3)
-        {
-            ExecutionNum.SetText((ExecutionCount - StageManager.Instance._character.GetComponent<Character>().MoveCount).ToString());
-        }
+        // 1, 2, 3스테이지에서는 처형 횟수를 표시하지 않기 위한 로직. 
+        // 24년 3월 이후에 한번 확인해서 필요없으면 지우면 된다. 
+        // if (StageManager.Instance.stage != 1 && StageManager.Instance.stage != 2 && StageManager.Instance.stage != 3)
+        // {
+        //     ExecutionNum.SetText((ExecutionCount - StageManager.Instance._character.GetComponent<Character>().MoveCount).ToString());
+        // }
     }
 
     public void SetupRemainEnemy()
@@ -255,12 +253,16 @@ public class Execution : MonoBehaviour
         }
     }
 
-    public void ExecutionSetUp()
+    public void ExecutionSetUp(int stage)
     {
-        // 1. 처형 카운트 설정 및 표시해줄 UI를 생성한다.
-        _executionCount = StageManager.Instance._stageData.ExecutionCount;
+        // 1. 스테이지 데이터를 불러온다.
+        string path = "Stage" + stage.ToString();
+        _stageData = StageDataLoader.Instance.LoadStageData(path);
 
-        // 2. 처형당할 적들을 표시해줄 스프라이트. 일단 10개를 만들어서 구석에 두고, 하나씩 표시해준다. 
+        // 2. 처형 카운트 설정 및 표시해줄 UI를 생성한다.
+        _executionCount = _stageData.ExecutionCount;
+
+        // 3. 처형당할 적들을 표시해줄 스프라이트. 일단 10개를 만들어서 구석에 두고, 하나씩 표시해준다. 
         for (int i = 0; i < 10; i++)
         {
             GameObject ExecutionTargetObject = Instantiate(ExecutionTargetPrefab, new Vector3(-9999.0f, -9999.0f, 0.0f), Quaternion.identity);
@@ -269,7 +271,7 @@ public class Execution : MonoBehaviour
             _executionTargetObjectList.Add(ExecutionTargetObject);
         }
 
-        // 3. 처형 대상들에게 나타날 스프라이트. 일단 10개를 만들어서 구석에 두고, 하나씩 표시해준다.
+        // 4. 처형 대상들에게 나타날 스프라이트. 일단 10개를 만들어서 구석에 두고, 하나씩 표시해준다.
         for (int i = 0; i < 100; i++)
         {
             GameObject ExecutionClawObject = Instantiate(ExecutionClaw, new Vector3(-9999.0f, -9999.0f, 0.0f), Quaternion.identity);
@@ -283,7 +285,7 @@ public class Execution : MonoBehaviour
         RemainEnemyTextObject = Instantiate(RemainEnemyText, new Vector3(-850.0f, 0.0f, 0.0f), Quaternion.identity);
         RemainEnemyTextObject.transform.SetParent(ExecutionCanvas.transform, false);
 
-        // 4. 처형 애니메이션에 관련된 변수. 미리 꺼둔다. 
+        // 5. 처형 애니메이션에 관련된 변수. 미리 꺼둔다. 
         ExecutionEffect.DOFade(0.0f, 0.0f);
         ExecutionWolf.DOFade(0.0f, 0.0f);
     }

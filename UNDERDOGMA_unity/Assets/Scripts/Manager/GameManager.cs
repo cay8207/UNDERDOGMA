@@ -11,16 +11,29 @@ using UnityEngine;
 public class GameManager : Singleton<GameManager>
 {
     [SerializeField] GameObject StageManagerPrefab;
-    [SerializeField] GameObject ExecutionManagerPrefab;
+    [SerializeField] GameObject ExecutionPrefab;
     [SerializeField] GameObject DialogueManagerPrefab;
 
-    StageManager _stageManager;
-    Execution _executionManager;
-    DialogueManager _dialogueManager;
+    private int stage;
+    public int Stage
+    {
+        get => stage;
+        set => stage = value;
+    }
+
+    private DialogueDataTable _dialogueDataTable;
+    public DialogueDataTable DialogueDataTable
+    {
+        get => _dialogueDataTable;
+        set => _dialogueDataTable = value;
+    }
 
     void Awake()
     {
         DontDestroyOnLoad(this.gameObject);
+        _dialogueDataTable = new DialogueDataTable("DialogueDataTable");
+        _dialogueDataTable.LoadCsv("언더독 다이얼로그 및 번역 테이블 - 다이얼로그 시트.csv");
+        _dialogueDataTable.print();
     }
     // Start is called before the first frame update
     void Start()

@@ -7,34 +7,12 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DialogueManager : Singleton<DialogueManager>
+public class DialogueManager : MonoBehaviour
 {
-    #region Singleton
-    // 싱글톤 패턴.
-    // 싱글톤 클래스를 구현해두긴 했지만, stageManager와 executionMangaer, DialogueManager는 
-    // dontdestroyonload가 필요없기 때문에 클래스 내부에 싱글톤 패턴을 간단히 구현.
+    // 싱글톤 패턴. 인스턴스를 하나만 만들어서 사용한다. 
     private static DialogueManager _instance;
 
-    public static DialogueManager Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                _instance = (DialogueManager)FindObjectOfType(typeof(DialogueManager));
-                if (_instance == null)
-                {
-                    GameObject singletonObject = new GameObject($"{typeof(DialogueManager)} (Singleton)");
-                    _instance = singletonObject.AddComponent<DialogueManager>();
-                    singletonObject.transform.parent = null;
-                }
-            }
-
-            return _instance;
-        }
-    }
-
-    #endregion
+    public static DialogueManager Instance => _instance;
 
     // 현재 텍스트를 담아두는 변수. 
     [SerializeField] private Canvas DialogueCanvas;
@@ -69,6 +47,15 @@ public class DialogueManager : Singleton<DialogueManager>
 
     public void Awake()
     {
+        if (_instance == null)
+        {
+            _instance = this;
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
+
         _isDialogueRunning = true;
 
         SetActiveImages(false);
@@ -76,11 +63,16 @@ public class DialogueManager : Singleton<DialogueManager>
 
     public void Start()
     {
-        string path = "Stage" + StageManager.Instance.stage.ToString();
+
+    }
+
+    public void Init(int stage)
+    {
+        string path = "Stage" + stage.ToString();
         _dialogueData = DialogueDataLoader.Instance.LoadDialogueData(path);
 
-        if (StageManager.Instance.stage == 1 || StageManager.Instance.stage == 4
-                || StageManager.Instance.stage == 10 || StageManager.Instance.stage == 11)
+        if (GameManager.Instance.Stage == 1 || GameManager.Instance.Stage == 4
+                || GameManager.Instance.Stage == 10 || GameManager.Instance.Stage == 11)
         {
             SetActiveImages(true);
             StartCoroutine(StartDialogueCoroutine());
@@ -94,8 +86,8 @@ public class DialogueManager : Singleton<DialogueManager>
 
     private void Update()
     {
-        if (StageManager.Instance.stage == 1 || StageManager.Instance.stage == 4
-                || StageManager.Instance.stage == 10 || StageManager.Instance.stage == 11)
+        if (GameManager.Instance.Stage == 1 || GameManager.Instance.Stage == 4
+                || GameManager.Instance.Stage == 10 || GameManager.Instance.Stage == 11)
         {
             // 대화를 읽는다.
             if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return) || Input.GetMouseButtonDown(0))

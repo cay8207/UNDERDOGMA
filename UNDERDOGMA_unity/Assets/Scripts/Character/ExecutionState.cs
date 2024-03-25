@@ -33,7 +33,7 @@ public class ExecutionState : BaseState
     public void ExecuteEnemies()
     {
         // 1. 처형할 적을 찾는다.
-        Dictionary<Vector2Int, GameObject> _executionTarget = Execution.Instance.ExecuteEnemies();
+        Dictionary<Vector2Int, GameObject> _executionTarget = ExecutionManager.Instance.ExecuteEnemies();
 
         foreach (var enemy in _executionTarget)
         {
