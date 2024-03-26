@@ -11,9 +11,15 @@ public class StageCreator : MonoBehaviour
     public TMP_InputField inputField_X;
     public TMP_InputField inputField_Y;
     public Button createButton;
+    public List<MapEditorTile> Tiles = new List<MapEditorTile>();
+    public Dictionary<int, Dictionary<int, MapEditorTile>> TileDictionary = new Dictionary<int, Dictionary<int, MapEditorTile>>();
+    [HideInInspector] public int ySize;
+    [HideInInspector] public int xSize;
 
     void Start()
     {
+        ySize = 0;
+        xSize = 0;
         InitializeGrid();
     }
 
@@ -24,39 +30,50 @@ public class StageCreator : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
+        Tiles.Clear();
+        TileDictionary.Clear();
     }
 
     public void CreateButtonClick()
     {
-        int column = 0;
-        int row = 0;
-        bool resultCol = int.TryParse(inputField_X.text, out column);
-        bool resultRow = int.TryParse(inputField_Y.text, out row);
-        if (resultCol == false)
+        xSize= 0;
+        ySize = 0;
+        bool resultX = int.TryParse(inputField_X.text, out xSize);
+        bool resultY = int.TryParse(inputField_Y.text, out ySize);
+        if (resultX == false)
         {
             Debug.Log("X에 정수값을 입력하세요.");
             return;
         }
-        if (resultRow == false)
+        if (resultY == false)
         {
             Debug.Log("Y에 정수값을 입력하세요.");
             return;
         }
-
-        CreateStage(column, row);
+        CreateStage(xSize, ySize);
     }
 
-    private void CreateStage(int col, int row)
+    public void CreateStage(int x, int y)
     {
         InitializeGrid();
-        grid.constraintCount = col;
+        grid.constraintCount = x;
 
-        for (int i = 0; i < col * row; i++)
+        for (int i = 0; i < x * y; i++)
         {
+            int curX = i % x;
+            int curY = i / x;
             GameObject temp = Instantiate(mapEditorTile);
+            MapEditorTile tile = temp.GetComponent<MapEditorTile>();
             temp.transform.SetParent(grid.gameObject.transform);
-            temp.GetComponent<MapEditorTile>().X = i % col;
-            temp.GetComponent<MapEditorTile>().Y = i / col;
+            tile.X = curX;
+            tile.Y = curY;
+            Tiles.Add(tile);
+            if (!TileDictionary.ContainsKey(curX))
+            {
+                TileDictionary.Add(curX, new Dictionary<int, MapEditorTile>());
+            }
+            TileDictionary[curX][curY] = tile;
+            tile.SetTileType(MapEditorTile.TileType.Wall);
         }
     }
 }
