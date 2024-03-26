@@ -11,16 +11,47 @@ using UnityEngine;
 public class GameManager : Singleton<GameManager>
 {
     [SerializeField] GameObject StageManagerPrefab;
-    [SerializeField] GameObject ExecutionManagerPrefab;
+    [SerializeField] GameObject ExecutionPrefab;
     [SerializeField] GameObject DialogueManagerPrefab;
 
-    StageManager _stageManager;
-    Execution _executionManager;
-    DialogueManager _dialogueManager;
+    private int world;
+    public int World
+    {
+        get => world;
+        set => world = value;
+    }
+
+    private int stage;
+    public int Stage
+    {
+        get => stage;
+        set => stage = value;
+    }
+
+    private Language _language;
+    public Language Language
+    {
+        get => _language;
+        set => _language = value;
+    }
+
+    private DialogueDataTable _dialogueDataTable;
+    public DialogueDataTable DialogueDataTable
+    {
+        get => _dialogueDataTable;
+        set => _dialogueDataTable = value;
+    }
 
     void Awake()
     {
         DontDestroyOnLoad(this.gameObject);
+
+        // 기본 언어는 한국어로 설정해준다.
+        _language = Language.English;
+
+        // 다이얼로그 테이블을 불러온다.
+        _dialogueDataTable = new DialogueDataTable("DialogueDataTable");
+        _dialogueDataTable.LoadCsv("언더독 다이얼로그 및 번역 테이블 - 다이얼로그 시트.csv");
     }
     // Start is called before the first frame update
     void Start()

@@ -7,34 +7,12 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DialogueManager : Singleton<DialogueManager>
+public class DialogueManager : MonoBehaviour
 {
-    #region Singleton
-    // 싱글톤 패턴.
-    // 싱글톤 클래스를 구현해두긴 했지만, stageManager와 executionMangaer, DialogueManager는 
-    // dontdestroyonload가 필요없기 때문에 클래스 내부에 싱글톤 패턴을 간단히 구현.
+    // 싱글톤 패턴. 인스턴스를 하나만 만들어서 사용한다. 
     private static DialogueManager _instance;
 
-    public static DialogueManager Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                _instance = (DialogueManager)FindObjectOfType(typeof(DialogueManager));
-                if (_instance == null)
-                {
-                    GameObject singletonObject = new GameObject($"{typeof(DialogueManager)} (Singleton)");
-                    _instance = singletonObject.AddComponent<DialogueManager>();
-                    singletonObject.transform.parent = null;
-                }
-            }
-
-            return _instance;
-        }
-    }
-
-    #endregion
+    public static DialogueManager Instance => _instance;
 
     // 현재 텍스트를 담아두는 변수. 
     [SerializeField] private Canvas DialogueCanvas;
@@ -56,19 +34,22 @@ public class DialogueManager : Singleton<DialogueManager>
     public bool _isDialogueRunning = false;
     public bool _isDialogueTextRunning = false;
 
-    private DialogueData _dialogueData;
-
-    public DialogueData DialogueData
-    {
-        get => _dialogueData;
-        set => _dialogueData = value;
-    }
+    private List<string> dialogueList;
 
     //  현재 몇번째 텍스트를 읽고 있는지 저장하기 위한 변수.
     private int count = 0;
 
     public void Awake()
     {
+        if (_instance == null)
+        {
+            _instance = this;
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
+
         _isDialogueRunning = true;
 
         SetActiveImages(false);
@@ -76,11 +57,20 @@ public class DialogueManager : Singleton<DialogueManager>
 
     public void Start()
     {
-        string path = "Stage" + StageManager.Instance.stage.ToString();
-        _dialogueData = DialogueDataLoader.Instance.LoadDialogueData(path);
 
-        if (StageManager.Instance.stage == 1 || StageManager.Instance.stage == 4
-                || StageManager.Instance.stage == 10 || StageManager.Instance.stage == 11)
+    }
+
+    public void Init(int world, int stage)
+    {
+        dialogueList = GameManager.Instance.DialogueDataTable.GetDialogueData(GameManager.Instance.Language, world, stage);
+
+        foreach (var dialogue in dialogueList)
+        {
+            Debug.Log(dialogue);
+        }
+
+        if (GameManager.Instance.Stage == 1 || GameManager.Instance.Stage == 4
+                || GameManager.Instance.Stage == 10 || GameManager.Instance.Stage == 11)
         {
             SetActiveImages(true);
             StartCoroutine(StartDialogueCoroutine());
@@ -94,15 +84,15 @@ public class DialogueManager : Singleton<DialogueManager>
 
     private void Update()
     {
-        if (StageManager.Instance.stage == 1 || StageManager.Instance.stage == 4
-                || StageManager.Instance.stage == 10 || StageManager.Instance.stage == 11)
+        if (GameManager.Instance.Stage == 1 || GameManager.Instance.Stage == 4
+                || GameManager.Instance.Stage == 10 || GameManager.Instance.Stage == 11)
         {
             // 대화를 읽는다.
             if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return) || Input.GetMouseButtonDown(0))
-                && count < _dialogueData.DialogueList.Count && _isDialogueTextRunning == false)
+                && count < dialogueList.Count && _isDialogueTextRunning == false)
             {
                 // 모든 대화를 읽은 경우
-                if (count == _dialogueData.DialogueList.Count - 1)
+                if (count == dialogueList.Count - 1)
                 {
                     count++;
                     // 모든 코루틴 종료
@@ -140,9 +130,9 @@ public class DialogueManager : Singleton<DialogueManager>
         DialogueImage2.sprite = listSprites2[count];
 
         // 텍스트 출력 //
-        for (int i = 0; i < _dialogueData.DialogueList[count].Length; i++)
+        for (int i = 0; i < dialogueList[count].Length; i++)
         {
-            DialogueText.text += _dialogueData.DialogueList[count][i]; // 한글자씩 출력
+            DialogueText.text += dialogueList[count][i]; // 한글자씩 출력
             yield return new WaitForSeconds(0.01f);
         }
         yield return new WaitForSeconds(0.5f); //텍스트 바로 안넘어가게
@@ -155,7 +145,7 @@ public class DialogueManager : Singleton<DialogueManager>
         DialogueText.text = "";
 
         // 리스트 초기화
-        _dialogueData.DialogueList.Clear();
+        dialogueList.Clear();
         listSprites1.Clear();
         listSprites2.Clear();
         // 애니메이터 초기화

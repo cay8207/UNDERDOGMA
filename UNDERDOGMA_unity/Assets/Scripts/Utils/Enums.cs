@@ -3,12 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
-
-public class Managers : Singleton<Managers>
+public enum Language
 {
-    public void Init()
-    {
-
-    }
+    Korean,
+    English,
+    Japanese
 }

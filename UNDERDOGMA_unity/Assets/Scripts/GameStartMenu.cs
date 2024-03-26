@@ -24,9 +24,6 @@ public class GameStartMenu : MonoBehaviour
 
     void Awake()
     {
-        Managers.Instance.Init();
-        GameManager.Instance.Init();
-
         AudioManager.Instance.Init();
         AudioManager.Instance.PlayBgm(true);
 
@@ -66,7 +63,9 @@ public class GameStartMenu : MonoBehaviour
             {
                 exitButton.GetComponent<Buttons>().ExitGame();
             }
+
             Debug.Log("Audio Start!");
+
             AudioManager.Instance.PlaySfx(AudioManager.Sfx.UI_Toggle);
         }
     }

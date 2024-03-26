@@ -134,7 +134,7 @@ public class Character : MonoBehaviour
             switch (_curState)
             {
                 case State.Idle:
-                    if (_moveCount == Execution.Instance.ExecutionCount)
+                    if (_moveCount == ExecutionManager.Instance.ExecutionCount)
                     {
                         ChangeState(State.Execution);
                         _moveCount = 0;
@@ -416,15 +416,15 @@ public class Character : MonoBehaviour
 
         CharacterDamagedSequence
                 .Append(
-                    Execution.Instance.ExecutionClawObjectList[60].GetComponent<RectTransform>()
+                    ExecutionManager.Instance.ExecutionClawObjectList[60].GetComponent<RectTransform>()
                     .DOLocalMove(SetPositionSpriteToUI(Row, Col), 0.0f, false)
                 )
                 .Append(
-                    Execution.Instance.ExecutionClawObjectList[60].GetComponent<UnityEngine.UI.Image>()
+                    ExecutionManager.Instance.ExecutionClawObjectList[60].GetComponent<UnityEngine.UI.Image>()
                     .DOFade(1.0f, 0.05f)
                 )
                 .Append(
-                    Execution.Instance.ExecutionClawObjectList[60].GetComponent<UnityEngine.UI.Image>()
+                    ExecutionManager.Instance.ExecutionClawObjectList[60].GetComponent<UnityEngine.UI.Image>()
                     .DOFade(0.0f, 0.6f)
                 );
 
@@ -479,21 +479,21 @@ public class Character : MonoBehaviour
         Debug.Log("(Character.cs) Execution Sequence start!");
         ExecutionEffectSequence
             .Append(
-                Execution.Instance.ExecutionEffect
+                ExecutionManager.Instance.ExecutionEffect
                 .DOFade(1.0f, 0.5f))
             .AppendInterval(0.5f)
             .Append(
-                Execution.Instance.ExecutionEffect
+                ExecutionManager.Instance.ExecutionEffect
                 .DOFade(0.0f, 0.5f)
                 );
 
         ExecutionWolfSequence
             .Append(
-                Execution.Instance.ExecutionWolf
+                ExecutionManager.Instance.ExecutionWolf
                 .DOFade(1.0f, 0.5f))
             .AppendInterval(0.5f)
             .Append(
-                Execution.Instance.ExecutionWolf
+                ExecutionManager.Instance.ExecutionWolf
                 .DOFade(0.0f, 0.5f)
                 );
 
@@ -511,16 +511,16 @@ public class Character : MonoBehaviour
 
             ExecutionClawSequenceList[count]
                 .Append(
-                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
+                    ExecutionManager.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
                     .DOLocalMove(SetPositionSpriteToUI(enemy.Key.x, enemy.Key.y), 0.0f, false)
                 )
                 .AppendCallback(() => AudioManager.Instance.PlaySfx(AudioManager.Sfx.Enemy_Attack))
                 .Append(
-                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<UnityEngine.UI.Image>()
+                    ExecutionManager.Instance.ExecutionClawObjectList[count].GetComponent<UnityEngine.UI.Image>()
                     .DOFade(1.0f, 0.05f)
                 )
                 .Append(
-                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<UnityEngine.UI.Image>()
+                    ExecutionManager.Instance.ExecutionClawObjectList[count].GetComponent<UnityEngine.UI.Image>()
                     .DOFade(0.0f, 0.6f)
                 );
 
@@ -533,24 +533,24 @@ public class Character : MonoBehaviour
             ExecutionClawSequenceList[count]
                 .AppendInterval(0.25f)
                 .Append(
-                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
+                    ExecutionManager.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
                     .DOLocalMove(SetPositionSpriteToUI(enemy.Key.x, enemy.Key.y), 0.0f, false)
                 )
                 .Append(
-                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
+                    ExecutionManager.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
                     .DORotate(new Vector3(0.0f, 0.0f, 90.0f), 0.0f)
                 )
                 .AppendCallback(() => AudioManager.Instance.PlaySfx(AudioManager.Sfx.Enemy_Attack))
                 .Append(
-                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<UnityEngine.UI.Image>()
+                    ExecutionManager.Instance.ExecutionClawObjectList[count].GetComponent<UnityEngine.UI.Image>()
                     .DOFade(1.0f, 0.05f)
                 )
                 .Append(
-                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<UnityEngine.UI.Image>()
+                    ExecutionManager.Instance.ExecutionClawObjectList[count].GetComponent<UnityEngine.UI.Image>()
                     .DOFade(0.0f, 0.6f)
                 )
                 .Append(
-                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
+                    ExecutionManager.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
                     .DORotate(new Vector3(0.0f, 0.0f, 0.0f), 0.0f)
                 );
 
@@ -563,16 +563,16 @@ public class Character : MonoBehaviour
             ExecutionClawSequenceList[count]
                 .AppendInterval(0.5f)
                 .Append(
-                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
+                    ExecutionManager.Instance.ExecutionClawObjectList[count].GetComponent<RectTransform>()
                     .DOLocalMove(SetPositionSpriteToUI(enemy.Key.x, enemy.Key.y), 0.0f, false)
                 )
                 .AppendCallback(() => AudioManager.Instance.PlaySfx(AudioManager.Sfx.Enemy_Attack))
                 .Append(
-                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<UnityEngine.UI.Image>()
+                    ExecutionManager.Instance.ExecutionClawObjectList[count].GetComponent<UnityEngine.UI.Image>()
                     .DOFade(1.0f, 0.05f)
                 )
                 .Append(
-                    Execution.Instance.ExecutionClawObjectList[count].GetComponent<UnityEngine.UI.Image>()
+                    ExecutionManager.Instance.ExecutionClawObjectList[count].GetComponent<UnityEngine.UI.Image>()
                     .DOFade(0.0f, 0.6f)
                 );
 
@@ -674,28 +674,11 @@ public class Character : MonoBehaviour
 
         ClearSequence
             .Append(
-                Execution.Instance.Clear.GetComponent<UnityEngine.UI.Image>()
+                StageManager.Instance.Clear.GetComponent<UnityEngine.UI.Image>()
                 .DOFade(1.0f, 1.0f));
 
 
         yield return new WaitForSeconds(2.0f);
-
-        if (StageManager.Instance.stage == 11)
-        {
-            SceneManager.LoadScene("World1BossClear");
-        }
-        else if (StageManager.Instance.stage >= 12 && StageManager.Instance.stage <= 16)
-        {
-            SceneManager.LoadScene("World1");
-        }
-        else if (StageManager.Instance.stage >= 26 && StageManager.Instance.stage <= 32)
-        {
-            SceneManager.LoadScene("World2");
-        }
-        else
-        {
-            SceneManager.LoadScene("Stage" + (StageManager.Instance.stage + 1).ToString());
-        }
     }
 
     #endregion
