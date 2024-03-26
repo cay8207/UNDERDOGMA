@@ -19,17 +19,17 @@ public class LoadingManager : Singleton<LoadingManager>
     }
 
     // 스테이지가 아닌 씬에서 스테이지 씬으로 이동하는 함수. 
-    public void LoadStage(int stage)
+    public void LoadStage(int world, int stage)
     {
         GameManager.Instance.Stage = stage;
 
         // Stage 씬으로 이동하고,
-        StartCoroutine(LoadSceneAsync("Stage", stage));
+        StartCoroutine(LoadSceneAsync("Stage", world, stage));
     }
 
     // 스테이지에서 다른 스테이지로 이동하는 함수.
     // 이 함수는 StageManager에서 호출된다. 기존의 StageManager와 Execution, DialogueManager는 삭제된다. 그리고 다시 생성한다.
-    public void LoadNextStage(int nextStage)
+    public void LoadNextStage(int nextWorld, int nextStage)
     {
         GameManager.Instance.Stage = nextStage;
 
@@ -38,10 +38,10 @@ public class LoadingManager : Singleton<LoadingManager>
         Destroy(GameObject.Find("Execution"));
         Destroy(GameObject.Find("DialogueManager"));
 
-        CreateManagers(nextStage);
+        CreateManagers(nextWorld, nextStage);
     }
 
-    private IEnumerator LoadSceneAsync(string sceneName, int stage)
+    private IEnumerator LoadSceneAsync(string sceneName, int world, int stage)
     {
         // 비동기적으로 Scene을 로드합니다.
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
@@ -56,18 +56,18 @@ public class LoadingManager : Singleton<LoadingManager>
             yield return null;
         }
 
-        CreateManagers(stage);
+        CreateManagers(world, stage);
     }
 
-    private void CreateManagers(int stage)
+    private void CreateManagers(int world, int stage)
     {
         GameObject stageManager = Instantiate(StageManagerPrefab);
-        stageManager.GetComponent<StageManager>().Init(stage);
+        stageManager.GetComponent<StageManager>().Init(world, stage);
 
         GameObject executionManager = Instantiate(ExecutionPrefab);
-        executionManager.GetComponent<ExecutionManager>().Init(stage);
+        executionManager.GetComponent<ExecutionManager>().Init(world, stage);
 
         GameObject dialogueManager = Instantiate(DialogueManagerPrefab);
-        dialogueManager.GetComponent<DialogueManager>().Init(stage);
+        dialogueManager.GetComponent<DialogueManager>().Init(world, stage);
     }
 }

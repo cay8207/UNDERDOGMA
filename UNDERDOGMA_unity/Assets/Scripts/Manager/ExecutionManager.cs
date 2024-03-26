@@ -104,9 +104,9 @@ public class ExecutionManager : MonoBehaviour
 
     }
 
-    public void Init(int stage)
+    public void Init(int world, int stage)
     {
-        ExecutionSetUp(stage);
+        ExecutionSetUp(world, stage);
         SetupRemainEnemy();
     }
 
@@ -253,7 +253,7 @@ public class ExecutionManager : MonoBehaviour
         }
     }
 
-    public void ExecutionSetUp(int stage)
+    public void ExecutionSetUp(int world, int stage)
     {
         // 1. 스테이지 데이터를 불러온다.
         string path = "Stage" + stage.ToString();

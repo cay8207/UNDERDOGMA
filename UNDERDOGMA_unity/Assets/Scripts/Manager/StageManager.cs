@@ -91,7 +91,7 @@ public class StageManager : MonoBehaviour
     }
 
     // 초기화해줄때에 호출되는 함수. 모든 오브젝트를 파괴하고, 다시 만들어준다. 
-    public void Init(int stage)
+    public void Init(int world, int stage)
     {
         string path = "Stage" + stage.ToString();
         _stageData = StageDataLoader.Instance.LoadStageData(path);

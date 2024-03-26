@@ -46,7 +46,7 @@ public abstract class DataTableBase : DataTable
                 continue;
 
             // 각각의 칸을 담아줄 리스트를 만든다.
-            string[] items = new string[columns.Count()];
+            List<string> items = new List<string>();
             bool insideQuotes = false;
             string currentItem = "";
 
@@ -62,8 +62,7 @@ public abstract class DataTableBase : DataTable
                 // 그렇지 않고 만약 쉼표이며, 따옴표 안에 있지 않다면 현재까지 저장된 string을 items에 넣어주고 currentItem을 초기화한다.
                 else if (c == ',' && !insideQuotes)
                 {
-                    Debug.Log(currentItem);
-                    items.Append(currentItem);
+                    items.Add(currentItem);
                     currentItem = "";
                 }
                 // 모두 아니라면 현재 아이템에 문자를 추가해준다. 
@@ -74,15 +73,10 @@ public abstract class DataTableBase : DataTable
             }
 
             // 마지막 아이템 추가. 이 때 따옴표가 있을 수 있으므로 제거해준다. 따옴표는 들어갈 필요가 없음!
-            items.Append(currentItem.Trim('"'));
+            items.Add(currentItem.Trim('"'));
 
-            foreach (var item in items)
-            {
-                Debug.Log(item);
-            }
-
-            if (items.Length > 0)
-                this.Rows.Add(items);  // Automatically does type conversion
+            if (items.Count > 0)
+                this.Rows.Add(items.ToArray());  // Automatically does type conversion
         }
 
         return true;
@@ -164,6 +158,7 @@ public class DialogueDataTable : DataTableBase
     private static IReadOnlyDictionary<string, string> _columnTypeMapping = new Dictionary<string, string>()
     {
         { "DialogueID", "System.Int32" },
+        { "When", "System.String"},
         { "Order", "System.Int32" },
         { "Speaker1", "System.String" },
         { "Speaker1Highlight", "System.Boolean"},
@@ -177,6 +172,17 @@ public class DialogueDataTable : DataTableBase
 
     public DialogueDataTable(string name) : base(name) { }
 
+    // 현재 world, stage를 변수로 넘겨받아서 ID의 값이 world*100+stage와 일치하는 row,
+    // GameManager의 Language와 일치하는 Col들을 찾아서 List의 형태로 반환한다.
+    public List<string> GetDialogueData(Language language, int world, int stage)
+    {
+        List<string> pool = this.Rows
+            .Cast<DataRow>()
+            .Where(x => (int)x["DialogueID"] == world * 100 + stage)
+            .Select(x => x[language.ToString()] as string)
+            .ToList();
+        return pool;
+    }
 }
 
 public class StageDataTable : DataTableBase

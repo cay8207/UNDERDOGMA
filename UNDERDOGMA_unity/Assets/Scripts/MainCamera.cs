@@ -27,8 +27,6 @@ public class MainCamera : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(transform.position.x + " " + transform.position.y + " " + transform.position.z);
-
         if (shakeDuration > 0)
         {
             transform.localPosition = originalTransform + UnityEngine.Random.insideUnitSphere * shakeMagnitude;
