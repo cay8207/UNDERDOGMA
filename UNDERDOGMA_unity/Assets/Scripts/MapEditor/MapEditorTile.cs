@@ -1,16 +1,19 @@
 using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
 using TMPro;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 public class MapEditorTile : MonoBehaviour
 {
     public enum TileType
     {
-        None, Empty, Player, Enemy, Meat
+        Wall, Empty, Player, Enemy, Meat
     }
 
     public TileType CurrentTileType;
@@ -19,6 +22,11 @@ public class MapEditorTile : MonoBehaviour
         Up = 0, Down = 1, Left = 2, Right = 3
     }
     public EnemyDirection CurrentEnemyDirection;
+    public enum EnemyType
+    {
+        NormalEnemy, ChaserEnemy, MiniBoss
+    }
+    public EnemyType CurrentEnemyType;
 
     [System.Serializable]
     public class TileSprites
@@ -26,8 +34,10 @@ public class MapEditorTile : MonoBehaviour
         public Sprite None;
         public Sprite Empty;
         public Sprite Player;
-        public Sprite Enemy;
         public Sprite Meat;
+        public Sprite NormalEnemy;
+        public Sprite ChaserEnemy;
+        public Sprite MiniBoss;
     }
 
     [Header("Coordinate")]
@@ -52,35 +62,9 @@ public class MapEditorTile : MonoBehaviour
     private Image tileImage;
 
     private int enemyHP = 0;
-    private int enemyAtk = 0;
     private int meatHP = 0;
 
     private MapEditor mapEditor;
-
-    private void Start()
-    {
-        tileImage = GetComponent<Image>();
-        SetTileType(TileType.None);
-    }
-
-    private Sprite GetCurrentSprite()
-    {
-        switch (CurrentTileType)
-        {
-            case TileType.None:
-                return tileSprites.None;
-            case TileType.Empty:
-                return tileSprites.Empty;
-            case TileType.Player:
-                return tileSprites.Player;
-            case TileType.Enemy:
-                return tileSprites.Enemy;
-            case TileType.Meat:
-                return tileSprites.Meat;
-            default:
-                return null;
-        }
-    }
 
     public int X
     {
@@ -98,15 +82,16 @@ public class MapEditorTile : MonoBehaviour
         get { return enemyHP; }
         set { enemyHP = value; }
     }
-    public int EnemyAtk
-    {
-        get { return enemyAtk; }
-        set { enemyHP = value; }
-    }
+
     public int MeatHP
     {
         get { return meatHP; }
         set { meatHP = value; }
+    }
+
+    private void Awake()
+    {
+        tileImage = GetComponent<Image>();
     }
 
     public void SelectTile()
@@ -119,7 +104,11 @@ public class MapEditorTile : MonoBehaviour
     public void SetTileType(TileType tileType)
     {
         CurrentTileType = tileType;
-        tileImage.sprite = GetCurrentSprite();
+        UpdateTileTypeUI();
+    }
+
+    private void UpdateTileTypeUI()
+    {
         switch (CurrentTileType)
         {
             case TileType.Enemy:
@@ -137,40 +126,132 @@ public class MapEditorTile : MonoBehaviour
                 meatUI.SetActive(false);
                 break;
         }
+        UpdateUI();
     }
 
-    public void SetTileSprite(List<Sprite> tileSprite)
+    public void SetEnemyType(EnemyType enemyType)
     {
-        tileSprites.None = tileSprite[0];
-        tileSprites.Empty = tileSprite[1];
-        tileSprites.Player = tileSprite[2];
-        tileSprites.Enemy = tileSprite[3];
-        tileSprites.Meat = tileSprite[4];
-        tileImage.sprite = GetCurrentSprite();
+        CurrentEnemyType = enemyType;
+        UpdateUI();
     }
 
     public void SetEnemyDirection(EnemyDirection direction)
     {
         CurrentEnemyDirection = direction;
+        UpdateUI();
+    }
+
+    public void SetEnemyHP(int hp)
+    {
+        EnemyHP = hp;
+        UpdateUI();
+    }
+
+    public void SetMeatHP(int hp)
+    {
+        MeatHP = hp;
+        UpdateUI();
+    }
+
+    public void UpdateUI()
+    {
+        //타일 이미지 변경
+        tileImage.sprite = GetCurrentSprite();
+        //적 방향 UI 변경
         for (int i = 0; i < 4; i++)
         {
             enemyUI.transform.Find("Direction").transform.GetChild(i).gameObject.SetActive(false);
         }
-        enemyUI.transform.Find("Direction").transform.GetChild((int)direction).gameObject.SetActive(true);
+        enemyUI.transform.Find("Direction").transform.GetChild((int)CurrentEnemyDirection).gameObject.SetActive(true);
+        //적 HP 텍스트 변경
+        enemyUI.transform.Find("HP").transform.GetChild(1).transform.GetComponent<TextMeshProUGUI>().text = EnemyHP.ToString();
+        //고기 HP 텍스트 변경
+        meatUI.transform.GetChild(1).transform.GetComponent<TextMeshProUGUI>().text = MeatHP.ToString();
     }
-    public void SetEnemyHP(int hp)
+
+    private Sprite GetCurrentSprite()
     {
-        EnemyHP = hp;
-        enemyUI.transform.Find("HP").transform.GetChild(1).transform.GetComponent<TextMeshProUGUI>().text = hp.ToString();
+        switch (CurrentTileType)
+        {
+            case TileType.Wall:
+                return tileSprites.None;
+            case TileType.Empty:
+                return tileSprites.Empty;
+            case TileType.Player:
+                return tileSprites.Player;
+            case TileType.Enemy:
+                switch (CurrentEnemyType)
+                {
+                    case EnemyType.NormalEnemy:
+                        return tileSprites.NormalEnemy;
+                    case EnemyType.ChaserEnemy:
+                        return tileSprites.ChaserEnemy;
+                    case EnemyType.MiniBoss:
+                        return tileSprites.MiniBoss;
+                    default: return null;
+                }
+            case TileType.Meat:
+                return tileSprites.Meat;
+            default:
+                return null;
+        }
     }
-    public void SetEnemyAtk(int atk)
+
+    public JObject ToJSON()
     {
-        EnemyAtk = atk;
-        enemyUI.transform.Find("ATK").transform.GetChild(1).transform.GetComponent<TextMeshProUGUI>().text = atk.ToString();
+        if (CurrentTileType == TileType.Player) SaveSystem.Instance.SetCharacterCoord(X, Y);
+        var json = new JObject();
+        json.Add("Type", CurrentTileType == TileType.Player? "Empty" : CurrentTileType.ToString());
+        json.Add("Round", "0");
+        json.Add("Pattern", "0");
+        json.Add("TileDirection", "None");
+        switch (CurrentTileType)
+        {
+            case TileType.Enemy:
+                json.Add("EnemyType", CurrentEnemyType.ToString());
+                json.Add("IsAlive", true);
+                json.Add("Attack", 1);
+                json.Add("Heart", enemyHP);
+                json.Add("AttackDirection", CurrentEnemyDirection.ToString());
+                break;
+
+            case TileType.Meat:
+                json.Add("Amount", meatHP);
+                json.Add("IsExist", true);
+                break;
+
+            default:
+                break;
+        }
+        return json;
     }
-    public void SetMeatHP(int hp)
+
+    public void FromJSON(JObject data)
     {
-        MeatHP = hp;
-        meatUI.transform.GetChild(0).transform.GetComponent<TextMeshProUGUI>().text = hp.ToString();
+        if (!Enum.TryParse<TileType>(data["Type"].ToString(), out CurrentTileType))
+        {
+            Debug.Log("TileTypeError");
+            return;
+        }
+        //추후 Round, Pattern, TileDirection 쓸 일 있으면 여기에 추가
+
+        switch (CurrentTileType)
+        {
+            case TileType.Enemy:
+                Enum.TryParse<EnemyType>(data["EnemyType"].ToString(), out CurrentEnemyType);
+                int.TryParse(data["Heart"].ToString(), out enemyHP);
+                Enum.TryParse<EnemyDirection>(data["AttackDirection"].ToString(), out CurrentEnemyDirection);
+                break;
+
+            case TileType.Meat:
+                int.TryParse(data["Amount"].ToString(), out meatHP);
+                break;
+
+            default:
+                break;
+        }
+
+        UpdateTileTypeUI();
     }
+
 }

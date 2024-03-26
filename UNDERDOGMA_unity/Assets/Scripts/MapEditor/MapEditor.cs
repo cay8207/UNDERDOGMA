@@ -22,17 +22,14 @@ public class MapEditor : OdinEditorWindow
     [EnumToggleButtons, OnValueChanged("OnTypeChanged")]
     public MapEditorTile.TileType tileType;
 
-    [ShowIf("tileType", MapEditorTile.TileType.Empty), OnValueChanged("OnTileSpriteChanged")]
-    public List<Sprite> TileSprite;
+    [ShowIf("tileType", MapEditorTile.TileType.Enemy), EnumToggleButtons, OnValueChanged("OnEnemyTypeChanged")]
+    public MapEditorTile.EnemyType EnemyType;
 
     [ShowIf("tileType", MapEditorTile.TileType.Enemy), EnumToggleButtons, OnValueChanged("OnEnemyDirectionChanged")]
-    public MapEditorTile.EnemyDirection enemyDirection;
+    public MapEditorTile.EnemyDirection EnemyDirection;
 
     [ShowIf("tileType", MapEditorTile.TileType.Enemy), OnValueChanged("OnEnemyHPChanged")]
     public int EnemyHP;
-
-    [ShowIf("tileType", MapEditorTile.TileType.Enemy), OnValueChanged("OnEnemyAtkChanged")]
-    public int EnemyAtk;
 
     [ShowIf("tileType", MapEditorTile.TileType.Meat), OnValueChanged("OnMeatHPChanged")]
     public int MeatHP;
@@ -42,40 +39,47 @@ public class MapEditor : OdinEditorWindow
     {
         tile = t;
         tileType = t.CurrentTileType;
+        UpdateTileValues();
     }
+
     public void OnTypeChanged()
     {
         tile.SetTileType(tileType);
+        UpdateTileValues();
+    }
+
+    private void UpdateTileValues()
+    {
         switch (tileType)
         {
             case MapEditorTile.TileType.Enemy:
-                tile.SetEnemyDirection(tile.CurrentEnemyDirection);
-                tile.SetEnemyHP(tile.EnemyHP);
-                tile.SetEnemyAtk(tile.EnemyAtk);
+                EnemyType = tile.CurrentEnemyType;
+                EnemyDirection = tile.CurrentEnemyDirection;
+                EnemyHP = tile.EnemyHP;
                 break;
             case MapEditorTile.TileType.Meat:
-                tile.SetMeatHP(tile.MeatHP);
+                MeatHP = tile.MeatHP;
                 break;
             default:
                 break;
         }
     }
-    public void OnTileSpriteChanged()
+    
+    public void OnEnemyTypeChanged()
     {
-        tile.SetTileSprite(TileSprite);
+        tile.SetEnemyType(EnemyType);
     }
+
     public void OnEnemyDirectionChanged()
     {
-        tile.SetEnemyDirection(enemyDirection);
+        tile.SetEnemyDirection(EnemyDirection);
     }
+
     public void OnEnemyHPChanged()
     {
         tile.SetEnemyHP(EnemyHP);
     }
-    public void OnEnemyAtkChanged()
-    {
-        tile.SetEnemyAtk(EnemyAtk);
-    }
+
     public void OnMeatHPChanged()
     {
         tile.SetMeatHP(MeatHP);
