@@ -55,6 +55,9 @@ public abstract class DataTableBase : DataTable
             {
                 // 만약 글자가 ". 즉 첫 따옴표라면 insideQuotes를 true로 만들어준다. 그 다음 따옴표는 false로 만든다.
                 // 즉, 여기부터의 문자들은 특정 셀의 내용이라는 뜻이다.
+                // 그런데 원래는 따옴표가 문장의 양 끝에 하나씩 있는걸 생각했는데, 스프레드시트에서 바로 csv 파일로 내려받으니
+                // 따옴표가 세개씩 들어가게 된다. 근데 세개 있는거랑 하나 있는거랑 아래의 코드 작동은 같아서 일단 냅둠.
+                // 나중에 만약 문제가 생기면 수정해야 한다. 
                 if (c == '"')
                 {
                     insideQuotes = !insideQuotes;
@@ -173,47 +176,16 @@ public class DialogueDataTable : DataTableBase
     public DialogueDataTable(string name) : base(name) { }
 
     // 현재 world, stage를 변수로 넘겨받아서 ID의 값이 world*100+stage와 일치하는 row,
-    // GameManager의 Language와 일치하는 Col들을 찾아서 List의 형태로 반환한다.
-    public List<string> GetDialogueData(Language language, int world, int stage)
+    // GameManager의 Language와 일치하고 When이 dialogueEvent와 일치하는 col들을 찾아서 List의 형태로 반환한다.
+    public List<string> GetDialogueData(DialogueEvent dialogueEvent, Language language, int world, int stage)
     {
         List<string> pool = this.Rows
             .Cast<DataRow>()
             .Where(x => (int)x["DialogueID"] == world * 100 + stage)
+            .Where(x => x["When"] as string == dialogueEvent.ToString())
             .Select(x => x[language.ToString()] as string)
             .ToList();
+
         return pool;
     }
-}
-
-public class StageDataTable : DataTableBase
-{
-    override public IReadOnlyDictionary<string, string> ColumnTypeMapping => _columnTypeMapping;
-    private static IReadOnlyDictionary<string, string> _columnTypeMapping = new Dictionary<string, string>()
-    {
-        { "StageID", "System.String" },
-        { "Type", "System.String" },
-        { "Difficulty", "System.Int32" },
-        { "MonsterID1", "System.String" },
-        { "MonsterID2", "System.String" },
-        { "MonsterID3", "System.String" },
-        { "MonsterID4", "System.String" },
-    };
-
-    public StageDataTable(string name) : base(name) { }
-
-    /// <summary>
-    /// Type과 Difficulty를 입력하면 해당되는 무작위 DataRow를 리턴한다(사용법은 Dictionary와 비슷).
-    /// </summary>
-    /// <param name="type"></param>
-    /// <param name="difficulty"></param>
-    /// <returns>DataRow를 리턴한다. ["StageID"], ["MonsterID1"] 등으로 맵의 ID나 적의 ID를 확인할 수 있다.</returns>
-    // public DataRow GetRandomEnemyCombination(string type, int difficulty)
-    // {
-    //     List<DataRow> pool = this.Rows
-    //         .Cast<DataRow>()
-    //         .Where(x => (x["Type"] as string == type) && ((int)x["Difficulty"] == difficulty))
-    //         .ToList();
-    //     pool.Shuffle();
-    //     return pool[0];
-    // }
 }

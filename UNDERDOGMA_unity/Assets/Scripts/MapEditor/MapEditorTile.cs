@@ -155,17 +155,17 @@ public class MapEditorTile : MonoBehaviour
 
     public void UpdateUI()
     {
-        //Å¸ÀÏ ÀÌ¹ÌÁö º¯°æ
+        //Å¸ï¿½ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         tileImage.sprite = GetCurrentSprite();
-        //Àû ¹æÇâ UI º¯°æ
+        //ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ UI ï¿½ï¿½ï¿½ï¿½
         for (int i = 0; i < 4; i++)
         {
             enemyUI.transform.Find("Direction").transform.GetChild(i).gameObject.SetActive(false);
         }
         enemyUI.transform.Find("Direction").transform.GetChild((int)CurrentEnemyDirection).gameObject.SetActive(true);
-        //Àû HP ÅØ½ºÆ® º¯°æ
+        //ï¿½ï¿½ HP ï¿½Ø½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
         enemyUI.transform.Find("HP").transform.GetChild(1).transform.GetComponent<TextMeshProUGUI>().text = EnemyHP.ToString();
-        //°í±â HP ÅØ½ºÆ® º¯°æ
+        //ï¿½ï¿½ï¿½ï¿½ HP ï¿½Ø½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
         meatUI.transform.GetChild(1).transform.GetComponent<TextMeshProUGUI>().text = MeatHP.ToString();
     }
 
@@ -200,11 +200,17 @@ public class MapEditorTile : MonoBehaviour
     public JObject ToJSON()
     {
         if (CurrentTileType == TileType.Player) SaveSystem.Instance.SetCharacterCoord(X, Y);
+
         var json = new JObject();
-        json.Add("Type", CurrentTileType == TileType.Player? "Empty" : CurrentTileType.ToString());
-        json.Add("Round", "0");
-        json.Add("Pattern", "0");
-        json.Add("TileDirection", "None");
+
+        json.Add("Type", CurrentTileType == TileType.Player ? "Empty" : CurrentTileType.ToString());
+
+        if (CurrentTileType != TileType.Wall)
+        {
+            json.Add("Pattern", "0");
+            json.Add("TileDirection", "None");
+        }
+
         switch (CurrentTileType)
         {
             case TileType.Enemy:
@@ -223,6 +229,7 @@ public class MapEditorTile : MonoBehaviour
             default:
                 break;
         }
+
         return json;
     }
 
@@ -233,7 +240,7 @@ public class MapEditorTile : MonoBehaviour
             Debug.Log("TileTypeError");
             return;
         }
-        //ÃßÈÄ Round, Pattern, TileDirection ¾µ ÀÏ ÀÖÀ¸¸é ¿©±â¿¡ Ãß°¡
+        //ï¿½ï¿½ï¿½ï¿½ Round, Pattern, TileDirection ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½â¿¡ ï¿½ß°ï¿½
 
         switch (CurrentTileType)
         {

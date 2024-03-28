@@ -11,3 +11,8 @@ public enum Language
     English,
     Japanese
 }
+
+public enum DialogueEvent
+{
+    Start, Ending
+}

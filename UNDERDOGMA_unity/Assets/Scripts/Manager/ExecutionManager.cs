@@ -107,49 +107,81 @@ public class ExecutionManager : MonoBehaviour
     public void Init(int world, int stage)
     {
         ExecutionSetUp(world, stage);
-        SetupRemainEnemy();
+        SetupRemainEnemyUI();
     }
 
     public void Update()
     {
-        Vector2 CameraPosition = StageManager.Instance.MainCamera.transform.position;
+        UpdateExecutionTargetUI();
 
-        if (StageManager.Instance._character.GetComponent<Character>().IsCharacterResetCoroutineRunning == false)
+        UpdateRemainEnemyUI();
+
+        // 1, 2, 3스테이지에서는 처형 횟수를 표시하지 않기 위한 로직. 
+        // 24년 3월 이후에 한번 확인해서 필요없으면 지우면 된다. 
+        // if (StageManager.Instance.stage != 1 && StageManager.Instance.stage != 2 && StageManager.Instance.stage != 3)
+        // {
+        //     ExecutionNum.SetText((ExecutionCount - StageManager.Instance._character.GetComponent<Character>().MoveCount).ToString());
+        // }
+    }
+
+    // 남은 적 UI를 세팅해주는 함수. 
+    public void SetupRemainEnemyUI()
+    {
+        for (int i = 0; i < 10; i++)
         {
-            if (ExecutionCount > 0)
+            GameObject RemainEnemyObject = Instantiate(RemainEnemyPrefab, new Vector3(-9999.0f, -9999.0f, 0.0f), Quaternion.identity);
+            RemainEnemyObject.transform.SetParent(ExecutionCanvas.transform, false);
+            RemainEnemyObject.transform.localScale = new Vector2(0.6f, 0.6f);
+            _remainEnemyObjectList.Add(RemainEnemyObject);
+        }
+    }
+
+    // 처형 대상을 표시하는 함수. 매 프레임마다 처형될 개체들을 찾고, 이들을 표시해준다. 
+    public void UpdateExecutionTargetUI()
+    {
+        // 만약 캐릭터가 존재하고, 캐릭터가 리셋 중이 아니라면 처형 대상을 찾아서 표시해준다.
+        if (StageManager.Instance._character != null)
+        {
+            if (StageManager.Instance._character.GetComponent<Character>().IsCharacterResetCoroutineRunning == false)
             {
-                _executionTargetDictionary = ExecuteEnemies();
-
-                if (_executionTargetDictionary.Count > 0)
+                if (ExecutionCount > 0)
                 {
-                    canFade = true;
+                    // 처형 대상들을 찾아 딕셔너리에 저장한다. 
+                    _executionTargetDictionary = ExecuteEnemies();
 
-                    int count = 0;
-
-                    foreach (var enemy in _executionTargetDictionary)
+                    if (_executionTargetDictionary.Count > 0)
                     {
-                        _executionTargetObjectList[count].transform.position = new Vector3(enemy.Key.x, enemy.Key.y + 0.2f, 0.0f);
+                        canFade = true;
 
-                        count++;
-                    }
+                        int count = 0;
 
-                    // 나머지 오브젝트는 숨겨준다. 
-                    for (int i = count; i < 10; i++)
-                    {
-                        _executionTargetObjectList[i].transform.position = new Vector3(-9999.0f, -9999.0f, 0.0f);
+                        // 처형 대상들을 표시해준다. 빨간 원으로 적을 표시한다. 
+                        foreach (var enemy in _executionTargetDictionary)
+                        {
+                            _executionTargetObjectList[count].transform.position = new Vector3(enemy.Key.x, enemy.Key.y + 0.2f, 0.0f);
+
+                            count++;
+                        }
+
+                        // 나머지 오브젝트는 숨겨준다. 
+                        for (int i = count; i < 10; i++)
+                        {
+                            _executionTargetObjectList[i].transform.position = new Vector3(-9999.0f, -9999.0f, 0.0f);
+                        }
                     }
                 }
             }
-        }
-        else
-        {
-            for (int i = 0; i < 10; i++)
+            else
             {
-                _executionTargetObjectList[i].transform.position = new Vector3(-9999.0f, -9999.0f, 0.0f);
+                // 처형 UI가 보이면 안 되기 때문에 안 보이는 곳에 숨긴다. 
+                for (int i = 0; i < 10; i++)
+                {
+                    _executionTargetObjectList[i].transform.position = new Vector3(-9999.0f, -9999.0f, 0.0f);
+                }
             }
         }
 
-
+        // 
         if (canFade)
         {
             for (int i = 0; i < 10; i++)
@@ -168,34 +200,16 @@ public class ExecutionManager : MonoBehaviour
 
             fadeCount++;
         }
-
-        updateRemainEnemy();
-
-        // 1, 2, 3스테이지에서는 처형 횟수를 표시하지 않기 위한 로직. 
-        // 24년 3월 이후에 한번 확인해서 필요없으면 지우면 된다. 
-        // if (StageManager.Instance.stage != 1 && StageManager.Instance.stage != 2 && StageManager.Instance.stage != 3)
-        // {
-        //     ExecutionNum.SetText((ExecutionCount - StageManager.Instance._character.GetComponent<Character>().MoveCount).ToString());
-        // }
     }
 
-    public void SetupRemainEnemy()
-    {
-        for (int i = 0; i < 10; i++)
-        {
-            GameObject RemainEnemyObject = Instantiate(RemainEnemyPrefab, new Vector3(-9999.0f, -9999.0f, 0.0f), Quaternion.identity);
-            RemainEnemyObject.transform.SetParent(ExecutionCanvas.transform, false);
-            RemainEnemyObject.transform.localScale = new Vector2(0.6f, 0.6f);
-            _remainEnemyObjectList.Add(RemainEnemyObject);
-        }
-    }
-
-    public void updateRemainEnemy()
+    // 남은 적들을 표시하는 UI를 업데이트하는 함수.
+    public void UpdateRemainEnemyUI()
     {
         int _row = 0;
         int _col = 0;
         int _enemyCount = 0;
 
+        // 1. 살아있는 적들의 수를 세준다. 
         foreach (var gameObject in StageManager.Instance.GameObjectDictionary)
         {
             _row = gameObject.Key.x;
@@ -211,44 +225,49 @@ public class ExecutionManager : MonoBehaviour
             }
         }
 
-        if (StageManager.Instance._character.GetComponent<Character>().IsCharacterExcutionCoroutineRunning == true)
+        // 2. 처형 중이라면 UI를 숨겨준다.
+        if (StageManager.Instance._character != null)
         {
-            ExecutionBackGround.enabled = false;
-            ExecutionDescription.enabled = false;
-            ExecutionNum.enabled = false;
-            ExecutionText.enabled = false;
-            ControlDescription.enabled = false;
-
-            RemainEnemyBackgroundObject.transform.localPosition = new Vector3(-9999.0f, -9999.0f, 0.0f);
-            RemainEnemyTextObject.transform.localPosition = new Vector3(-9999.0f, -9999.0f, 0.0f);
-
-            for (int i = 0; i < _enemyCount; i++)
+            if (StageManager.Instance._character.GetComponent<Character>().IsCharacterExecutionCoroutineRunning == true)
             {
-                _remainEnemyObjectList[i].transform.localPosition = new Vector3(-9999.0f, -9999.0f, 0.0f);
+                ExecutionBackGround.enabled = false;
+                ExecutionDescription.enabled = false;
+                ExecutionNum.enabled = false;
+                ExecutionText.enabled = false;
+                ControlDescription.enabled = false;
+
+                RemainEnemyBackgroundObject.transform.localPosition = new Vector3(-9999.0f, -9999.0f, 0.0f);
+                RemainEnemyTextObject.transform.localPosition = new Vector3(-9999.0f, -9999.0f, 0.0f);
+
+                for (int i = 0; i < _enemyCount; i++)
+                {
+                    _remainEnemyObjectList[i].transform.localPosition = new Vector3(-9999.0f, -9999.0f, 0.0f);
+                }
+                for (int i = _enemyCount; i < 10; i++)
+                {
+                    _remainEnemyObjectList[i].transform.localPosition = new Vector3(-9999.0f, -9999.0f, 0.0f);
+                }
             }
-            for (int i = _enemyCount; i < 10; i++)
+            // 3. 처형 중이 아니라면 UI를 보여준다.
+            else
             {
-                _remainEnemyObjectList[i].transform.localPosition = new Vector3(-9999.0f, -9999.0f, 0.0f);
-            }
-        }
-        else
-        {
-            ExecutionBackGround.enabled = true;
-            ExecutionDescription.enabled = true;
-            ExecutionNum.enabled = true;
-            ExecutionText.enabled = true;
-            ControlDescription.enabled = true;
+                ExecutionBackGround.enabled = true;
+                ExecutionDescription.enabled = true;
+                ExecutionNum.enabled = true;
+                ExecutionText.enabled = true;
+                ControlDescription.enabled = true;
 
-            RemainEnemyBackgroundObject.transform.localPosition = new Vector3(-850.0f, 37.5f * (_enemyCount) + 75.0f, 0.0f);
-            RemainEnemyTextObject.transform.localPosition = new Vector3(-850.0f, 37.5f * (_enemyCount) + 75.0f, 0.0f);
+                RemainEnemyBackgroundObject.transform.localPosition = new Vector3(-850.0f, 37.5f * (_enemyCount) + 75.0f, 0.0f);
+                RemainEnemyTextObject.transform.localPosition = new Vector3(-850.0f, 37.5f * (_enemyCount) + 75.0f, 0.0f);
 
-            for (int i = 0; i < _enemyCount; i++)
-            {
-                _remainEnemyObjectList[i].transform.localPosition = new Vector3(-850.0f, 37.5f * (_enemyCount) - 75.0f * i, 0.0f);
-            }
-            for (int i = _enemyCount; i < 10; i++)
-            {
-                _remainEnemyObjectList[i].transform.localPosition = new Vector3(-9999.0f, -9999.0f, 0.0f);
+                for (int i = 0; i < _enemyCount; i++)
+                {
+                    _remainEnemyObjectList[i].transform.localPosition = new Vector3(-850.0f, 37.5f * (_enemyCount) - 75.0f * i, 0.0f);
+                }
+                for (int i = _enemyCount; i < 10; i++)
+                {
+                    _remainEnemyObjectList[i].transform.localPosition = new Vector3(-9999.0f, -9999.0f, 0.0f);
+                }
             }
         }
     }
@@ -256,7 +275,7 @@ public class ExecutionManager : MonoBehaviour
     public void ExecutionSetUp(int world, int stage)
     {
         // 1. 스테이지 데이터를 불러온다.
-        string path = "Stage" + stage.ToString();
+        string path = "Stage" + (world * 100 + stage).ToString();
         _stageData = StageDataLoader.Instance.LoadStageData(path);
 
         // 2. 처형 카운트 설정 및 표시해줄 UI를 생성한다.

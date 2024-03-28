@@ -37,7 +37,7 @@ public class DialogueManager : MonoBehaviour
     private List<string> dialogueList;
 
     //  현재 몇번째 텍스트를 읽고 있는지 저장하기 위한 변수.
-    private int count = 0;
+    private int count;
 
     public void Awake()
     {
@@ -60,17 +60,20 @@ public class DialogueManager : MonoBehaviour
 
     }
 
-    public void Init(int world, int stage)
+    // 데이터를 가져오고, 만약 현재 스테이지에 다이얼로그가 존재하는 경우 다이얼로그를 출력한다.
+    public void Init(DialogueEvent dialogueEvent, Language language, int world, int stage)
     {
-        dialogueList = GameManager.Instance.DialogueDataTable.GetDialogueData(GameManager.Instance.Language, world, stage);
+        dialogueList = GameManager.Instance.DialogueDataTable.GetDialogueData(dialogueEvent, language, world, stage);
 
         foreach (var dialogue in dialogueList)
         {
             Debug.Log(dialogue);
         }
 
-        if (GameManager.Instance.Stage == 1 || GameManager.Instance.Stage == 4
-                || GameManager.Instance.Stage == 10 || GameManager.Instance.Stage == 11)
+        // 현재 다이얼로그의 위치를 가리키는 카운트를 0으로 초기화한다. 
+        count = 0;
+
+        if (dialogueList.Count > 0)
         {
             SetActiveImages(true);
             StartCoroutine(StartDialogueCoroutine());
@@ -84,8 +87,7 @@ public class DialogueManager : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance.Stage == 1 || GameManager.Instance.Stage == 4
-                || GameManager.Instance.Stage == 10 || GameManager.Instance.Stage == 11)
+        if (dialogueList.Count > 0)
         {
             // 대화를 읽는다.
             if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return) || Input.GetMouseButtonDown(0))
@@ -102,6 +104,7 @@ public class DialogueManager : MonoBehaviour
                 }
                 else
                 {
+                    Debug.Log("count: " + count + " / " + "dialogueList.Count: " + dialogueList.Count);
                     count++;
                     // 아닌 경우 다음 다이얼로그 출력.
                     StopAllCoroutines();
@@ -112,8 +115,10 @@ public class DialogueManager : MonoBehaviour
 
     }
 
+    // 다이얼로그를 하나씩 출력하는 코루틴. 
     public IEnumerator StartDialogueCoroutine()
     {
+        // 1. 다이얼로그가 출력되는 동안 캐릭터의 움직임을 멈춰준다.
         _isDialogueTextRunning = true;
 
         Name.text = Names[count];

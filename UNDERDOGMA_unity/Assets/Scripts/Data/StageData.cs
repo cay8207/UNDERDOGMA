@@ -31,30 +31,6 @@ public class StageData
     }
 
     [JsonIgnore]
-    private int _executionHealth;
-    public int ExecutionHealth
-    {
-        get => _executionHealth;
-        set => _executionHealth = value;
-    }
-
-    [JsonIgnore]
-    private int _characterRow;
-    public int CharacterRow
-    {
-        get => _characterRow;
-        set => _characterRow = value;
-    }
-
-    [JsonIgnore]
-    private int _characterCol;
-    public int CharacterCol
-    {
-        get => _characterCol;
-        set => _characterCol = value;
-    }
-
-    [JsonIgnore]
     private int _characterHeart;
     public int CharacterHeart
     {
@@ -62,9 +38,41 @@ public class StageData
         set => _characterHeart = value;
     }
 
+    [JsonIgnore]
+    private int _characterX;
+    public int CharacterX
+    {
+        get => _characterX;
+        set => _characterX = value;
+    }
+
+    [JsonIgnore]
+    private int _characterY;
+    public int CharacterY
+    {
+        get => _characterY;
+        set => _characterY = value;
+    }
+
+    [JsonIgnore]
+    private int _stageXSize;
+    public int StageXSize
+    {
+        get => _stageXSize;
+        set => _stageXSize = value;
+    }
+
+    [JsonIgnore]
+    private int _stageYSize;
+    public int StageYSize
+    {
+        get => _stageYSize;
+        set => _stageYSize = value;
+    }
+
     // 데이터를 초기화하는 생성자
-    public StageData(Dictionary<string, Dictionary<string, string>> tileDictionary, int executionCount,
-    int characterRow, int characterCol, int characterHeart)
+    public StageData(Dictionary<string, Dictionary<string, string>> tileDictionary, int executionCount, int characterHeart,
+    int characterX, int characterY, int stageXSize, int StageYSize)
     {
         foreach (var tile in tileDictionary)
         {
@@ -91,7 +99,6 @@ public class StageData
                     _tileDictionary
                         .Add(new(tilex, tiley),
                                 new TileObject(TileType.Empty,
-                                    Int32.Parse(tile.Value["Round"]),
                                         Int32.Parse(tile.Value["Pattern"]),
                                             returnTileDirection(tile.Value["TileDirection"])));
                     break;
@@ -108,7 +115,6 @@ public class StageData
                     _tileDictionary
                         .Add(new(tilex, tiley),
                                 new TileObject(TileType.Enemy,
-                                    Int32.Parse(tile.Value["Round"]),
                                         Int32.Parse(tile.Value["Pattern"]),
                                             returnTileDirection(tile.Value["TileDirection"]),
                                                 createEnemyData(tile.Value)));
@@ -123,7 +129,6 @@ public class StageData
                     _tileDictionary
                         .Add(new(tilex, tiley),
                                 new TileObject(TileType.Meat,
-                                    Int32.Parse(tile.Value["Round"]),
                                         Int32.Parse(tile.Value["Pattern"]),
                                             returnTileDirection(tile.Value["TileDirection"]),
                                                 createMeatData(tile.Value)));
@@ -132,9 +137,11 @@ public class StageData
             }
         }
         this._executionCount = executionCount;
-        this._characterRow = characterRow;
-        this._characterCol = characterCol;
         this._characterHeart = characterHeart;
+        this._characterX = characterX;
+        this._characterY = characterY;
+        this._stageXSize = stageXSize;
+        this._stageYSize = StageYSize;
     }
 
     public EnemyData createEnemyData(Dictionary<String, String> data)

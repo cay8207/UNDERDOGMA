@@ -84,25 +84,25 @@ public class StageManager : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
-
-        pauseCanvas = Instantiate(pauseCanvasPrefab);
-        pauseCanvas.SetActive(false);
-        isPauseCanvasOpened = false;
     }
 
     // 초기화해줄때에 호출되는 함수. 모든 오브젝트를 파괴하고, 다시 만들어준다. 
     public void Init(int world, int stage)
     {
-        string path = "Stage" + stage.ToString();
+        string path = "Stage" + (world * 100 + stage).ToString();
         _stageData = StageDataLoader.Instance.LoadStageData(path);
 
         DestroyAllObjects();
 
         SetCamera();
 
-        TileInstantiate(stage);
+        TileInstantiate(world, stage);
 
         Clear.GetComponent<Image>().DOFade(0.0f, 0.0f);
+
+        pauseCanvas = Instantiate(pauseCanvasPrefab);
+        pauseCanvas.SetActive(false);
+        isPauseCanvasOpened = false;
     }
 
     // Update is called once per frame
@@ -171,10 +171,10 @@ public class StageManager : MonoBehaviour
         MainCamera.GetComponent<MainCamera>().originalTransform = MainCamera.transform.position;
     }
 
-    public void TileInstantiate(int stage)
+    public void TileInstantiate(int world, int stage)
     {
         // 원래는 한번만 가져오면 될 것 같은데 지금 알 수 없는 이유로 기존의 데이터가 훼손되어서... 일단 반복해서 가져오는걸로.
-        string path = "Stage" + stage.ToString();
+        string path = "Stage" + (world * 100 + stage).ToString();
         _stageData = StageDataLoader.Instance.LoadStageData(path);
 
         // 타일들을 하나씩 만들어준다. 
@@ -199,23 +199,7 @@ public class StageManager : MonoBehaviour
             if (tile.Value.Type != TileType.Wall)
             {
                 GameObject newTile = Instantiate(TilePrefab, tilePosition, Quaternion.identity, Tiles.transform);
-                newTile.GetComponent<SpriteRenderer>().sprite = SetTileSprite(tile.Value);
-
-                if (tile.Value.Round == 1 || tile.Value.Round == 2)
-                {
-                    if (tile.Value.TileDirection == TileDirection.Up)
-                    {
-                        newTile.transform.Rotate(0, 0, -90);
-                    }
-                    else if (tile.Value.TileDirection == TileDirection.Down)
-                    {
-                        newTile.transform.Rotate(0, 0, 90);
-                    }
-                    else if (tile.Value.TileDirection == TileDirection.Right)
-                    {
-                        newTile.transform.Rotate(0, 0, 180);
-                    }
-                }
+                newTile.GetComponent<SpriteRenderer>().sprite = TileSprites[0];
             }
 
             if (tile.Value.Type == TileType.Enemy)
@@ -239,8 +223,8 @@ public class StageManager : MonoBehaviour
         }
 
         // 캐릭터 오브젝트를 생성하고 초기화해준다. 
-        _character = Instantiate(CharacterPrefab, new Vector3(_stageData.CharacterRow - 0.07f, _stageData.CharacterCol + 0.35f, 0.0f), Quaternion.identity);
-        _character.GetComponent<Character>().Init(_stageData.CharacterRow, _stageData.CharacterCol, _stageData.CharacterHeart);
+        _character = Instantiate(CharacterPrefab, new Vector3(_stageData.CharacterX - 0.07f, _stageData.CharacterY + 0.35f, 0.0f), Quaternion.identity);
+        _character.GetComponent<Character>().Init(_stageData.CharacterX, _stageData.CharacterY, _stageData.CharacterHeart);
         MainCamera.GetComponent<MainCamera>()._character = _character;
     }
 
@@ -268,6 +252,19 @@ public class StageManager : MonoBehaviour
         if (_character != null)
         {
             Destroy(_character);
+        }
+
+        // 4. 타일들을 모두 파괴한다.
+        GameObject tiles = GameObject.Find("Tiles");
+        if (tiles != null)
+        {
+            Destroy(tiles);
+        }
+
+        // 5. pauseCanvas를 제거한다.
+        if (pauseCanvas != null)
+        {
+            Destroy(pauseCanvas);
         }
     }
 
@@ -323,49 +320,6 @@ public class StageManager : MonoBehaviour
             default:
                 return null;
         }
-    }
-
-    // 타일의 스프라이트를 반환하는 함수. 둥근 모서리의 수, 패턴, 방향에 따라 다르게 반환해줘야 한다. 
-    private Sprite SetTileSprite(TileObject tile)
-    {
-        if (tile.Round == 0 && tile.Pattern == 0 && tile.TileDirection == TileDirection.None)
-        {
-            return TileSprites[0];
-        }
-        else if (tile.Round == 0 && tile.Pattern == 1 && tile.TileDirection == TileDirection.None)
-        {
-            return TileSprites[1];
-        }
-        else if (tile.Round == 0 && tile.Pattern == 2 && tile.TileDirection == TileDirection.None)
-        {
-            return TileSprites[2];
-        }
-        else if (tile.Round == 1 && tile.Pattern == 0)
-        {
-            return TileSprites[3];
-        }
-        else if (tile.Round == 1 && tile.Pattern == 1)
-        {
-            return TileSprites[4];
-        }
-        else if (tile.Round == 1 && tile.Pattern == 2)
-        {
-            return TileSprites[5];
-        }
-        else if (tile.Round == 2 && tile.Pattern == 0)
-        {
-            return TileSprites[6];
-        }
-        else if (tile.Round == 2 && tile.Pattern == 1)
-        {
-            return TileSprites[7];
-        }
-        else if (tile.Round == 2 && tile.Pattern == 2)
-        {
-            return TileSprites[8];
-        }
-
-        return null;
     }
 
     //툴팁 활성화 함수

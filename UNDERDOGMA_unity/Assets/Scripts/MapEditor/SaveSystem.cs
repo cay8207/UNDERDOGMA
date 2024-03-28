@@ -17,48 +17,53 @@ public class SaveSystem : Singleton<SaveSystem>
     [ContextMenu("SaveMapData")]
     public void SaveMapDataToJson()
     {
+        // 1. StageData ê°ì²´ë¥¼ ìƒì„±í•˜ê³ , 
         stageData = new StageData();
         stageData.TileDictionary = new Dictionary<string, JObject>();
         List<MapEditorTile> mapEditorTiles = stageCreator.Tiles;
-        foreach(var tile in mapEditorTiles)
+
+        // 
+        foreach (var tile in mapEditorTiles)
         {
             stageData.TileDictionary.Add($"{tile.X}, {tile.Y}", tile.ToJSON());
         }
-        if(stageData.CharacterX == -1 || stageData.CharacterY == -1)
+
+        if (stageData.CharacterX == -1 || stageData.CharacterY == -1)
         {
             Debug.LogWarning("Player Tile Not Set");
         }
+
         for (int x = -1; x <= stageCreator.xSize; x++)
         {
-            for(int y = -1; y <= stageCreator.ySize; y++)
+            for (int y = -1; y <= stageCreator.ySize; y++)
             {
-                if(x == -1 || x == stageCreator.xSize || y == -1 || y == stageCreator.ySize)
+                if (x == -1 || x == stageCreator.xSize || y == -1 || y == stageCreator.ySize)
                 {
                     var jsonTypeWall = new JObject();
                     jsonTypeWall.Add("Type", "Wall");
-                    jsonTypeWall.Add("Round", "0");
-                    jsonTypeWall.Add("Pattern", "0");
-                    jsonTypeWall.Add("TileDirection", "None");
                     stageData.TileDictionary.Add($"{x}, {y}", jsonTypeWall);
                 }
             }
         }
+
         bool resultEC = int.TryParse(inputField_ExecutionCount.text, out stageData.ExecutionCount);
         bool resultCH = int.TryParse(inputField_CharacterHeart.text, out stageData.CharacterHeart);
         if (resultEC == false)
         {
-            Debug.Log("Execution Count¿¡ Á¤¼ö°ªÀ» ÀÔ·ÂÇÏ¼¼¿ä.");
+            Debug.Log("Execution Countï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½.");
             return;
         }
+
         if (resultCH == false)
         {
-            Debug.Log("Character Heart¿¡ Á¤¼ö°ªÀ» ÀÔ·ÂÇÏ¼¼¿ä.");
+            Debug.Log("Character Heartï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½.");
             return;
         }
         bool resultSN = int.TryParse(inputField_StageNum.text, out int stageNum);
+
         if (resultSN == false)
         {
-            Debug.Log("StageNum¿¡ Á¤¼ö°ªÀ» ÀÔ·ÂÇÏ¼¼¿ä.");
+            Debug.Log("StageNumï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½.");
             return;
         }
         stageData.StageXSize = stageCreator.xSize;
@@ -66,29 +71,33 @@ public class SaveSystem : Singleton<SaveSystem>
         string jsonData = JsonConvert.SerializeObject(stageData, Formatting.Indented);
         string path = Application.streamingAssetsPath + "/Data/Stage/Stage" + stageNum + ".json";
         File.WriteAllText(path, jsonData);
-        Debug.Log("Stage" + stageNum + ".jsonÀÌ ÀúÀåµÇ¾ú½À´Ï´Ù!");
+        Debug.Log("Stage" + stageNum + ".jsonï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½!");
     }
 
     [ContextMenu("LoadMapData")]
     public void LoadMapDataFromJson()
     {
         bool resultSN = int.TryParse(inputField_StageNum.text, out int stageNum);
+
         if (resultSN == false)
         {
-            Debug.Log("StageNum¿¡ Á¤¼ö°ªÀ» ÀÔ·ÂÇÏ¼¼¿ä.");
+            Debug.Log("StageNumï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½.");
             return;
         }
+
         string path = Application.streamingAssetsPath + "/Data/Stage/Stage" + stageNum + ".json";
         if (!File.Exists(path))
         {
-            Debug.LogError(stageNum + ".json ÆÄÀÏÀÌ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù!");
+            Debug.LogError(stageNum + ".json ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê½ï¿½ï¿½Ï´ï¿½!");
             return;
         }
+
         string jsonData = File.ReadAllText(path);
         stageData = JsonConvert.DeserializeObject<StageData>(jsonData);
         stageCreator.ySize = stageData.StageYSize;
         stageCreator.xSize = stageData.StageXSize;
         stageCreator.CreateStage(stageData.StageXSize, stageData.StageYSize);
+
         for (int x = 0; x < stageCreator.xSize; x++)
         {
             for (int y = 0; y < stageCreator.ySize; y++)
@@ -97,7 +106,8 @@ public class SaveSystem : Singleton<SaveSystem>
                 stageCreator.TileDictionary[x][y].FromJSON(stageData.TileDictionary[key]);
             }
         }
-        if(stageData.CharacterX == -1 || stageData.CharacterY == -1)
+
+        if (stageData.CharacterX == -1 || stageData.CharacterY == -1)
         {
             Debug.LogWarning("Player Tile Not Set");
         }
@@ -105,6 +115,7 @@ public class SaveSystem : Singleton<SaveSystem>
         {
             stageCreator.TileDictionary[stageData.CharacterX][stageData.CharacterY].SetTileType(MapEditorTile.TileType.Player);
         }
+
         inputField_ExecutionCount.text = stageData.ExecutionCount.ToString();
         inputField_CharacterHeart.text = stageData.CharacterHeart.ToString();
         stageCreator.inputField_X.text = stageData.StageXSize.ToString();
