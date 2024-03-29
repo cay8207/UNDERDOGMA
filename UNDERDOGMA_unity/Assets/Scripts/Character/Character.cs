@@ -5,6 +5,7 @@ using TMPro;
 using DG.Tweening;
 using UnityEngine.SceneManagement;
 using System.Drawing;
+using UnityEditor.SceneManagement;
 
 public class Character : MonoBehaviour
 {
@@ -84,7 +85,7 @@ public class Character : MonoBehaviour
     }
 
     private bool _isCharacterExecutionCoroutineRunning;
-    public bool IsCharacterExcutionCoroutineRunning
+    public bool IsCharacterExecutionCoroutineRunning
     {
         get => _isCharacterExecutionCoroutineRunning;
         set => _isCharacterExecutionCoroutineRunning = value;
@@ -661,13 +662,6 @@ public class Character : MonoBehaviour
     {
         Debug.Log("StageClear");
 
-        // 승리 애니메이션 추가되면 수정할 예정. 
-        // _character.GetComponent<Animator>().SetBool("StageClear", true);
-
-        // yield return new WaitForSeconds(2.0f);
-
-        // _character.GetComponent<Animator>().SetBool("StageClear", false);
-
         Sequence ClearSequence = DOTween.Sequence();
 
         yield return new WaitForSeconds(1.0f);
@@ -679,6 +673,36 @@ public class Character : MonoBehaviour
 
 
         yield return new WaitForSeconds(2.0f);
+
+        int stageId = GameManager.Instance.World * 100 + GameManager.Instance.Stage;
+        Debug.Log(stageId);
+
+        // 만약 111이면 World1BossClear 씬으로, 112 이상 116 이하면 World1 씬으로,
+        // 만약 212 이상 226 이하면 World2 씬으로, 이외에는 stageId+1 씬으로 이동.
+        switch (stageId)
+        {
+            case 111:
+                SceneManager.LoadScene("World1BossClear");
+                break;
+            case 112:
+            case 113:
+            case 114:
+            case 115:
+            case 116:
+                SceneManager.LoadScene("World1");
+                break;
+            case 212:
+            case 213:
+            case 214:
+            case 215:
+            case 216:
+                SceneManager.LoadScene("World2");
+                break;
+            default:
+                Debug.Log("Load Next Stage. World: " + (stageId + 1) / 100 + " Stage: " + (stageId + 1) % 100);
+                LoadingManager.Instance.LoadNextStage((stageId + 1) / 100, (stageId + 1) % 100);
+                break;
+        }
     }
 
     #endregion

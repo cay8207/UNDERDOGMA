@@ -12,12 +12,6 @@ public class TileObject
         get => _type;
         set => _type = value;
     }
-    private int _round;
-    public int Round
-    {
-        get => _round;
-        set => _round = value;
-    }
     private int _pattern;
     public int Pattern
     {
@@ -58,10 +52,9 @@ public class TileObject
     }
 
     // 2. Type이 Empty인 경우 생성자. 타일에 대한 정보를 저장해준다. 
-    public TileObject(TileType type, int round, int pattern, TileDirection tileDirection)
+    public TileObject(TileType type, int pattern, TileDirection tileDirection)
     {
         this._type = type;
-        this._round = round;
         this._pattern = pattern;
         this._tileDirection = tileDirection;
         switch (type)
@@ -74,20 +67,18 @@ public class TileObject
     }
 
     // 3. Type이 Enemy인 경우 생성자. 타일에 대한 정보와 적에 대한 정보를 저장해준다.
-    public TileObject(TileType type, int round, int pattern, TileDirection tileDirection, EnemyData enemyData)
+    public TileObject(TileType type, int pattern, TileDirection tileDirection, EnemyData enemyData)
     {
         this._type = type;
-        this._round = round;
         this._pattern = pattern;
         this._tileDirection = tileDirection;
         this._enemyData = enemyData;
     }
 
     // 4. Type이 Meat인 경우 생성자. 타일에 대한 정보와 고기에 대한 정보를 저장해준다.
-    public TileObject(TileType type, int round, int pattern, TileDirection tileDirection, MeatData meatData)
+    public TileObject(TileType type, int pattern, TileDirection tileDirection, MeatData meatData)
     {
         this._type = type;
-        this._round = round;
         this._pattern = pattern;
         this._tileDirection = tileDirection;
         this._meatData = meatData;
@@ -97,7 +88,6 @@ public class TileObject
     public TileObject(TileObject other)
     {
         Type = other.Type;
-        Round = other.Round;
         Pattern = other.Pattern;
         TileDirection = other.TileDirection;
         EnemyData = other.EnemyData;

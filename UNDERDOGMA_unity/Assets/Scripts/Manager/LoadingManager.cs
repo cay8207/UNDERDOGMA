@@ -21,6 +21,7 @@ public class LoadingManager : Singleton<LoadingManager>
     // 스테이지가 아닌 씬에서 스테이지 씬으로 이동하는 함수. 
     public void LoadStage(int world, int stage)
     {
+        GameManager.Instance.World = world;
         GameManager.Instance.Stage = stage;
 
         // Stage 씬으로 이동하고,
@@ -31,12 +32,14 @@ public class LoadingManager : Singleton<LoadingManager>
     // 이 함수는 StageManager에서 호출된다. 기존의 StageManager와 Execution, DialogueManager는 삭제된다. 그리고 다시 생성한다.
     public void LoadNextStage(int nextWorld, int nextStage)
     {
+        GameManager.Instance.World = nextWorld;
         GameManager.Instance.Stage = nextStage;
 
-        // StageManager, Execution, DialogueManager를 삭제한다.
-        Destroy(GameObject.Find("StageManager"));
-        Destroy(GameObject.Find("Execution"));
-        Destroy(GameObject.Find("DialogueManager"));
+        // 게임 내의 모든 오브젝트들, StageManager, ExecutionManager, DialogueManager를 삭제한다.
+        StageManager.Instance.DestroyAllObjects();
+        Destroy(StageManager.Instance.gameObject);
+        Destroy(ExecutionManager.Instance.gameObject);
+        Destroy(DialogueManager.Instance.gameObject);
 
         CreateManagers(nextWorld, nextStage);
     }
@@ -68,6 +71,6 @@ public class LoadingManager : Singleton<LoadingManager>
         executionManager.GetComponent<ExecutionManager>().Init(world, stage);
 
         GameObject dialogueManager = Instantiate(DialogueManagerPrefab);
-        dialogueManager.GetComponent<DialogueManager>().Init(world, stage);
+        dialogueManager.GetComponent<DialogueManager>().Init(DialogueEvent.Start, GameManager.Instance.Language, world, stage);
     }
 }

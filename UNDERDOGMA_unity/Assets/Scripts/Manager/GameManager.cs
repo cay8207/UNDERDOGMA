@@ -47,7 +47,7 @@ public class GameManager : Singleton<GameManager>
         DontDestroyOnLoad(this.gameObject);
 
         // 기본 언어는 한국어로 설정해준다.
-        _language = Language.English;
+        _language = Language.Korean;
 
         // 다이얼로그 테이블을 불러온다.
         _dialogueDataTable = new DialogueDataTable("DialogueDataTable");
