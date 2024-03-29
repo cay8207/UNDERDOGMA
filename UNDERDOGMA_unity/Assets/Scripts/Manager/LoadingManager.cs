@@ -35,11 +35,11 @@ public class LoadingManager : Singleton<LoadingManager>
         GameManager.Instance.World = nextWorld;
         GameManager.Instance.Stage = nextStage;
 
-        // 게임 내의 모든 오브젝트들, StageManager, Execution, DialogueManager를 삭제한다.
+        // 게임 내의 모든 오브젝트들, StageManager, ExecutionManager, DialogueManager를 삭제한다.
         StageManager.Instance.DestroyAllObjects();
-        Destroy(GameObject.Find("StageManager"));
-        Destroy(GameObject.Find("ExecutionManager"));
-        Destroy(GameObject.Find("DialogueManager"));
+        Destroy(StageManager.Instance.gameObject);
+        Destroy(ExecutionManager.Instance.gameObject);
+        Destroy(DialogueManager.Instance.gameObject);
 
         CreateManagers(nextWorld, nextStage);
     }

@@ -699,6 +699,7 @@ public class Character : MonoBehaviour
                 SceneManager.LoadScene("World2");
                 break;
             default:
+                Debug.Log("Load Next Stage. World: " + (stageId + 1) / 100 + " Stage: " + (stageId + 1) % 100);
                 LoadingManager.Instance.LoadNextStage((stageId + 1) / 100, (stageId + 1) % 100);
                 break;
         }

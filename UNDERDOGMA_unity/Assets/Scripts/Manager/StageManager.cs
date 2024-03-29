@@ -76,12 +76,15 @@ public class StageManager : MonoBehaviour
     // Start is called before the first frame update
     public void Awake()
     {
+        Debug.Log("(StageManager.cs) instance: " + _instance.ToString());
         if (_instance == null)
         {
+            Debug.Log("instance is null");
             _instance = this;
         }
         else
         {
+            Debug.Log("instance is not null");
             Destroy(this.gameObject);
         }
     }
