@@ -15,7 +15,11 @@ public class StageManager : MonoBehaviour
     // 싱글톤 패턴. 인스턴스를 하나만 만들어서 사용한다. 
     private static StageManager _instance;
 
-    public static StageManager Instance => _instance;
+    public static StageManager Instance
+    {
+        get => _instance;
+        set => _instance = value;
+    }
 
     // 1. SerializeField가 붙은것들은 프리팹을 저장하기 위한 변수들. 
 
@@ -27,8 +31,10 @@ public class StageManager : MonoBehaviour
     [SerializeField] GameObject CharacterPrefab;
     [SerializeField] GameObject MeatPrefab;
     [SerializeField] GameObject NormalEnemyPrefab;
-    [SerializeField] GameObject ChaserEnemyPrefab;
+    [SerializeField] GameObject ChaserPrefab;
     [SerializeField] GameObject MiniBossPrefab;
+    [SerializeField] GameObject StrongAttackPrefab;
+    [SerializeField] GameObject AllDirectionPrefab;
     [SerializeField] List<Sprite> TileSprites;
     [SerializeField] public GameObject Clear;
 
@@ -76,7 +82,6 @@ public class StageManager : MonoBehaviour
     // Start is called before the first frame update
     public void Awake()
     {
-        Debug.Log("(StageManager.cs) instance: " + _instance.ToString());
         if (_instance == null)
         {
             Debug.Log("instance is null");
@@ -316,10 +321,14 @@ public class StageManager : MonoBehaviour
         {
             case EnemyType.NormalEnemy:
                 return NormalEnemyPrefab;
-            case EnemyType.ChaserEnemy:
-                return ChaserEnemyPrefab;
+            case EnemyType.Chaser:
+                return ChaserPrefab;
             case EnemyType.MiniBoss:
                 return MiniBossPrefab;
+            case EnemyType.StrongAttack:
+                return StrongAttackPrefab;
+            case EnemyType.AllDirection:
+                return AllDirectionPrefab;
             default:
                 return null;
         }

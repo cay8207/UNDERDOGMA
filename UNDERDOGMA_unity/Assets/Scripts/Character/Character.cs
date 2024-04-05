@@ -61,6 +61,7 @@ public class Character : MonoBehaviour
         Death,
         Reset,
         Clear,
+        EndingDialogueState
     }
 
     private State _curState;
@@ -246,6 +247,9 @@ public class Character : MonoBehaviour
                 break;
             case State.Clear:
                 _fsm.ChangeState(new ClearState(this));
+                break;
+            case State.EndingDialogueState:
+                _fsm.ChangeState(new EndingDialogueState(this));
                 break;
         }
     }

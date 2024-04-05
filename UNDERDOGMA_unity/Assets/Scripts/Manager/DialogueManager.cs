@@ -12,7 +12,11 @@ public class DialogueManager : MonoBehaviour
     // 싱글톤 패턴. 인스턴스를 하나만 만들어서 사용한다. 
     private static DialogueManager _instance;
 
-    public static DialogueManager Instance => _instance;
+    public static DialogueManager Instance
+    {
+        get => _instance;
+        set => _instance = value;
+    }
 
     // 현재 텍스트를 담아두는 변수. 
     [SerializeField] private Canvas DialogueCanvas;
@@ -50,8 +54,6 @@ public class DialogueManager : MonoBehaviour
             Destroy(this.gameObject);
         }
 
-        _isDialogueRunning = true;
-
         SetActiveImages(false);
     }
 
@@ -63,6 +65,8 @@ public class DialogueManager : MonoBehaviour
     // 데이터를 가져오고, 만약 현재 스테이지에 다이얼로그가 존재하는 경우 다이얼로그를 출력한다.
     public void Init(DialogueEvent dialogueEvent, Language language, int world, int stage)
     {
+        _isDialogueRunning = true;
+
         dialogueList = GameManager.Instance.DialogueDataTable.GetDialogueData(dialogueEvent, language, world, stage);
 
         foreach (var dialogue in dialogueList)
@@ -73,15 +77,22 @@ public class DialogueManager : MonoBehaviour
         // 현재 다이얼로그의 위치를 가리키는 카운트를 0으로 초기화한다. 
         count = 0;
 
+        // 만약 다이얼로그가 존재하는 경우, 다이얼로그를 출력한다.
         if (dialogueList.Count > 0)
         {
             SetActiveImages(true);
             StartCoroutine(StartDialogueCoroutine());
         }
-        else
+        // 다이얼로그가 존재하지 않으며, 시작 다이얼로그인 경우, 다이얼로그를 종료하고 툴팁을 활성화한다.
+        else if (dialogueList.Count == 0 && dialogueEvent == DialogueEvent.Start)
         {
             _isDialogueRunning = false;
             StageManager.Instance.ActivateTooltip();
+        }
+        // 다이얼로그가 존재하지 않으며, 엔딩 다이얼로그인 경우 다이얼로그를 종료한다. 
+        else if (dialogueList.Count == 0 && dialogueEvent == DialogueEvent.Ending)
+        {
+            _isDialogueRunning = false;
         }
     }
 
@@ -148,12 +159,6 @@ public class DialogueManager : MonoBehaviour
     {
         count = 0;
         DialogueText.text = "";
-
-        // 리스트 초기화
-        dialogueList.Clear();
-        listSprites1.Clear();
-        listSprites2.Clear();
-        // 애니메이터 초기화
 
         SetActiveImages(false);
         StageManager.Instance.ActivateTooltip();

@@ -186,8 +186,10 @@ public enum TileDirection
 public enum EnemyType
 {
     NormalEnemy,
-    ChaserEnemy,
+    Chaser,
     MiniBoss,
+    StrongAttack,
+    AllDirection
 }
 
 public enum AttackDirection

@@ -63,9 +63,9 @@ public class DamagedState : BaseState
                     }
                 }
                 // 1번 타입 적인 경우
-                else if (StageManager.Instance.TempTileDictionary[new Vector2Int(enemyRow, enemyCol)].EnemyData.EnemyType == EnemyType.ChaserEnemy)
+                else if (StageManager.Instance.TempTileDictionary[new Vector2Int(enemyRow, enemyCol)].EnemyData.EnemyType == EnemyType.Chaser)
                 {
-                    amount = gameObject.Value.GetComponent<ChaserEnemy>().CheckCharacterDamaged(PlayerPosition.x, PlayerPosition.y);
+                    amount = gameObject.Value.GetComponent<Chaser>().CheckCharacterDamaged(PlayerPosition.x, PlayerPosition.y);
                     if (amount > 0)
                     {
                         _character.EnqueueCoroutine(_character.CharacterDamaged(amount));
@@ -75,6 +75,22 @@ public class DamagedState : BaseState
                 else if (StageManager.Instance.TempTileDictionary[new Vector2Int(enemyRow, enemyCol)].EnemyData.EnemyType == EnemyType.MiniBoss)
                 {
                     amount = gameObject.Value.GetComponent<MiniBoss>().CheckCharacterDamaged(PlayerPosition.x, PlayerPosition.y);
+                    if (amount > 0)
+                    {
+                        _character.EnqueueCoroutine(_character.CharacterDamaged(amount));
+                    }
+                }
+                else if (StageManager.Instance.TempTileDictionary[new Vector2Int(enemyRow, enemyCol)].EnemyData.EnemyType == EnemyType.StrongAttack)
+                {
+                    amount = gameObject.Value.GetComponent<StrongAttack>().CheckCharacterDamaged(PlayerPosition.x, PlayerPosition.y);
+                    if (amount > 0)
+                    {
+                        _character.EnqueueCoroutine(_character.CharacterDamaged(amount));
+                    }
+                }
+                else if (StageManager.Instance.TempTileDictionary[new Vector2Int(enemyRow, enemyCol)].EnemyData.EnemyType == EnemyType.AllDirection)
+                {
+                    amount = gameObject.Value.GetComponent<AllDirection>().CheckCharacterDamaged(PlayerPosition.x, PlayerPosition.y);
                     if (amount > 0)
                     {
                         _character.EnqueueCoroutine(_character.CharacterDamaged(amount));
