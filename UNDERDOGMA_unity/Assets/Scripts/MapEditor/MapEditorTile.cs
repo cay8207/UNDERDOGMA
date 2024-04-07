@@ -24,7 +24,7 @@ public class MapEditorTile : MonoBehaviour
     public EnemyDirection CurrentEnemyDirection;
     public enum EnemyType
     {
-        NormalEnemy, ChaserEnemy, MiniBoss
+        NormalEnemy, ChaserEnemy, MiniBoss, StrongAttack, AllDirectionsAttack
     }
     public EnemyType CurrentEnemyType;
 
@@ -38,6 +38,8 @@ public class MapEditorTile : MonoBehaviour
         public Sprite NormalEnemy;
         public Sprite ChaserEnemy;
         public Sprite MiniBoss;
+        public Sprite StrongAttack;
+        public Sprite AllDirectionsAttack;
     }
 
     [Header("Coordinate")]
@@ -188,6 +190,10 @@ public class MapEditorTile : MonoBehaviour
                         return tileSprites.ChaserEnemy;
                     case EnemyType.MiniBoss:
                         return tileSprites.MiniBoss;
+                    case EnemyType.StrongAttack:
+                        return tileSprites.StrongAttack;
+                    case EnemyType.AllDirectionsAttack:
+                        return tileSprites.AllDirectionsAttack;
                     default: return null;
                 }
             case TileType.Meat:
