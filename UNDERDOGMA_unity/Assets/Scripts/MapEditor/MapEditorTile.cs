@@ -213,8 +213,7 @@ public class MapEditorTile : MonoBehaviour
 
         if (CurrentTileType != TileType.Wall)
         {
-            json.Add("Pattern", "0");
-            json.Add("TileDirection", "None");
+            //Pattern and TileDirection were here...
         }
 
         switch (CurrentTileType)
@@ -246,7 +245,6 @@ public class MapEditorTile : MonoBehaviour
             Debug.Log("TileTypeError");
             return;
         }
-        //���� Round, Pattern, TileDirection �� �� ������ ���⿡ �߰�
 
         switch (CurrentTileType)
         {
