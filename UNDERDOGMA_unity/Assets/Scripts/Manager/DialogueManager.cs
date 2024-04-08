@@ -135,7 +135,6 @@ public class DialogueManager : MonoBehaviour
         Name.text = Names[count];
 
         DialogueText.text = "";
-
         DialogueImage1.rectTransform.localPosition = DialogueImage1Position;
         DialogueImage2.rectTransform.localPosition = DialogueImage2Position;
 

@@ -162,6 +162,8 @@ public class DialogueDataTable : DataTableBase
     {
         { "DialogueID", "System.Int32" },
         { "When", "System.String"},
+        { "CutSceneName", "System.String"},
+        { "Effect", "System.String"},
         { "Order", "System.Int32" },
         { "Speaker1", "System.String" },
         { "Speaker1Highlight", "System.Boolean"},
@@ -169,8 +171,7 @@ public class DialogueDataTable : DataTableBase
         { "Speaker2Highlight", "System.Boolean"},
         { "Speaker3", "System.String" },
         { "Speaker3Highlight", "System.Boolean"},
-        { "Korean", "System.String" },
-        { "English", "System.String" },
+        { "Key", "System.String" },
     };
 
     public DialogueDataTable(string name) : base(name) { }
