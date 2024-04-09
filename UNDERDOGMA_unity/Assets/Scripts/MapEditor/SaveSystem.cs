@@ -50,20 +50,20 @@ public class SaveSystem : Singleton<SaveSystem>
         bool resultCH = int.TryParse(inputField_CharacterHeart.text, out stageData.CharacterHeart);
         if (resultEC == false)
         {
-            Debug.Log("Execution Count�� �������� �Է��ϼ���.");
+            Debug.Log("Execution Count should be an INT value.");
             return;
         }
 
         if (resultCH == false)
         {
-            Debug.Log("Character Heart�� �������� �Է��ϼ���.");
+            Debug.Log("Character Heart should be an INT value.");
             return;
         }
         bool resultSN = int.TryParse(inputField_StageNum.text, out int stageNum);
 
         if (resultSN == false)
         {
-            Debug.Log("StageNum�� �������� �Է��ϼ���.");
+            Debug.Log("StageNum should be an INT Value.");
             return;
         }
         stageData.StageXSize = stageCreator.xSize;
@@ -71,7 +71,7 @@ public class SaveSystem : Singleton<SaveSystem>
         string jsonData = JsonConvert.SerializeObject(stageData, Formatting.Indented);
         string path = Application.streamingAssetsPath + "/Data/Stage/Stage" + stageNum + ".json";
         File.WriteAllText(path, jsonData);
-        Debug.Log("Stage" + stageNum + ".json�� ����Ǿ����ϴ�!");
+        Debug.Log("Stage" + stageNum + ".json Saved!");
     }
 
     [ContextMenu("LoadMapData")]
@@ -81,14 +81,14 @@ public class SaveSystem : Singleton<SaveSystem>
 
         if (resultSN == false)
         {
-            Debug.Log("StageNum�� �������� �Է��ϼ���.");
+            Debug.Log("StageNum should be an INT value.");
             return;
         }
 
         string path = Application.streamingAssetsPath + "/Data/Stage/Stage" + stageNum + ".json";
         if (!File.Exists(path))
         {
-            Debug.LogError(stageNum + ".json ������ �������� �ʽ��ϴ�!");
+            Debug.LogError(stageNum + ".json Loaded!");
             return;
         }
 

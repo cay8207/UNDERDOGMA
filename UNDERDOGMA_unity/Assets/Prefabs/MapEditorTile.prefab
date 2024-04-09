@@ -440,8 +440,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 1
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: e903b23fccbe3334d8154b70f29f10a3, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: e903b23fccbe3334d8154b70f29f10a3, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -895,6 +895,8 @@ MonoBehaviour:
     NormalEnemy: {fileID: 21300000, guid: f84df4042f89e014e96b8731ec9e9833, type: 3}
     ChaserEnemy: {fileID: 21300000, guid: 6078112b8cb7c2a4c9c2fcc949841400, type: 3}
     MiniBoss: {fileID: 21300000, guid: 41b5f74544360f349adc75c12717fa6e, type: 3}
+    StrongAttack: {fileID: 21300000, guid: c2ba21d8830ed3d45a855884585f284a, type: 3}
+    AllDirectionsAttack: {fileID: 21300000, guid: 17d2402178830f843b5965c64bdfc901, type: 3}
   tileShape: []
   enemyUI: {fileID: 4367491725405069057}
   meatUI: {fileID: 9111554656072745952}
@@ -1082,8 +1084,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 1
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: e903b23fccbe3334d8154b70f29f10a3, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: e903b23fccbe3334d8154b70f29f10a3, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
