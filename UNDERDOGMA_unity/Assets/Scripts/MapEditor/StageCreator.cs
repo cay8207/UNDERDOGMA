@@ -42,12 +42,12 @@ public class StageCreator : MonoBehaviour
         bool resultY = int.TryParse(inputField_Y.text, out ySize);
         if (resultX == false)
         {
-            Debug.Log("X에 정수값을 입력하세요.");
+            Debug.Log("X should be an INT value.");
             return;
         }
         if (resultY == false)
         {
-            Debug.Log("Y에 정수값을 입력하세요.");
+            Debug.Log("Y should be an INT value.");
             return;
         }
         CreateStage(xSize, ySize);

@@ -1,0 +1,162 @@
+{
+  "TileDictionary": {
+    "0, 0": {
+      "Type": "Enemy",
+      "Pattern": "0",
+      "TileDirection": "None",
+      "EnemyType": "NormalEnemy",
+      "IsAlive": true,
+      "Attack": 1,
+      "Heart": 7,
+      "AttackDirection": "Up"
+    },
+    "1, 0": {
+      "Type": "Wall"
+    },
+    "2, 0": {
+      "Type": "Empty",
+      "Pattern": "0",
+      "TileDirection": "None"
+    },
+    "3, 0": {
+      "Type": "Enemy",
+      "Pattern": "0",
+      "TileDirection": "None",
+      "EnemyType": "NormalEnemy",
+      "IsAlive": true,
+      "Attack": 1,
+      "Heart": 3,
+      "AttackDirection": "Left"
+    },
+    "0, 1": {
+      "Type": "Empty",
+      "Pattern": "0",
+      "TileDirection": "None"
+    },
+    "1, 1": {
+      "Type": "Empty",
+      "Pattern": "0",
+      "TileDirection": "None"
+    },
+    "2, 1": {
+      "Type": "Empty",
+      "Pattern": "0",
+      "TileDirection": "None"
+    },
+    "3, 1": {
+      "Type": "Wall"
+    },
+    "0, 2": {
+      "Type": "Wall"
+    },
+    "1, 2": {
+      "Type": "Empty",
+      "Pattern": "0",
+      "TileDirection": "None"
+    },
+    "2, 2": {
+      "Type": "Empty",
+      "Pattern": "0",
+      "TileDirection": "None"
+    },
+    "3, 2": {
+      "Type": "Empty",
+      "Pattern": "0",
+      "TileDirection": "None"
+    },
+    "0, 3": {
+      "Type": "Enemy",
+      "Pattern": "0",
+      "TileDirection": "None",
+      "EnemyType": "NormalEnemy",
+      "IsAlive": true,
+      "Attack": 1,
+      "Heart": 6,
+      "AttackDirection": "Right"
+    },
+    "1, 3": {
+      "Type": "Empty",
+      "Pattern": "0",
+      "TileDirection": "None"
+    },
+    "2, 3": {
+      "Type": "Wall"
+    },
+    "3, 3": {
+      "Type": "Enemy",
+      "Pattern": "0",
+      "TileDirection": "None",
+      "EnemyType": "NormalEnemy",
+      "IsAlive": true,
+      "Attack": 1,
+      "Heart": 4,
+      "AttackDirection": "Down"
+    },
+    "-1, -1": {
+      "Type": "Wall"
+    },
+    "-1, 0": {
+      "Type": "Wall"
+    },
+    "-1, 1": {
+      "Type": "Wall"
+    },
+    "-1, 2": {
+      "Type": "Wall"
+    },
+    "-1, 3": {
+      "Type": "Wall"
+    },
+    "-1, 4": {
+      "Type": "Wall"
+    },
+    "0, -1": {
+      "Type": "Wall"
+    },
+    "0, 4": {
+      "Type": "Wall"
+    },
+    "1, -1": {
+      "Type": "Wall"
+    },
+    "1, 4": {
+      "Type": "Wall"
+    },
+    "2, -1": {
+      "Type": "Wall"
+    },
+    "2, 4": {
+      "Type": "Wall"
+    },
+    "3, -1": {
+      "Type": "Wall"
+    },
+    "3, 4": {
+      "Type": "Wall"
+    },
+    "4, -1": {
+      "Type": "Wall"
+    },
+    "4, 0": {
+      "Type": "Wall"
+    },
+    "4, 1": {
+      "Type": "Wall"
+    },
+    "4, 2": {
+      "Type": "Wall"
+    },
+    "4, 3": {
+      "Type": "Wall"
+    },
+    "4, 4": {
+      "Type": "Wall"
+    }
+  },
+  "ExecutionCount": 3,
+  "CharacterHeart": 10,
+  "CharacterX": 2,
+  "CharacterY": 1,
+  "StageXSize": 4,
+  "StageYSize": 4
+}
