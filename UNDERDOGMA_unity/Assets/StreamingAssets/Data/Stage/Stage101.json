@@ -24,9 +24,7 @@
       "AttackDirection": "Left"
     },
     "0, 1": {
-      "Type": "Wall",
-      "Pattern": "0",
-      "TileDirection": "None"
+      "Type": "Wall"
     },
     "1, 1": {
       "Type": "Empty",
@@ -34,14 +32,10 @@
       "TileDirection": "None"
     },
     "2, 1": {
-      "Type": "Wall",
-      "Pattern": "0",
-      "TileDirection": "None"
+      "Type": "Wall"
     },
     "3, 1": {
-      "Type": "Wall",
-      "Pattern": "0",
-      "TileDirection": "None"
+      "Type": "Wall"
     },
     "0, 2": {
       "Type": "Empty",
@@ -54,14 +48,10 @@
       "TileDirection": "None"
     },
     "2, 2": {
-      "Type": "Wall",
-      "Pattern": "0",
-      "TileDirection": "None"
+      "Type": "Wall"
     },
     "3, 2": {
-      "Type": "Wall",
-      "Pattern": "0",
-      "TileDirection": "None"
+      "Type": "Wall"
     },
     "-1, -1": {
       "Type": "Wall"
