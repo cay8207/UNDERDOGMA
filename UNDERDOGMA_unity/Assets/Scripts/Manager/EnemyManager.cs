@@ -19,9 +19,9 @@ public class EnemyManager : Singleton<EnemyManager>
         {
             EnemyDeathCoroutine = StartCoroutine(GameObjectDictionary[targetPosition].GetComponent<NormalEnemy>().EnemyDeath(targetPosition, deathByExecution));
         }
-        else if (StageManager.Instance.TempTileDictionary[targetPosition].EnemyData.EnemyType == EnemyType.ChaserEnemy)
+        else if (StageManager.Instance.TempTileDictionary[targetPosition].EnemyData.EnemyType == EnemyType.Chaser)
         {
-            EnemyDeathCoroutine = StartCoroutine(GameObjectDictionary[targetPosition].GetComponent<ChaserEnemy>().EnemyDeath(targetPosition, deathByExecution));
+            EnemyDeathCoroutine = StartCoroutine(GameObjectDictionary[targetPosition].GetComponent<Chaser>().EnemyDeath(targetPosition, deathByExecution));
         }
         else if (StageManager.Instance.TempTileDictionary[targetPosition].EnemyData.EnemyType == EnemyType.MiniBoss)
         {

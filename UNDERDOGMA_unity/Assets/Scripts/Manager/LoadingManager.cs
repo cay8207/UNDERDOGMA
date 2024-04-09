@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -12,6 +13,11 @@ public class LoadingManager : Singleton<LoadingManager>
     [SerializeField] GameObject StageManagerPrefab;
     [SerializeField] GameObject ExecutionPrefab;
     [SerializeField] GameObject DialogueManagerPrefab;
+
+    // 2. 만들어진 매니저들을 저장하기 위한 변수들.
+    private GameObject stageManager;
+    private GameObject executionManager;
+    private GameObject dialogueManager;
 
     public void Awake()
     {
@@ -35,13 +41,7 @@ public class LoadingManager : Singleton<LoadingManager>
         GameManager.Instance.World = nextWorld;
         GameManager.Instance.Stage = nextStage;
 
-        // 게임 내의 모든 오브젝트들, StageManager, ExecutionManager, DialogueManager를 삭제한다.
-        StageManager.Instance.DestroyAllObjects();
-        Destroy(StageManager.Instance.gameObject);
-        Destroy(ExecutionManager.Instance.gameObject);
-        Destroy(DialogueManager.Instance.gameObject);
-
-        CreateManagers(nextWorld, nextStage);
+        InitManagers(nextWorld, nextStage);
     }
 
     private IEnumerator LoadSceneAsync(string sceneName, int world, int stage)
@@ -59,18 +59,17 @@ public class LoadingManager : Singleton<LoadingManager>
             yield return null;
         }
 
-        CreateManagers(world, stage);
+        stageManager = Instantiate(StageManagerPrefab);
+        executionManager = Instantiate(ExecutionPrefab);
+        dialogueManager = Instantiate(DialogueManagerPrefab);
+
+        InitManagers(world, stage);
     }
 
-    private void CreateManagers(int world, int stage)
+    private void InitManagers(int world, int stage)
     {
-        GameObject stageManager = Instantiate(StageManagerPrefab);
         stageManager.GetComponent<StageManager>().Init(world, stage);
-
-        GameObject executionManager = Instantiate(ExecutionPrefab);
         executionManager.GetComponent<ExecutionManager>().Init(world, stage);
-
-        GameObject dialogueManager = Instantiate(DialogueManagerPrefab);
         dialogueManager.GetComponent<DialogueManager>().Init(DialogueEvent.Start, GameManager.Instance.Language, world, stage);
     }
 }

@@ -163,14 +163,14 @@ public class DialogueDataTable : DataTableBase
         { "DialogueID", "System.Int32" },
         { "When", "System.String"},
         { "Order", "System.Int32" },
+        { "Effect", "System.String"},
         { "Speaker1", "System.String" },
         { "Speaker1Highlight", "System.Boolean"},
         { "Speaker2", "System.String" },
         { "Speaker2Highlight", "System.Boolean"},
         { "Speaker3", "System.String" },
         { "Speaker3Highlight", "System.Boolean"},
-        { "Korean", "System.String" },
-        { "English", "System.String" },
+        { "Key", "System.String" },
     };
 
     public DialogueDataTable(string name) : base(name) { }
@@ -189,3 +189,101 @@ public class DialogueDataTable : DataTableBase
         return pool;
     }
 }
+
+public class CutSceneDataTable : DataTableBase
+{
+    override public IReadOnlyDictionary<string, string> ColumnTypeMapping => _columnTypeMapping;
+    private static IReadOnlyDictionary<string, string> _columnTypeMapping = new Dictionary<string, string>()
+    {
+        { "DialogueID", "System.Int32" },
+        { "When", "System.String"},
+        { "Order", "System.Int32" },
+        { "Effect", "System.String"},
+        { "Speaker1", "System.String" },
+        { "Speaker1Highlight", "System.Boolean"},
+        { "Speaker2", "System.String" },
+        { "Speaker2Highlight", "System.Boolean"},
+        { "Speaker3", "System.String" },
+        { "Speaker3Highlight", "System.Boolean"},
+        { "Key", "System.String" },
+    };
+
+    public CutSceneDataTable(string name) : base(name) { }
+
+    // 현재 world, stage를 변수로 넘겨받아서 ID의 값이 world*100+stage와 일치하는 row,
+    // GameManager의 Language와 일치하고 When이 dialogueEvent와 일치하는 col들을 찾아서 List의 형태로 반환한다.
+    public List<string> GetCutSceneData(DialogueEvent dialogueEvent, Language language, int world, int stage)
+    {
+        List<string> pool = this.Rows
+            .Cast<DataRow>()
+            .Where(x => (int)x["DialogueID"] == world * 100 + stage)
+            .Where(x => x["When"] as string == dialogueEvent.ToString())
+            .Select(x => x[language.ToString()] as string)
+            .ToList();
+
+        return pool;
+    }
+}
+
+public class WordKeyDataTable : DataTableBase
+{
+    override public IReadOnlyDictionary<string, string> ColumnTypeMapping => _columnTypeMapping;
+    private static IReadOnlyDictionary<string, string> _columnTypeMapping = new Dictionary<string, string>()
+    {
+        { "DialogueID", "System.Int32" },
+        { "When", "System.String"},
+        { "Order", "System.Int32" },
+        { "Effect", "System.String"},
+        { "Speaker1", "System.String" },
+        { "Speaker1Highlight", "System.Boolean"},
+        { "Speaker2", "System.String" },
+        { "Speaker2Highlight", "System.Boolean"},
+        { "Speaker3", "System.String" },
+        { "Speaker3Highlight", "System.Boolean"},
+        { "Key", "System.String" },
+    };
+
+    public WordKeyDataTable(string name) : base(name) { }
+
+    // 현재 world, stage를 변수로 넘겨받아서 ID의 값이 world*100+stage와 일치하는 row,
+    // GameManager의 Language와 일치하고 When이 dialogueEvent와 일치하는 col들을 찾아서 List의 형태로 반환한다.
+    public List<string> GetCutSceneData(DialogueEvent dialogueEvent, Language language, int world, int stage)
+    {
+        List<string> pool = this.Rows
+            .Cast<DataRow>()
+            .Where(x => (int)x["DialogueID"] == world * 100 + stage)
+            .Where(x => x["When"] as string == dialogueEvent.ToString())
+            .Select(x => x[language.ToString()] as string)
+            .ToList();
+
+        return pool;
+    }
+}
+
+public class KeyTranslateDataTable : DataTableBase
+{
+    override public IReadOnlyDictionary<string, string> ColumnTypeMapping => _columnTypeMapping;
+    private static IReadOnlyDictionary<string, string> _columnTypeMapping = new Dictionary<string, string>()
+    {
+        { "Key", "System.String" },
+        { "English", "System.String"},
+        { "Korean", "System.String" }
+    };
+
+    public KeyTranslateDataTable(string name) : base(name) { }
+
+    // 현재 world, stage를 변수로 넘겨받아서 ID의 값이 world*100+stage와 일치하는 row,
+    // GameManager의 Language와 일치하고 When이 dialogueEvent와 일치하는 col들을 찾아서 List의 형태로 반환한다.
+    public List<string> GetTranslatedData(string key, Language language)
+    {
+        List<string> pool = this.Rows
+            .Cast<DataRow>()
+            .Where(x => x["Key"] as string == key)
+            .Select(x => x[language.ToString()] as string)
+            .ToList();
+
+        return pool;
+    }
+}
+
+

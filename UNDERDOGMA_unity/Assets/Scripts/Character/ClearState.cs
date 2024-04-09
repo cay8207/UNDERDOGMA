@@ -22,8 +22,8 @@ public class ClearState : BaseState
         {
             if (StageClearCheck() == true)
             {
-                _character.EnqueueCoroutine(_character.StageClear());
-                _character.ChangeState(Character.State.Idle);
+                DialogueManager.Instance.Init(DialogueEvent.Ending, GameManager.Instance.Language, GameManager.Instance.World, GameManager.Instance.Stage);
+                _character.ChangeState(Character.State.EndingDialogueState);
             }
             else
             {

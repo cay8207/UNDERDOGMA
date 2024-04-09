@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &5325941225055906692
+--- !u!1001 &4995571406879534037
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -51,50 +51,45 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2102386051233708106, guid: 654343c5af990c042861ab5e563698c5, type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: 452343241316466459900025393b1912, type: 2}
     - target: {fileID: 2102386051233708107, guid: 654343c5af990c042861ab5e563698c5, type: 3}
       propertyPath: m_Name
-      value: MiniBoss
+      value: NormalEnemy Variant
       objectReference: {fileID: 0}
     m_RemovedComponents:
-    - {fileID: 2102386051233708105, guid: 654343c5af990c042861ab5e563698c5, type: 3}
     - {fileID: 5776619918338012818, guid: 654343c5af990c042861ab5e563698c5, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 654343c5af990c042861ab5e563698c5, type: 3}
---- !u!1 &1588643719186311147 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6909212703182654575, guid: 654343c5af990c042861ab5e563698c5, type: 3}
-  m_PrefabInstance: {fileID: 5325941225055906692}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1894400471926187225 stripped
+--- !u!1 &1652853878343459976 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6026881050816204637, guid: 654343c5af990c042861ab5e563698c5, type: 3}
-  m_PrefabInstance: {fileID: 5325941225055906692}
+  m_PrefabInstance: {fileID: 4995571406879534037}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &6108191347411620815 stripped
+--- !u!1 &1923496511253424058 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6909212703182654575, guid: 654343c5af990c042861ab5e563698c5, type: 3}
+  m_PrefabInstance: {fileID: 4995571406879534037}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6376808191004660638 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2102386051233708107, guid: 654343c5af990c042861ab5e563698c5, type: 3}
-  m_PrefabInstance: {fileID: 5325941225055906692}
+  m_PrefabInstance: {fileID: 4995571406879534037}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &-4888506218135644097
+--- !u!114 &4953255781179152665
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6108191347411620815}
+  m_GameObject: {fileID: 6376808191004660638}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d533f00605898b34783115e2be5dbff1, type: 3}
+  m_Script: {fileID: 11500000, guid: 2749b2740cca12e428e48fa21e1c00c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _attackText: {fileID: 1588643719186311147}
-  _heartText: {fileID: 1894400471926187225}
-  AttackRange: {fileID: 7279750290909251015}
---- !u!1 &7279750290909251015 stripped
+  _attackText: {fileID: 1923496511253424058}
+  _heartText: {fileID: 1652853878343459976}
+  AttackRange: {fileID: 7619106200386700694}
+--- !u!1 &7619106200386700694 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3237900126884310595, guid: 654343c5af990c042861ab5e563698c5, type: 3}
-  m_PrefabInstance: {fileID: 5325941225055906692}
+  m_PrefabInstance: {fileID: 4995571406879534037}
   m_PrefabAsset: {fileID: 0}

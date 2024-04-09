@@ -160,11 +160,18 @@ public class StageData
                 enemyType = EnemyType.NormalEnemy;
                 break;
             case "ChaserEnemy":
-                enemyType = EnemyType.ChaserEnemy;
+                enemyType = EnemyType.Chaser;
                 break;
             case "MiniBoss":
                 enemyType = EnemyType.MiniBoss;
                 break;
+            case "StrongAttack":
+                enemyType = EnemyType.StrongAttack;
+                break;
+            case "AllDirection":
+                enemyType = EnemyType.AllDirection;
+                break;
+
         }
 
         switch (data["IsAlive"])

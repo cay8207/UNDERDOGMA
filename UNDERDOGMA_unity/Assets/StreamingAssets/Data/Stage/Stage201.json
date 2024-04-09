@@ -1,0 +1,90 @@
+{
+  "TileDictionary": {
+    "0, 0": {
+      "Type": "Enemy",
+      "Pattern": "0",
+      "TileDirection": "None",
+      "EnemyType": "StrongAttack",
+      "IsAlive": true,
+      "Attack": 1,
+      "Heart": 2,
+      "AttackDirection": "Right"
+    },
+    "1, 0": {
+      "Type": "Empty",
+      "Pattern": "0",
+      "TileDirection": "None"
+    },
+    "2, 0": {
+      "Type": "Empty",
+      "Pattern": "0",
+      "TileDirection": "None"
+    },
+    "3, 0": {
+      "Type": "Empty",
+      "Pattern": "0",
+      "TileDirection": "None"
+    },
+    "4, 0": {
+      "Type": "Meat",
+      "Pattern": "0",
+      "TileDirection": "None",
+      "Amount": 5,
+      "IsExist": true
+    },
+    "-1, -1": {
+      "Type": "Wall"
+    },
+    "-1, 0": {
+      "Type": "Wall"
+    },
+    "-1, 1": {
+      "Type": "Wall"
+    },
+    "0, -1": {
+      "Type": "Wall"
+    },
+    "0, 1": {
+      "Type": "Wall"
+    },
+    "1, -1": {
+      "Type": "Wall"
+    },
+    "1, 1": {
+      "Type": "Wall"
+    },
+    "2, -1": {
+      "Type": "Wall"
+    },
+    "2, 1": {
+      "Type": "Wall"
+    },
+    "3, -1": {
+      "Type": "Wall"
+    },
+    "3, 1": {
+      "Type": "Wall"
+    },
+    "4, -1": {
+      "Type": "Wall"
+    },
+    "4, 1": {
+      "Type": "Wall"
+    },
+    "5, -1": {
+      "Type": "Wall"
+    },
+    "5, 0": {
+      "Type": "Wall"
+    },
+    "5, 1": {
+      "Type": "Wall"
+    }
+  },
+  "ExecutionCount": 4,
+  "CharacterHeart": 1,
+  "CharacterX": 2,
+  "CharacterY": 0,
+  "StageXSize": 5,
+  "StageYSize": 1
+}

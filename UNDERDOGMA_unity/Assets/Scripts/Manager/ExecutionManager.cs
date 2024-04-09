@@ -11,7 +11,11 @@ public class ExecutionManager : MonoBehaviour
     // 싱글톤 패턴. 인스턴스를 하나만 만들어서 사용한다. 
     private static ExecutionManager _instance;
 
-    public static ExecutionManager Instance => _instance;
+    public static ExecutionManager Instance
+    {
+        get => _instance;
+        set => _instance = value;
+    }
 
     // 1. 처형 애니메이션과 관련된 변수들. 
     // 1.1. 관련 UI들을 담는 캔버스.
@@ -118,10 +122,10 @@ public class ExecutionManager : MonoBehaviour
 
         // 1, 2, 3스테이지에서는 처형 횟수를 표시하지 않기 위한 로직. 
         // 24년 3월 이후에 한번 확인해서 필요없으면 지우면 된다. 
-        // if (StageManager.Instance.stage != 1 && StageManager.Instance.stage != 2 && StageManager.Instance.stage != 3)
-        // {
-        //     ExecutionNum.SetText((ExecutionCount - StageManager.Instance._character.GetComponent<Character>().MoveCount).ToString());
-        // }
+        if (GameManager.Instance.Stage != 1 && GameManager.Instance.Stage != 2 && GameManager.Instance.Stage != 3)
+        {
+            ExecutionNum.SetText((ExecutionCount - StageManager.Instance._character.GetComponent<Character>().MoveCount).ToString());
+        }
     }
 
     // 남은 적 UI를 세팅해주는 함수. 
@@ -330,7 +334,7 @@ public class ExecutionManager : MonoBehaviour
 
             if (tile.Type == TileType.Enemy)
             {
-                if ((tile.EnemyData.EnemyType == EnemyType.NormalEnemy || tile.EnemyData.EnemyType == EnemyType.ChaserEnemy)
+                if ((tile.EnemyData.EnemyType == EnemyType.NormalEnemy || tile.EnemyData.EnemyType == EnemyType.Chaser)
                     && tile.EnemyData.IsAlive == true)
                 {
                     // 2.1. 만약 해당 적이 체력이 가장 높다면 기존 큐를 비우고 새롭게 추가한다. 

@@ -34,8 +34,7 @@ public class ResetState : BaseState
 
     public void ResetGame()
     {
-        // 1. 모든 오브젝트들을 파괴시켜준다.
-        StageManager.Instance.DestroyAllObjects();
-        // StageManager.Instance.TileInstantiate(GameManager.Instance.Stage);
+        // 1. 스테이지를 다시 로드한다. 
+        StageManager.Instance.Init(GameManager.Instance.World, GameManager.Instance.Stage);
     }
 }
