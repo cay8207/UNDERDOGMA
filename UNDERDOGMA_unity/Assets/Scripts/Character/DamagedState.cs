@@ -22,6 +22,7 @@ public class DamagedState : BaseState
         {
             // 이동이 끝나고, 적의 턴까지 끝났을때에 몇가지 경우의 수가 존재한다.
             // 1. 만약 hp가 0 이하라면 죽는다.
+            // my name is
             if (_character.Heart <= 0)
             {
                 _character.ChangeState(Character.State.Death);
@@ -96,9 +97,18 @@ public class DamagedState : BaseState
                         _character.EnqueueCoroutine(_character.CharacterDamaged(amount));
                     }
                 }
+                else if (StageManager.Instance.TempTileDictionary[new Vector2Int(enemyRow, enemyCol)].EnemyData.EnemyType == EnemyType.Angel)
+                {
+                    amount = gameObject.Value.GetComponent<Angel>().CheckCharacterDamaged(PlayerPosition.x, PlayerPosition.y);
+                    if (amount > 0)
+                    {
+                        _character.EnqueueCoroutine(_character.CharacterDamaged(amount));
+                    }
+                }
             }
         }
 
-        EnemyManager.Instance.ChaserEnemyUpdate();
+        EnemyManager.Instance.ChaserUpdate();
+        EnemyManager.Instance.AngelUpdate();
     }
 }

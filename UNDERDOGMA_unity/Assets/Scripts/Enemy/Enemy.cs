@@ -102,7 +102,7 @@ public abstract class Enemy : MonoBehaviour, IEnemyAttributesSetter, IEnemyPosit
     }
 
     // 첫번째 인자는 해당 위치에 있는 적을 찾기 위해서, 두번째 인자는 적이 처형될때에 잠시 대기하기 위해서. 
-    public IEnumerator EnemyDeath(Vector2Int targetPosition, bool deathByExecution)
+    public virtual IEnumerator EnemyDeath(Vector2Int targetPosition, bool deathByExecution)
     {
         // 나중에 죽는 애니메이션 추가해야 함. 
         // gameObject.GetComponent<SpriteRenderer>().sprite = _deadDog;

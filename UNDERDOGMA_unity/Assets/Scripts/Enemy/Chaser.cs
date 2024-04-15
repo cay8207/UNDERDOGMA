@@ -86,7 +86,7 @@ public class Chaser : Enemy
             // 현재 DamagedState에서 foreach문을 도는중이기 때문에 ChaserEnemy의 정보를 업데이트 할 수 없음.
             // 따라서 EnemyManager에 저장해두고, 한번에 업데이트한다. 
 
-            EnemyManager.Instance.ChaserEnemyMoveDictionary.Add(new Vector2Int(Row, Col), targetPosition);
+            EnemyManager.Instance.ChaserMoveDictionary.Add(new Vector2Int(Row, Col), targetPosition);
 
             // 4.3. 일단 행과 열이 바뀌었음을 저장해준다. 
             Row = targetPosition.x;
@@ -100,13 +100,7 @@ public class Chaser : Enemy
 
     public override IEnumerator EnemyAttackAnimation(Vector2Int targetPosition)
     {
-        gameObject.GetComponent<Animator>().SetBool("IsAttack", true);
-
-        AudioManager.Instance.PlaySfx(AudioManager.Sfx.Enemy_Attack);
-
-        yield return new WaitForSeconds(0.65f);
-
-        gameObject.GetComponent<Animator>().SetBool("IsAttack", false);
+        StartCoroutine(base.EnemyAttackAnimation(targetPosition));
 
         yield return null;
     }

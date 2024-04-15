@@ -61,7 +61,8 @@ public class Character : MonoBehaviour
         Death,
         Reset,
         Clear,
-        EndingDialogueState
+        EndingDialogueState,
+        Kick
     }
 
     private State _curState;
@@ -166,6 +167,10 @@ public class Character : MonoBehaviour
 
                             }
                         }
+                        else if (WhatIsNextPosition(key) == TileType.Ball)
+                        {
+
+                        }
                         else if (WhatIsNextPosition(key) == TileType.Wall)
                         {
 
@@ -191,6 +196,10 @@ public class Character : MonoBehaviour
                 case State.Reset:
                     break;
                 case State.Clear:
+                    break;
+                case State.EndingDialogueState:
+                    break;
+                case State.Kick:
                     break;
             }
 
@@ -281,6 +290,18 @@ public class Character : MonoBehaviour
         }
     }
 
+    // KickState의 경우 어느 방향으로 차줬는지 kick까지 필요하다. 
+    public void ChangeState(State nextState, Vector2Int targetPosition, KeyCode key)
+    {
+        _curState = nextState;
+        switch (nextState)
+        {
+            case State.Kick:
+                _fsm.ChangeState(new KickState(this, targetPosition, key));
+                break;
+        }
+    }
+
     // 캐릭터의 다음 칸에 어떤 오브젝트가 있는지 반환한다. 
     private TileType WhatIsNextPosition(KeyCode key)
     {
@@ -293,7 +314,6 @@ public class Character : MonoBehaviour
         {
             if (tileObject.EnemyData.IsAlive == true)
             {
-                // ChangeState(State.Attack, targetPosition);
                 return TileType.Enemy;
             }
             else if (tileObject.EnemyData.IsAlive == false)
@@ -616,6 +636,27 @@ public class Character : MonoBehaviour
         MeatManager.Instance.EatMeat(targetPosition);
 
         // 5. 코루틴이 끝났다는 의미로 변수의 값을 변경해준다. 
+        _isCharacterCoroutineRunning = false;
+    }
+
+    public IEnumerator CharacterKick(Vector2Int targetPosition, KeyCode key)
+    {
+        _isCharacterCoroutineRunning = true;
+
+        // ToDo: Kick 소리 찾으면 변경 필요. 
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.Eat);
+
+        // 캐릭터가 공격하는 애니메이션 재생.
+        GetComponent<Animator>().SetBool("IsAttack", true);
+
+        yield return new WaitForSeconds(0.9f);
+
+        GetComponent<Animator>().SetBool("IsAttack", false);
+
+        BallManager.Instance.Kick(targetPosition, key);
+
+        yield return new WaitForSeconds(0.5f);
+
         _isCharacterCoroutineRunning = false;
     }
 

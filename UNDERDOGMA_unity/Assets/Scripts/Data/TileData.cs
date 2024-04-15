@@ -38,17 +38,10 @@ public class TileObject
         set => _meatData = value;
     }
 
-    // 1. Type이 Wall인 경우 생성자. Type만 저장해주면 된다. 
+    // 1. Type이 Wall, Ball 등인 경우 생성자. Type만 저장해주면 된다. 
     public TileObject(TileType type)
     {
         this._type = type;
-        switch (type)
-        {
-            case TileType.Wall:
-                break;
-            case TileType.Empty:
-                break;
-        }
     }
 
     // 2. Type이 Empty인 경우 생성자. 타일에 대한 정보를 저장해준다. 
@@ -57,13 +50,6 @@ public class TileObject
         this._type = type;
         this._pattern = pattern;
         this._tileDirection = tileDirection;
-        switch (type)
-        {
-            case TileType.Wall:
-                break;
-            case TileType.Empty:
-                break;
-        }
     }
 
     // 3. Type이 Enemy인 경우 생성자. 타일에 대한 정보와 적에 대한 정보를 저장해준다.
@@ -170,6 +156,7 @@ public enum TileType
     Empty,
     Enemy,
     Meat,
+    Ball,
     Invalid
 }
 
@@ -189,11 +176,13 @@ public enum EnemyType
     Chaser,
     MiniBoss,
     StrongAttack,
-    AllDirection
+    AllDirection,
+    Angel
 }
 
 public enum AttackDirection
 {
+    None,
     Up,
     Down,
     Left,

@@ -70,7 +70,7 @@
       "Type": "Enemy",
       "Pattern": "0",
       "TileDirection": "None",
-      "EnemyType": "NormalEnemy",
+      "EnemyType": "Angel",
       "IsAlive": true,
       "Attack": 1,
       "Heart": 3,

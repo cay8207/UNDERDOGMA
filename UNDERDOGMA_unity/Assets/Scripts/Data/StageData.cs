@@ -171,6 +171,9 @@ public class StageData
             case "AllDirection":
                 enemyType = EnemyType.AllDirection;
                 break;
+            case "Angel":
+                enemyType = EnemyType.Angel;
+                break;
 
         }
 
@@ -242,6 +245,8 @@ public class StageData
                 return TileType.Enemy;
             case "Meat":
                 return TileType.Meat;
+            case "Ball":
+                return TileType.Ball;
             default:
                 return TileType.Invalid;
         }

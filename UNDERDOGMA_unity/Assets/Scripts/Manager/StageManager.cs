@@ -35,6 +35,8 @@ public class StageManager : MonoBehaviour
     [SerializeField] GameObject MiniBossPrefab;
     [SerializeField] GameObject StrongAttackPrefab;
     [SerializeField] GameObject AllDirectionPrefab;
+    [SerializeField] GameObject AngelPrefab;
+    [SerializeField] GameObject BallPrefab;
     [SerializeField] List<Sprite> TileSprites;
     [SerializeField] public GameObject Clear;
 
@@ -212,13 +214,7 @@ public class StageManager : MonoBehaviour
 
             if (tile.Value.Type == TileType.Enemy)
             {
-                GameObject newEnemy = InstantiateEnemy(tile.Value.EnemyData.EnemyType, tilePosition);
-                if (newEnemy != null)
-                {
-                    SetEnemyAttributes(newEnemy, tile.Value.EnemyData);
-                    SetEnemyPosition(newEnemy, tile.Key.x, tile.Key.y);
-                    _gameObjectDictionary.Add(new Vector2Int(tile.Key.x, tile.Key.y), newEnemy);
-                }
+                SetUpEnemy(new Vector2Int(tile.Key.x, tile.Key.y), tile.Value);
             }
 
             if (tile.Value.Type == TileType.Meat)
@@ -276,6 +272,16 @@ public class StageManager : MonoBehaviour
         }
     }
 
+    public void SetUpEnemy(Vector2Int targetPosition, TileObject tileObject)
+    {
+        GameObject newEnemy = InstantiateEnemy(tileObject.EnemyData.EnemyType, new Vector3(targetPosition.x, targetPosition.y, 0));
+        if (newEnemy != null)
+        {
+            SetEnemyAttributes(newEnemy, tileObject.EnemyData);
+            SetEnemyPosition(newEnemy, targetPosition.x, targetPosition.y);
+            _gameObjectDictionary.Add(new Vector2Int(targetPosition.x, targetPosition.y), newEnemy);
+        }
+    }
 
     private GameObject InstantiateEnemy(EnemyType enemyType, Vector3 position)
     {
@@ -315,6 +321,13 @@ public class StageManager : MonoBehaviour
         }
     }
 
+    public void SetUpBall(Vector2Int targetPosition, TileObject tile)
+    {
+        GameObject newMeat = Instantiate(BallPrefab, new Vector3(targetPosition.x, targetPosition.y, 0), Quaternion.identity);
+
+        _gameObjectDictionary.Add(new Vector2Int(targetPosition.x, targetPosition.y), newMeat);
+    }
+
     private GameObject GetEnemyPrefab(EnemyType enemyType)
     {
         switch (enemyType)
@@ -329,6 +342,8 @@ public class StageManager : MonoBehaviour
                 return StrongAttackPrefab;
             case EnemyType.AllDirection:
                 return AllDirectionPrefab;
+            case EnemyType.Angel:
+                return AngelPrefab;
             default:
                 return null;
         }

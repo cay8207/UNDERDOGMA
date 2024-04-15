@@ -27,11 +27,16 @@ public class MoveState : BaseState
         if (_character.IsCharacterCoroutineRunning == false)
         {
             // 1. 고기가 있는 칸에 도달하는 경우 MeatState로 넘어간다.
-            // 2. 그렇지 않은 경우 적에게 공격을 받는지 체크하는 Damaged State로 넘어간다.
+            // 2. 공이 있는 칸에 도달하는 경우 BallState로 넘어간다.
+            // 3. 그렇지 않은 경우 적에게 공격을 받는지 체크하는 Damaged State로 넘어간다.
 
             if (_nextState == Character.State.Meat)
             {
                 _character.ChangeState(Character.State.Meat, targetPosition);
+            }
+            else if (_nextState == Character.State.Kick)
+            {
+                _character.ChangeState(Character.State.Kick, targetPosition);
             }
             else if (_nextState == Character.State.Damaged)
             {
