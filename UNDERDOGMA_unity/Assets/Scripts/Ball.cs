@@ -32,6 +32,9 @@ public class Ball : Enemy
             // 2. 공의 위치를 업데이트한다. 
             StageManager.Instance.TempTileDictionary[nowPosition].Type = TileType.Empty;
             StageManager.Instance.TempTileDictionary[targetPosition].Type = TileType.Ball;
+
+            StageManager.Instance.GameObjectDictionary[targetPosition] = gameObject;
+            StageManager.Instance.GameObjectDictionary.Remove(nowPosition);
         }
 
         yield return null;

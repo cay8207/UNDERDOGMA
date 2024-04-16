@@ -101,6 +101,13 @@ public class MoveState : BaseState
                 break;
             }
 
+            // 2. 만약 이동하려는 칸에 공이 있다면 Kick State로 이동한다.
+            if (tileObject.Type == TileType.Ball)
+            {
+                _nextState = Character.State.Kick;
+                break;
+            }
+
             // 3. 만약 해당 칸에 고기가 있다면 Meat State로 이동한다. 
             if (tileObject.Type == TileType.Meat)
             {
