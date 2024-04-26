@@ -174,6 +174,9 @@ public class StageData
             case "Angel":
                 enemyType = EnemyType.Angel;
                 break;
+            case "KickBoss":
+                enemyType = EnemyType.KickBoss;
+                break;
 
         }
 

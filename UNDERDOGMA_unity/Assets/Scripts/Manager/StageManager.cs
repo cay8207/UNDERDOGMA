@@ -37,6 +37,7 @@ public class StageManager : MonoBehaviour
     [SerializeField] GameObject AllDirectionPrefab;
     [SerializeField] GameObject AngelPrefab;
     [SerializeField] GameObject BallPrefab;
+    [SerializeField] GameObject KickBossPrefab;
     [SerializeField] List<Sprite> TileSprites;
     [SerializeField] public GameObject Clear;
 
@@ -344,6 +345,8 @@ public class StageManager : MonoBehaviour
                 return AllDirectionPrefab;
             case EnemyType.Angel:
                 return AngelPrefab;
+            case EnemyType.KickBoss:
+                return KickBossPrefab;
             default:
                 return null;
         }
@@ -367,6 +370,39 @@ public class StageManager : MonoBehaviour
     .Append(toolTip.GetComponent<Image>().DOColor(new Color(1.0f, 0.486f, 0.0f), 0.25f))
     .AppendInterval(0.2f)
     .Append(toolTip.GetComponent<Image>().DOColor(new Color(1.0f, 1.0f, 1.0f), 0.25f));
+        }
+    }
+
+    public bool StageClearCheck()
+    {
+        Debug.Log("GameObject.Count: " + GameObjectDictionary.Count);
+
+        int _row = 0;
+        int _col = 0;
+        int _enemyCount = 0;
+
+        foreach (var gameObject in GameObjectDictionary)
+        {
+            _row = gameObject.Key.x;
+            _col = gameObject.Key.y;
+
+            if (TempTileDictionary[new Vector2Int(_row, _col)].Type == TileType.Enemy)
+            {
+                if (TempTileDictionary[new Vector2Int(_row, _col)].EnemyData.IsAlive == true)
+                {
+                    _enemyCount++;
+                }
+
+            }
+        }
+
+        if (_enemyCount == 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 }

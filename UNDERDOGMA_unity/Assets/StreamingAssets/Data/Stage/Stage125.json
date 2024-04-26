@@ -132,7 +132,7 @@
       "Type": "Enemy",
       "Pattern": "0",
       "TileDirection": "None",
-      "EnemyType": "MiniBoss",
+      "EnemyType": "KickBoss",
       "IsAlive": true,
       "Attack": 1,
       "Heart": 9,
@@ -217,7 +217,7 @@
       "Type": "Wall"
     }
   },
-  "ExecutionCount": 10,
+  "ExecutionCount": 20,
   "CharacterHeart": 8,
   "CharacterX": 0,
   "CharacterY": 2,

@@ -60,7 +60,6 @@ public class Character : MonoBehaviour
         Execution,
         Death,
         Reset,
-        Clear,
         EndingDialogueState,
         Kick
     }
@@ -137,19 +136,6 @@ public class Character : MonoBehaviour
             switch (_curState)
             {
                 case State.Idle:
-                    if (_moveCount == ExecutionManager.Instance.ExecutionCount)
-                    {
-                        ChangeState(State.Execution);
-                        _moveCount = 0;
-                        _keyDownQueue.Clear();
-                        break;
-                    }
-
-                    for (int i = 0; i < _keyDownQueue.Count; i++)
-                    {
-                        Debug.Log("keydownQueue: " + _keyDownQueue.ToArray()[i]);
-                    }
-
                     // TODO: 현재와 같은 방식이면 벽이 있는 방향으로 여러번 클릭시 여러 프레임 이후에야 이동이 가능.
                     // 이를 방지하기 위해 while문을 돌려줘야 할 것 같다.
                     if (_keyDownQueue.Count > 0)
@@ -195,35 +181,33 @@ public class Character : MonoBehaviour
                     break;
                 case State.Reset:
                     break;
-                case State.Clear:
-                    break;
                 case State.EndingDialogueState:
                     break;
                 case State.Kick:
                     break;
             }
+        }
 
-            if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
-            {
-                _keyDownQueue.Enqueue(KeyCode.W);
-            }
-            else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
-            {
-                _keyDownQueue.Enqueue(KeyCode.S);
-            }
-            else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
-            {
-                _keyDownQueue.Enqueue(KeyCode.A);
-            }
-            else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
-            {
-                _keyDownQueue.Enqueue(KeyCode.D);
-            }
-            else if (Input.GetKeyDown(KeyCode.R))
-            {
-                AudioManager.Instance.PlaySfx(AudioManager.Sfx.Reset);
-                ChangeState(State.Reset);
-            }
+        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            _keyDownQueue.Enqueue(KeyCode.W);
+        }
+        else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            _keyDownQueue.Enqueue(KeyCode.S);
+        }
+        else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            _keyDownQueue.Enqueue(KeyCode.A);
+        }
+        else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            _keyDownQueue.Enqueue(KeyCode.D);
+        }
+        else if (Input.GetKeyDown(KeyCode.R))
+        {
+            AudioManager.Instance.PlaySfx(AudioManager.Sfx.Reset);
+            ChangeState(State.Reset);
         }
 
         _coroutineController.ExecuteCoroutine();
@@ -253,9 +237,6 @@ public class Character : MonoBehaviour
                 break;
             case State.Reset:
                 _fsm.ChangeState(new ResetState(this));
-                break;
-            case State.Clear:
-                _fsm.ChangeState(new ClearState(this));
                 break;
             case State.EndingDialogueState:
                 _fsm.ChangeState(new EndingDialogueState(this));

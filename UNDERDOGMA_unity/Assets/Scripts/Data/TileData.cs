@@ -177,7 +177,8 @@ public enum EnemyType
     MiniBoss,
     StrongAttack,
     AllDirection,
-    Angel
+    Angel,
+    KickBoss
 }
 
 public enum AttackDirection

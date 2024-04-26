@@ -27,7 +27,20 @@ public class AttackState : BaseState
             // 1. 행동이 끝났으니 행동 카운트를 증가시켜준다. 
             _character.MoveCount++;
 
-            _character.ChangeState(Character.State.Damaged);
+            // 2. 만약 남은 적이 없다면 EndingDialogue로 이동한다. 
+            if (StageManager.Instance.StageClearCheck())
+            {
+                DialogueManager.Instance.Init(DialogueEvent.Ending, GameManager.Instance.Language, GameManager.Instance.World, GameManager.Instance.Stage);
+                _character._keyDownQueue.Clear();
+                _character.ChangeState(Character.State.EndingDialogueState);
+            }
+            // 3. 만약 남은 적이 있다면 캐릭터의 모든 큐를 제거하고 DamagedState로 이동한다.
+            else
+            {
+                _character._keyDownQueue.Clear();
+                _character.ChangeState(Character.State.Damaged);
+                return;
+            }
         }
     }
 

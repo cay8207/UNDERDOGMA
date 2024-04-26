@@ -7,6 +7,8 @@ using System.Collections;
 
 public class ExecutionState : BaseState
 {
+    public Character.State _nextState;
+
     public ExecutionState(Character character) : base(character)
     {
 
@@ -22,6 +24,19 @@ public class ExecutionState : BaseState
         if (_character.IsCharacterCoroutineRunning == false)
         {
             ExecuteEnemies();
+
+            if (_nextState == Character.State.Death)
+            {
+                _character.ChangeState(Character.State.Death);
+            }
+            else if (_nextState == Character.State.Idle)
+            {
+                _character.ChangeState(Character.State.Idle);
+            }
+            else if (_nextState == Character.State.EndingDialogueState)
+            {
+                _character.ChangeState(Character.State.EndingDialogueState);
+            }
         }
     }
 
@@ -54,7 +69,7 @@ public class ExecutionState : BaseState
 
             _character.EnqueueCoroutine(_character.ExecutionEvent(_executionTarget));
 
-            _character.ChangeState(Character.State.Death);
+            _nextState = Character.State.Death;
         }
         // 3. 만약 큐에 character가 없다면 적을 모두 처형한다. 
         else
@@ -66,7 +81,14 @@ public class ExecutionState : BaseState
 
             _character.EnqueueCoroutine(_character.ExecutionEvent(_executionTarget));
 
-            _character.ChangeState(Character.State.Clear);
+            if (StageManager.Instance.StageClearCheck())
+            {
+                _nextState = Character.State.EndingDialogueState;
+            }
+            else
+            {
+                _nextState = Character.State.Idle;
+            }
         }
     }
 }

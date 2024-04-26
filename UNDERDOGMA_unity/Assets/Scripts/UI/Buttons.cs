@@ -30,7 +30,7 @@ public class Buttons : MonoBehaviour
     public void ReturnToStageMap()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene("World" + (GameManager.Instance.Stage <= 16 ? 1 : 2).ToString());
+        SceneManager.LoadScene("World" + GameManager.Instance.Stage.ToString());
     }
     public void ExitGame()
     {
