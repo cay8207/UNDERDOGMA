@@ -221,9 +221,8 @@ public class MapEditorTile : MonoBehaviour
             case TileType.Enemy:
                 json.Add("EnemyType", CurrentEnemyType.ToString());
                 json.Add("IsAlive", true);
-                json.Add("Attack", 1);
                 json.Add("Heart", enemyHP);
-                json.Add("AttackDirection", CurrentEnemyDirection.ToString());
+                json.Add("SpriteDirection", CurrentEnemyDirection.ToString());
                 break;
 
             case TileType.Meat:
@@ -251,7 +250,7 @@ public class MapEditorTile : MonoBehaviour
             case TileType.Enemy:
                 Enum.TryParse<EnemyType>(data["EnemyType"].ToString(), out CurrentEnemyType);
                 int.TryParse(data["Heart"].ToString(), out enemyHP);
-                Enum.TryParse<EnemyDirection>(data["AttackDirection"].ToString(), out CurrentEnemyDirection);
+                Enum.TryParse<EnemyDirection>(data["SpriteDirection"].ToString(), out CurrentEnemyDirection);
                 break;
 
             case TileType.Meat:

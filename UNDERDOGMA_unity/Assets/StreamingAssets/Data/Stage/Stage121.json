@@ -2,92 +2,64 @@
   "TileDictionary": {
     "0, 0": {
       "Type": "Enemy",
-      "Pattern": "0",
-      "TileDirection": "None",
       "EnemyType": "NormalEnemy",
       "IsAlive": true,
-      "Attack": 1,
       "Heart": 1,
-      "AttackDirection": "Right"
+      "SpriteDirection": "Right"
     },
     "1, 0": {
-      "Type": "Empty",
-      "Pattern": "0",
-      "TileDirection": "None"
+      "Type": "Empty"
     },
     "2, 0": {
-      "Type": "Empty",
-      "Pattern": "0",
-      "TileDirection": "None"
+      "Type": "Empty"
     },
     "3, 0": {
-      "Type": "Empty",
-      "Pattern": "0",
-      "TileDirection": "None"
+      "Type": "Empty"
     },
     "4, 0": {
       "Type": "Enemy",
-      "Pattern": "0",
-      "TileDirection": "None",
       "EnemyType": "NormalEnemy",
       "IsAlive": true,
-      "Attack": 1,
       "Heart": 3,
-      "AttackDirection": "Left"
+      "SpriteDirection": "Left"
     },
     "0, 1": {
       "Type": "Wall"
     },
     "1, 1": {
-      "Type": "Empty",
-      "Pattern": "0",
-      "TileDirection": "None"
+      "Type": "Empty"
     },
     "2, 1": {
       "Type": "Wall"
     },
     "3, 1": {
-      "Type": "Empty",
-      "Pattern": "0",
-      "TileDirection": "None"
+      "Type": "Empty"
     },
     "4, 1": {
       "Type": "Wall"
     },
     "0, 2": {
       "Type": "Enemy",
-      "Pattern": "0",
-      "TileDirection": "None",
       "EnemyType": "NormalEnemy",
       "IsAlive": true,
-      "Attack": 1,
       "Heart": 4,
-      "AttackDirection": "Right"
+      "SpriteDirection": "Right"
     },
     "1, 2": {
-      "Type": "Empty",
-      "Pattern": "0",
-      "TileDirection": "None"
+      "Type": "Empty"
     },
     "2, 2": {
-      "Type": "Empty",
-      "Pattern": "0",
-      "TileDirection": "None"
+      "Type": "Empty"
     },
     "3, 2": {
-      "Type": "Empty",
-      "Pattern": "0",
-      "TileDirection": "None"
+      "Type": "Empty"
     },
     "4, 2": {
       "Type": "Enemy",
-      "Pattern": "0",
-      "TileDirection": "None",
       "EnemyType": "NormalEnemy",
       "IsAlive": true,
-      "Attack": 1,
       "Heart": 3,
-      "AttackDirection": "Left"
+      "SpriteDirection": "Left"
     },
     "-1, -1": {
       "Type": "Wall"

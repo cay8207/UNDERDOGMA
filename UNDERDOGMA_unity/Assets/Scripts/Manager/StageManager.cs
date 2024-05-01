@@ -37,6 +37,7 @@ public class StageManager : MonoBehaviour
     [SerializeField] GameObject AllDirectionPrefab;
     [SerializeField] GameObject AngelPrefab;
     [SerializeField] GameObject BallPrefab;
+    [SerializeField] GameObject KickBossPrefab;
     [SerializeField] List<Sprite> TileSprites;
     [SerializeField] public GameObject Clear;
 
@@ -133,6 +134,8 @@ public class StageManager : MonoBehaviour
                 Time.timeScale = 0;
             }
         }
+
+        // 
     }
 
     // 타일들을 모두 탐색해서, 가장 맵의 끝에 있는 타일의 x, y값을 찾아서 그 중간값을 카메라의 위치로 설정해준다.
@@ -209,7 +212,7 @@ public class StageManager : MonoBehaviour
             if (tile.Value.Type != TileType.Wall)
             {
                 GameObject newTile = Instantiate(TilePrefab, tilePosition, Quaternion.identity, Tiles.transform);
-                newTile.GetComponent<SpriteRenderer>().sprite = TileSprites[0];
+                newTile.transform.DORotate(new Vector3(0, 0, UnityEngine.Random.Range(-5.0f, 5.0f)), 0.0f);
             }
 
             if (tile.Value.Type == TileType.Enemy)
@@ -344,6 +347,8 @@ public class StageManager : MonoBehaviour
                 return AllDirectionPrefab;
             case EnemyType.Angel:
                 return AngelPrefab;
+            case EnemyType.KickBoss:
+                return KickBossPrefab;
             default:
                 return null;
         }
@@ -367,6 +372,39 @@ public class StageManager : MonoBehaviour
     .Append(toolTip.GetComponent<Image>().DOColor(new Color(1.0f, 0.486f, 0.0f), 0.25f))
     .AppendInterval(0.2f)
     .Append(toolTip.GetComponent<Image>().DOColor(new Color(1.0f, 1.0f, 1.0f), 0.25f));
+        }
+    }
+
+    public bool StageClearCheck()
+    {
+        Debug.Log("GameObject.Count: " + GameObjectDictionary.Count);
+
+        int _row = 0;
+        int _col = 0;
+        int _enemyCount = 0;
+
+        foreach (var gameObject in GameObjectDictionary)
+        {
+            _row = gameObject.Key.x;
+            _col = gameObject.Key.y;
+
+            if (TempTileDictionary[new Vector2Int(_row, _col)].Type == TileType.Enemy)
+            {
+                if (TempTileDictionary[new Vector2Int(_row, _col)].EnemyData.IsAlive == true)
+                {
+                    _enemyCount++;
+                }
+
+            }
+        }
+
+        if (_enemyCount == 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 }

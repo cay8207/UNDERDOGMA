@@ -18,6 +18,8 @@ public class KickState : BaseState
 
     public override void OnStateEnter()
     {
+        _character.MoveCount++;
+        _character.HeartChange(-1);
         _character.EnqueueCoroutine(_character.CharacterKick(_targetPosition, _key));
     }
 
@@ -26,7 +28,16 @@ public class KickState : BaseState
         // 적을 찬 후 주변에 적이 있다면 데미지를 받아야 한다. 
         if (_character.IsCharacterCoroutineRunning == false)
         {
-            _character.ChangeState(Character.State.Damaged);
+            if (_character.Heart <= 0)
+            {
+                _character.ChangeState(Character.State.Death);
+                return;
+            }
+            else
+            {
+                _character.ChangeState(Character.State.Damaged);
+                return;
+            }
         }
     }
 

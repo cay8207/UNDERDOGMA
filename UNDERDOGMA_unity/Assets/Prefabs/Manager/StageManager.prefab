@@ -57,6 +57,7 @@ MonoBehaviour:
   AllDirectionPrefab: {fileID: 2102386051233708107, guid: 654343c5af990c042861ab5e563698c5, type: 3}
   AngelPrefab: {fileID: 6040568205910369544, guid: e267813fd0ac9334aa9a6ed8cf9fe221, type: 3}
   BallPrefab: {fileID: 8228331591022776077, guid: 6b9416aa72c0b1842aafd62fe06b9017, type: 3}
+  KickBossPrefab: {fileID: 6256625866893897016, guid: 4e78ea228ac0acf4baf42bc8f0b4ee53, type: 3}
   TileSprites:
   - {fileID: 21300000, guid: 9c1c897c52d7bb849a988edf98560adf, type: 3}
   - {fileID: 21300000, guid: 9941401e8af946a4e97368ad0d84f3e8, type: 3}
@@ -471,7 +472,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: ddbdafedc5f07ad4d8afac4ef3a13a8b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7f8cd27f03625274b83cc478c5cd2692, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

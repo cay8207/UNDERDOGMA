@@ -78,7 +78,7 @@ public class EnemyManager : Singleton<EnemyManager>
             foreach (Vector2Int angelPosition in DeathAngelPositionList)
             {
                 TileObject angel = StageManager.Instance.TempTileDictionary[angelPosition];
-                TileObject newTileObject = new TileObject(TileType.Ball, 0, TileDirection.None);
+                TileObject newTileObject = new TileObject(TileType.Ball);
 
                 StageManager.Instance.TempTileDictionary[angelPosition] = newTileObject;
                 StageManager.Instance.SetUpBall(angelPosition, newTileObject);

@@ -59,36 +59,22 @@ public class SaveSystem : Singleton<SaveSystem>
             Debug.Log("Character Heart should be an INT value.");
             return;
         }
-        bool resultSN = int.TryParse(inputField_StageNum.text, out int stageNum);
 
-        if (resultSN == false)
-        {
-            Debug.Log("StageNum should be an INT Value.");
-            return;
-        }
         stageData.StageXSize = stageCreator.xSize;
         stageData.StageYSize = stageCreator.ySize;
         string jsonData = JsonConvert.SerializeObject(stageData, Formatting.Indented);
-        string path = Application.streamingAssetsPath + "/Data/Stage/Stage" + stageNum + ".json";
+        string path = Application.streamingAssetsPath + "/Data/Stage/Stage" + inputField_StageNum.text + ".json";
         File.WriteAllText(path, jsonData);
-        Debug.Log("Stage" + stageNum + ".json Saved!");
+        Debug.Log("Stage" + inputField_StageNum.text + ".json Saved!");
     }
 
     [ContextMenu("LoadMapData")]
     public void LoadMapDataFromJson()
     {
-        bool resultSN = int.TryParse(inputField_StageNum.text, out int stageNum);
-
-        if (resultSN == false)
-        {
-            Debug.Log("StageNum should be an INT value.");
-            return;
-        }
-
-        string path = Application.streamingAssetsPath + "/Data/Stage/Stage" + stageNum + ".json";
+        string path = Application.streamingAssetsPath + "/Data/Stage/Stage" + inputField_StageNum.text + ".json";
         if (!File.Exists(path))
         {
-            Debug.LogError(stageNum + ".json Loaded!");
+            Debug.LogError(inputField_StageNum.text + ".json Loaded!");
             return;
         }
 

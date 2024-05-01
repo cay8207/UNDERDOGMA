@@ -26,9 +26,16 @@ public class MoveState : BaseState
     {
         if (_character.IsCharacterCoroutineRunning == false)
         {
-            // 1. 고기가 있는 칸에 도달하는 경우 MeatState로 넘어간다.
-            // 2. 공이 있는 칸에 도달하는 경우 BallState로 넘어간다.
-            // 3. 그렇지 않은 경우 적에게 공격을 받는지 체크하는 Damaged State로 넘어간다.
+            // 1. 만약 캐릭터가 죽었다면 Death State로 넘어간다.
+            if (_character.Heart <= 0)
+            {
+                _character.ChangeState(Character.State.Death);
+                return;
+            }
+
+            // 2. 고기가 있는 칸에 도달하는 경우 MeatState로 넘어간다.
+            // 3. 공이 있는 칸에 도달하는 경우 BallState로 넘어간다.
+            // 4. 그렇지 않은 경우 적에게 공격을 받는지 체크하는 Damaged State로 넘어간다.
 
             if (_nextState == Character.State.Meat)
             {
@@ -36,7 +43,9 @@ public class MoveState : BaseState
             }
             else if (_nextState == Character.State.Kick)
             {
-                _character.ChangeState(Character.State.Kick, targetPosition);
+                // Kick State에서 체력이 깎이는데, move와 kick에서 둘 다 까이면 안되니 체력을 하나 올려준다. 
+                _character.HeartChange(1);
+                _character.ChangeState(Character.State.Kick, targetPosition + returnDirection(_key), _key);
             }
             else if (_nextState == Character.State.Damaged)
             {
@@ -60,9 +69,9 @@ public class MoveState : BaseState
         {
             _character.MoveCount++;
 
-            _character.EnqueueCoroutine(_character.CharacterMoveCoroutine(targetPosition));
-
             _character.HeartChange(-1);
+
+            _character.EnqueueCoroutine(_character.CharacterMoveCoroutine(targetPosition));
 
             AudioManager.Instance.PlaySfx(AudioManager.Sfx.Move);
         }
@@ -98,6 +107,14 @@ public class MoveState : BaseState
                 // 1.1. targetPosition에 벽이 있으므로, 이전 위치로 돌아가야 한다. 
                 targetPosition -= returnDirection(key);
                 _nextState = Character.State.Damaged;
+                break;
+            }
+
+            // 2. 만약 이동하려는 칸에 공이 있다면 Kick State로 이동한다.
+            if (tileObject.Type == TileType.Ball)
+            {
+                targetPosition -= returnDirection(key);
+                _nextState = Character.State.Kick;
                 break;
             }
 

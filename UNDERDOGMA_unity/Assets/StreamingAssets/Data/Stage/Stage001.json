@@ -1,0 +1,73 @@
+{
+    "TileDictionary": {
+        "0, 0": {
+            "Type": "Empty"
+        },
+        "1, 0": {
+            "Type": "Empty"
+        },
+        "2, 0": {
+            "Type": "Empty"
+        },
+        "3, 0": {
+            "Type": "Empty"
+        },
+        "4, 0": {
+            "Type": "Empty"
+        },
+        "-1, -1": {
+            "Type": "Wall"
+        },
+        "-1, 0": {
+            "Type": "Wall"
+        },
+        "-1, 1": {
+            "Type": "Wall"
+        },
+        "0, -1": {
+            "Type": "Wall"
+        },
+        "0, 1": {
+            "Type": "Wall"
+        },
+        "1, -1": {
+            "Type": "Wall"
+        },
+        "1, 1": {
+            "Type": "Wall"
+        },
+        "2, -1": {
+            "Type": "Wall"
+        },
+        "2, 1": {
+            "Type": "Wall"
+        },
+        "3, -1": {
+            "Type": "Wall"
+        },
+        "3, 1": {
+            "Type": "Wall"
+        },
+        "4, -1": {
+            "Type": "Wall"
+        },
+        "4, 1": {
+            "Type": "Wall"
+        },
+        "5, -1": {
+            "Type": "Wall"
+        },
+        "5, 0": {
+            "Type": "Wall"
+        },
+        "5, 1": {
+            "Type": "Wall"
+        }
+    },
+    "ExecutionCount": -1,
+    "CharacterHeart": 10,
+    "CharacterX": 0,
+    "CharacterY": 0,
+    "StageXSize": 5,
+    "StageYSize": 1
+}
