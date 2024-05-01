@@ -221,9 +221,8 @@ public class MapEditorTile : MonoBehaviour
             case TileType.Enemy:
                 json.Add("EnemyType", CurrentEnemyType.ToString());
                 json.Add("IsAlive", true);
-                json.Add("Attack", 1);
                 json.Add("Heart", enemyHP);
-                json.Add("AttackDirection", CurrentEnemyDirection.ToString());
+                json.Add("SpriteDirection", CurrentEnemyDirection.ToString());
                 break;
 
             case TileType.Meat:

@@ -25,14 +25,7 @@ public abstract class Enemy : MonoBehaviour, IEnemyAttributesSetter, IEnemyPosit
         set => _col = value;
     }
 
-    // 적의 공격력과 생명력. 
-    private int _attack;
-    public int Attack
-    {
-        get => _attack;
-        set => _attack = value;
-    }
-
+    // 적의 생명력. 
     private int _heart;
 
     public int Heart
@@ -41,27 +34,26 @@ public abstract class Enemy : MonoBehaviour, IEnemyAttributesSetter, IEnemyPosit
         set => _heart = value;
     }
 
-    private AttackDirection _enemyAttackDirection;
-    public AttackDirection EnemyAttackDirection
+    private SpriteDirection _enemyAttackDirection;
+    public SpriteDirection EnemyAttackDirection
     {
         get => _enemyAttackDirection;
         set => _enemyAttackDirection = value;
     }
 
     // 상하좌우 체크를 위한 배열. 
-    public Dictionary<AttackDirection, Vector2Int> directionOffsetDictionary = new Dictionary<AttackDirection, Vector2Int>
+    public Dictionary<SpriteDirection, Vector2Int> directionOffsetDictionary = new Dictionary<SpriteDirection, Vector2Int>
     {
-        { AttackDirection.Up, new Vector2Int(0, 1) },
-        { AttackDirection.Down, new Vector2Int(0, -1) },
-        { AttackDirection.Left, new Vector2Int(-1, 0) },
-        { AttackDirection.Right, new Vector2Int(1, 0) }
+        { SpriteDirection.Up, new Vector2Int(0, 1) },
+        { SpriteDirection.Down, new Vector2Int(0, -1) },
+        { SpriteDirection.Left, new Vector2Int(-1, 0) },
+        { SpriteDirection.Right, new Vector2Int(1, 0) }
     };
 
     #endregion
 
     public void SetAttributes(EnemyData enemyData)
     {
-        _attack = enemyData.Attack;
         _heart = enemyData.Heart;
         _enemyAttackDirection = enemyData.AttackDirection;
     }
@@ -69,7 +61,6 @@ public abstract class Enemy : MonoBehaviour, IEnemyAttributesSetter, IEnemyPosit
     // Start is called before the first frame update
     public virtual void Start()
     {
-        _attackText.GetComponent<Text>().SetText(_attack);
         _heartText.GetComponent<Text>().SetText(_heart);
     }
 

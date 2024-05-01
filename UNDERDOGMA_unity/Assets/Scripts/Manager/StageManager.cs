@@ -209,8 +209,7 @@ public class StageManager : MonoBehaviour
             // -1인 경우는 벽. 이외의 경우에만 타일 만들어주면 된다. 
             if (tile.Value.Type != TileType.Wall)
             {
-                GameObject newTile = Instantiate(TilePrefab, tilePosition, Quaternion.identity, Tiles.transform);
-                newTile.GetComponent<SpriteRenderer>().sprite = TileSprites[0];
+                Instantiate(TilePrefab, tilePosition, Quaternion.identity, Tiles.transform);
             }
 
             if (tile.Value.Type == TileType.Enemy)

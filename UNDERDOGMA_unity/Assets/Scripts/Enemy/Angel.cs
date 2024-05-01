@@ -31,7 +31,7 @@ public class Angel : Enemy
         if (targetPosition == new Vector2Int(playerRow, playerCol))
         {
             StartCoroutine(EnemyAttackAnimation(targetPosition));
-            return Attack;
+            return 1;
         }
 
         return 0;
@@ -70,23 +70,23 @@ public class Angel : Enemy
         yield return null;
     }
 
-    public void SetAttackRangePosition(GameObject attackRange, AttackDirection attackDirection)
+    public void SetAttackRangePosition(GameObject attackRange, SpriteDirection attackDirection)
     {
         switch (attackDirection)
         {
-            case AttackDirection.Up:
+            case SpriteDirection.Up:
                 attackRange.transform.Rotate(0, 0, -90);
                 attackRange.transform.position += new Vector3(0.0f, -0.38f, 0.0f);
                 break;
-            case AttackDirection.Down:
+            case SpriteDirection.Down:
                 attackRange.transform.Rotate(0, 0, 90);
                 attackRange.transform.position += new Vector3(0.0f, 0.38f, 0.0f);
                 break;
-            case AttackDirection.Left:
+            case SpriteDirection.Left:
                 attackRange.transform.Rotate(0, 0, 0);
                 attackRange.transform.position += new Vector3(0.38f, 0.0f, 0.0f);
                 break;
-            case AttackDirection.Right:
+            case SpriteDirection.Right:
                 attackRange.transform.Rotate(0, 0, 180);
                 attackRange.transform.position += new Vector3(-0.38f, 0.0f, 0.0f);
                 break;

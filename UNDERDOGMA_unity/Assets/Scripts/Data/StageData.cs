@@ -105,7 +105,6 @@ public class StageData
                 case "Enemy":
                     if (tile.Value.ContainsKey("EnemyType") == false
                         || tile.Value.ContainsKey("IsAlive") == false
-                        || tile.Value.ContainsKey("Attack") == false
                         || tile.Value.ContainsKey("Heart") == false
                         || tile.Value.ContainsKey("AttackDirection") == false)
                     {
@@ -150,9 +149,8 @@ public class StageData
 
         EnemyType enemyType = new EnemyType();
         bool isAlive = true;
-        int attack;
         int heart;
-        AttackDirection attackDirection = new AttackDirection();
+        SpriteDirection attackDirection = new SpriteDirection();
 
         switch (data["EnemyType"])
         {
@@ -190,26 +188,25 @@ public class StageData
                 break;
         }
 
-        attack = Int32.Parse(data["Attack"]);
         heart = Int32.Parse(data["Heart"]);
 
         switch (data["AttackDirection"])
         {
             case "Up":
-                attackDirection = AttackDirection.Up;
+                attackDirection = SpriteDirection.Up;
                 break;
             case "Down":
-                attackDirection = AttackDirection.Down;
+                attackDirection = SpriteDirection.Down;
                 break;
             case "Left":
-                attackDirection = AttackDirection.Left;
+                attackDirection = SpriteDirection.Left;
                 break;
             case "Right":
-                attackDirection = AttackDirection.Right;
+                attackDirection = SpriteDirection.Right;
                 break;
         }
 
-        enemyData = new EnemyData(enemyType, isAlive, attack, heart, attackDirection);
+        enemyData = new EnemyData(enemyType, isAlive, heart, attackDirection);
 
         return enemyData;
     }

@@ -6,6 +6,9 @@ using UnityEngine;
 
 public class DamagedState : BaseState
 {
+    // 원래 캐릭터의 위치를 저장하기 위한 변수. 만약 위치가 바뀌었으면, 즉 kickboss에게 차이거나 했으면 한번 더 데미지를 받아야 한다. 
+    Vector2Int characterOriginPosition;
+
     public DamagedState(Character character) : base(character)
     {
 
@@ -13,6 +16,8 @@ public class DamagedState : BaseState
 
     public override void OnStateEnter()
     {
+        characterOriginPosition = new Vector2Int(_character.Row, _character.Col);
+
         EnemyTurn();
     }
 
@@ -30,15 +35,23 @@ public class DamagedState : BaseState
             // 2. 만약 죽지 않았고
             else
             {
-                // 2.1. 처형 턴이라면 ExecutionState로 넘어간다. 
-                if (_character.MoveCount == ExecutionManager.Instance.ExecutionCount)
+                // 2.1. 캐릭터의 위치가 바뀌었다면, 즉 kickboss에게 차이거나 했으면 한번 더 데미지를 받아야 한다.
+                if (characterOriginPosition != new Vector2Int(_character.Row, _character.Col))
                 {
-                    _character._keyDownQueue.Clear();
-                    _character.ChangeState(Character.State.Execution);
+                    _character.ChangeState(Character.State.Damaged);
                 }
                 else
                 {
-                    _character.ChangeState(Character.State.Idle);
+                    // 2.2. 처형 턴이라면 ExecutionState로 넘어간다. 
+                    if (_character.MoveCount == ExecutionManager.Instance.ExecutionCount)
+                    {
+                        _character.ChangeState(Character.State.Execution);
+                    }
+                    // 2.3. 그렇지 않다면 IdleState로 넘어간다.
+                    else
+                    {
+                        _character.ChangeState(Character.State.Idle);
+                    }
                 }
             }
         }

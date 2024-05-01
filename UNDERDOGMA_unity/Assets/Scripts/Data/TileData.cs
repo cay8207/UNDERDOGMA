@@ -96,30 +96,23 @@ public class EnemyData
         get => isAlive;
         set => isAlive = value;
     }
-    private int attack;
-    public int Attack
-    {
-        get => attack;
-        set => attack = value;
-    }
     private int heart;
     public int Heart
     {
         get => heart;
         set => heart = value;
     }
-    private AttackDirection attackDirection;
-    public AttackDirection AttackDirection
+    private SpriteDirection attackDirection;
+    public SpriteDirection AttackDirection
     {
         get => attackDirection;
         set => attackDirection = value;
     }
 
-    public EnemyData(EnemyType enemyType, bool isAlive, int attack, int heart, AttackDirection attackDirection)
+    public EnemyData(EnemyType enemyType, bool isAlive, int heart, SpriteDirection attackDirection)
     {
         this.enemyType = enemyType;
         this.isAlive = isAlive;
-        this.attack = attack;
         this.heart = heart;
         this.attackDirection = attackDirection;
     }
@@ -181,7 +174,7 @@ public enum EnemyType
     KickBoss
 }
 
-public enum AttackDirection
+public enum SpriteDirection
 {
     None,
     Up,
