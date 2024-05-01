@@ -4,32 +4,23 @@
       "Type": "Wall"
     },
     "1, 0": {
-      "Type": "Empty",
-      "Pattern": "0",
-      "TileDirection": "None"
+      "Type": "Empty"
     },
     "2, 0": {
-      "Type": "Empty",
-      "Pattern": "0",
-      "TileDirection": "None"
+      "Type": "Empty"
     },
     "3, 0": {
       "Type": "Enemy",
-      "Pattern": "0",
-      "TileDirection": "None",
-      "EnemyType": "NormalEnemy",
+      "EnemyType": "AllDirectionsAttack",
       "IsAlive": true,
-      "Attack": 1,
       "Heart": 2,
-      "AttackDirection": "Left"
+      "SpriteDirection": "Left"
     },
     "0, 1": {
       "Type": "Wall"
     },
     "1, 1": {
-      "Type": "Empty",
-      "Pattern": "0",
-      "TileDirection": "None"
+      "Type": "Empty"
     },
     "2, 1": {
       "Type": "Wall"
@@ -38,20 +29,20 @@
       "Type": "Wall"
     },
     "0, 2": {
-      "Type": "Empty",
-      "Pattern": "0",
-      "TileDirection": "None"
+      "Type": "Empty"
     },
     "1, 2": {
-      "Type": "Empty",
-      "Pattern": "0",
-      "TileDirection": "None"
+      "Type": "Empty"
     },
     "2, 2": {
       "Type": "Wall"
     },
     "3, 2": {
-      "Type": "Wall"
+      "Type": "Enemy",
+      "EnemyType": "AllDirectionsAttack",
+      "IsAlive": true,
+      "Heart": 9,
+      "SpriteDirection": "Up"
     },
     "-1, -1": {
       "Type": "Wall"
@@ -108,8 +99,8 @@
       "Type": "Wall"
     }
   },
-  "ExecutionCount": -1,
-  "CharacterHeart": 7,
+  "ExecutionCount": 4,
+  "CharacterHeart": 10,
   "CharacterX": 0,
   "CharacterY": 2,
   "StageXSize": 4,

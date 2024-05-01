@@ -98,9 +98,7 @@ public class StageData
                 case "Empty":
                     _tileDictionary
                         .Add(new(tilex, tiley),
-                                new TileObject(TileType.Empty,
-                                        Int32.Parse(tile.Value["Pattern"]),
-                                            returnTileDirection(tile.Value["TileDirection"])));
+                                new TileObject(TileType.Empty));
                     break;
                 case "Enemy":
                     if (tile.Value.ContainsKey("EnemyType") == false

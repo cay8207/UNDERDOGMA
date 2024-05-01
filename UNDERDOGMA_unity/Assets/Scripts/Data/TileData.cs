@@ -12,18 +12,6 @@ public class TileObject
         get => _type;
         set => _type = value;
     }
-    private int _pattern;
-    public int Pattern
-    {
-        get => _pattern;
-        set => _pattern = value;
-    }
-    private TileDirection _tileDirection;
-    public TileDirection TileDirection
-    {
-        get => _tileDirection;
-        set => _tileDirection = value;
-    }
 
     private EnemyData _enemyData;
     public EnemyData EnemyData
@@ -38,44 +26,30 @@ public class TileObject
         set => _meatData = value;
     }
 
-    // 1. Type이 Wall, Ball 등인 경우 생성자. Type만 저장해주면 된다. 
+    // 1. Type이 Wall, Ball, Empty 등인 경우 생성자. Type만 저장해주면 된다. 
     public TileObject(TileType type)
     {
         this._type = type;
     }
 
-    // 2. Type이 Empty인 경우 생성자. 타일에 대한 정보를 저장해준다. 
-    public TileObject(TileType type, int pattern, TileDirection tileDirection)
-    {
-        this._type = type;
-        this._pattern = pattern;
-        this._tileDirection = tileDirection;
-    }
-
-    // 3. Type이 Enemy인 경우 생성자. 타일에 대한 정보와 적에 대한 정보를 저장해준다.
+    // 2. Type이 Enemy인 경우 생성자. 타일에 대한 정보와 적에 대한 정보를 저장해준다.
     public TileObject(TileType type, int pattern, TileDirection tileDirection, EnemyData enemyData)
     {
         this._type = type;
-        this._pattern = pattern;
-        this._tileDirection = tileDirection;
         this._enemyData = enemyData;
     }
 
-    // 4. Type이 Meat인 경우 생성자. 타일에 대한 정보와 고기에 대한 정보를 저장해준다.
+    // 3. Type이 Meat인 경우 생성자. 타일에 대한 정보와 고기에 대한 정보를 저장해준다.
     public TileObject(TileType type, int pattern, TileDirection tileDirection, MeatData meatData)
     {
         this._type = type;
-        this._pattern = pattern;
-        this._tileDirection = tileDirection;
         this._meatData = meatData;
     }
 
-    // 5. 복사 생성자. 
+    // 4. 복사 생성자. 
     public TileObject(TileObject other)
     {
         Type = other.Type;
-        Pattern = other.Pattern;
-        TileDirection = other.TileDirection;
         EnemyData = other.EnemyData;
         MeatData = other.MeatData;
     }

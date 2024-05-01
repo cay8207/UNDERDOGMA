@@ -134,6 +134,8 @@ public class StageManager : MonoBehaviour
                 Time.timeScale = 0;
             }
         }
+
+        // 
     }
 
     // 타일들을 모두 탐색해서, 가장 맵의 끝에 있는 타일의 x, y값을 찾아서 그 중간값을 카메라의 위치로 설정해준다.
@@ -209,7 +211,8 @@ public class StageManager : MonoBehaviour
             // -1인 경우는 벽. 이외의 경우에만 타일 만들어주면 된다. 
             if (tile.Value.Type != TileType.Wall)
             {
-                Instantiate(TilePrefab, tilePosition, Quaternion.identity, Tiles.transform);
+                GameObject newTile = Instantiate(TilePrefab, tilePosition, Quaternion.identity, Tiles.transform);
+                newTile.transform.DORotate(new Vector3(0, 0, UnityEngine.Random.Range(-5.0f, 5.0f)), 0.0f);
             }
 
             if (tile.Value.Type == TileType.Enemy)

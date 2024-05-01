@@ -1,24 +1,16 @@
 {
   "TileDictionary": {
     "0, 0": {
-      "Type": "Empty",
-      "Pattern": "0",
-      "TileDirection": "None"
+      "Type": "Empty"
     },
     "1, 0": {
-      "Type": "Empty",
-      "Pattern": "0",
-      "TileDirection": "None"
+      "Type": "Empty"
     },
     "2, 0": {
-      "Type": "Empty",
-      "Pattern": "0",
-      "TileDirection": "None"
+      "Type": "Empty"
     },
     "3, 0": {
-      "Type": "Empty",
-      "Pattern": "0",
-      "TileDirection": "None"
+      "Type": "Empty"
     },
     "4, 0": {
       "Type": "Wall"
@@ -30,17 +22,13 @@
       "Type": "Wall"
     },
     "1, 1": {
-      "Type": "Empty",
-      "Pattern": "0",
-      "TileDirection": "None"
+      "Type": "Empty"
     },
     "2, 1": {
       "Type": "Wall"
     },
     "3, 1": {
-      "Type": "Empty",
-      "Pattern": "0",
-      "TileDirection": "None"
+      "Type": "Empty"
     },
     "4, 1": {
       "Type": "Wall"
@@ -52,34 +40,23 @@
       "Type": "Wall"
     },
     "1, 2": {
-      "Type": "Empty",
-      "Pattern": "0",
-      "TileDirection": "None"
+      "Type": "Empty"
     },
     "2, 2": {
-      "Type": "Empty",
-      "Pattern": "0",
-      "TileDirection": "None"
+      "Type": "Empty"
     },
     "3, 2": {
-      "Type": "Empty",
-      "Pattern": "0",
-      "TileDirection": "None"
+      "Type": "Empty"
     },
     "4, 2": {
-      "Type": "Empty",
-      "Pattern": "0",
-      "TileDirection": "None"
+      "Type": "Empty"
     },
     "5, 2": {
       "Type": "Enemy",
-      "Pattern": "0",
-      "TileDirection": "None",
       "EnemyType": "ChaserEnemy",
       "IsAlive": true,
-      "Attack": 1,
       "Heart": 3,
-      "AttackDirection": "Left"
+      "SpriteDirection": "Left"
     },
     "0, 3": {
       "Type": "Wall"
@@ -92,13 +69,10 @@
     },
     "3, 3": {
       "Type": "Enemy",
-      "Pattern": "0",
-      "TileDirection": "None",
       "EnemyType": "ChaserEnemy",
       "IsAlive": true,
-      "Attack": 1,
       "Heart": 3,
-      "AttackDirection": "Down"
+      "SpriteDirection": "Down"
     },
     "4, 3": {
       "Type": "Wall"

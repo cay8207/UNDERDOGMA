@@ -4,85 +4,43 @@
       "Type": "Wall"
     },
     "1, 0": {
-      "Type": "Empty",
-      "Pattern": "0",
-      "TileDirection": "None"
+      "Type": "Wall"
     },
     "2, 0": {
-      "Type": "Empty",
-      "Pattern": "0",
-      "TileDirection": "None"
+      "Type": "Wall"
     },
     "3, 0": {
-      "Type": "Enemy",
-      "Pattern": "0",
-      "TileDirection": "None",
-      "EnemyType": "NormalEnemy",
-      "IsAlive": true,
-      "Attack": 1,
-      "Heart": 7,
-      "AttackDirection": "Left"
+      "Type": "Wall"
     },
     "4, 0": {
       "Type": "Wall"
     },
     "0, 1": {
-      "Type": "Empty",
-      "Pattern": "0",
-      "TileDirection": "None"
+      "Type": "Wall"
     },
     "1, 1": {
-      "Type": "Empty",
-      "Pattern": "0",
-      "TileDirection": "None"
+      "Type": "Wall"
     },
     "2, 1": {
-      "Type": "Enemy",
-      "Pattern": "0",
-      "TileDirection": "None",
-      "EnemyType": "NormalEnemy",
-      "IsAlive": true,
-      "Attack": 1,
-      "Heart": 9,
-      "AttackDirection": "Left"
+      "Type": "Wall"
     },
     "3, 1": {
-      "Type": "Empty",
-      "Pattern": "0",
-      "TileDirection": "None"
+      "Type": "Wall"
     },
     "4, 1": {
-      "Type": "Enemy",
-      "Pattern": "0",
-      "TileDirection": "None",
-      "EnemyType": "MiniBoss",
-      "IsAlive": true,
-      "Attack": 1,
-      "Heart": 13,
-      "AttackDirection": "Left"
+      "Type": "Wall"
     },
     "0, 2": {
       "Type": "Wall"
     },
     "1, 2": {
-      "Type": "Empty",
-      "Pattern": "0",
-      "TileDirection": "None"
+      "Type": "Wall"
     },
     "2, 2": {
-      "Type": "Empty",
-      "Pattern": "0",
-      "TileDirection": "None"
+      "Type": "Wall"
     },
     "3, 2": {
-      "Type": "Enemy",
-      "Pattern": "0",
-      "TileDirection": "None",
-      "EnemyType": "NormalEnemy",
-      "IsAlive": true,
-      "Attack": 1,
-      "Heart": 4,
-      "AttackDirection": "Left"
+      "Type": "Wall"
     },
     "4, 2": {
       "Type": "Wall"
@@ -150,8 +108,8 @@
   },
   "ExecutionCount": 4,
   "CharacterHeart": 12,
-  "CharacterX": 1,
-  "CharacterY": 2,
+  "CharacterX": -1,
+  "CharacterY": -1,
   "StageXSize": 5,
   "StageYSize": 3
 }
