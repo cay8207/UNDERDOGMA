@@ -33,14 +33,14 @@ public class TileObject
     }
 
     // 2. Type이 Enemy인 경우 생성자. 타일에 대한 정보와 적에 대한 정보를 저장해준다.
-    public TileObject(TileType type, int pattern, TileDirection tileDirection, EnemyData enemyData)
+    public TileObject(TileType type, EnemyData enemyData)
     {
         this._type = type;
         this._enemyData = enemyData;
     }
 
     // 3. Type이 Meat인 경우 생성자. 타일에 대한 정보와 고기에 대한 정보를 저장해준다.
-    public TileObject(TileType type, int pattern, TileDirection tileDirection, MeatData meatData)
+    public TileObject(TileType type, MeatData meatData)
     {
         this._type = type;
         this._meatData = meatData;
@@ -143,7 +143,7 @@ public enum EnemyType
     Chaser,
     MiniBoss,
     StrongAttack,
-    AllDirection,
+    AllDirectionsAttack,
     Angel,
     KickBoss
 }

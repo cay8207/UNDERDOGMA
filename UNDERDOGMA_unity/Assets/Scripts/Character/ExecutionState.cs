@@ -16,15 +16,25 @@ public class ExecutionState : BaseState
 
     public override void OnStateEnter()
     {
-
+        ExecuteEnemies();
     }
 
     public override void OnStateUpdate()
     {
+        // 1. 캐릭터의 코루틴이 끝났다면
         if (_character.IsCharacterCoroutineRunning == false)
         {
-            ExecuteEnemies();
+            // 1.1. 즉, 처형이 끝났다면 게임이 클리어되었는지를 확인한다. 
+            if (StageManager.Instance.StageClearCheck())
+            {
+                _nextState = Character.State.EndingDialogueState;
+            }
+            else
+            {
+                _nextState = Character.State.Idle;
+            }
 
+            // 1.2. 다음 상태에 따라 state를 변경해준다. 
             if (_nextState == Character.State.Death)
             {
                 _character.ChangeState(Character.State.Death);
@@ -48,7 +58,7 @@ public class ExecutionState : BaseState
     public void ExecuteEnemies()
     {
         // 1. 처형할 적을 찾는다.
-        Dictionary<Vector2Int, GameObject> _executionTarget = ExecutionManager.Instance.ExecuteEnemies();
+        Dictionary<Vector2Int, GameObject> _executionTarget = ExecutionManager.Instance.FindExecutionTargets();
 
         foreach (var enemy in _executionTarget)
         {
@@ -80,15 +90,6 @@ public class ExecutionState : BaseState
             }
 
             _character.EnqueueCoroutine(_character.ExecutionEvent(_executionTarget));
-
-            if (StageManager.Instance.StageClearCheck())
-            {
-                _nextState = Character.State.EndingDialogueState;
-            }
-            else
-            {
-                _nextState = Character.State.Idle;
-            }
         }
     }
 }

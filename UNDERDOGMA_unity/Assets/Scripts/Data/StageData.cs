@@ -104,16 +104,14 @@ public class StageData
                     if (tile.Value.ContainsKey("EnemyType") == false
                         || tile.Value.ContainsKey("IsAlive") == false
                         || tile.Value.ContainsKey("Heart") == false
-                        || tile.Value.ContainsKey("AttackDirection") == false)
+                        || tile.Value.ContainsKey("SpriteDirection") == false)
                     {
-                        Debug.Log("Enemy 데이터가 잘못 입력되었습니다. EnemyType, IsAlive, Attack, Heart, AttackDirection 중 빠진 게 없는지 체크해주세요.");
+                        Debug.Log("Enemy 데이터가 잘못 입력되었습니다. EnemyType, IsAlive, Heart, SpriteDirection 중 빠진 게 없는지 체크해주세요.");
                         continue;
                     }
                     _tileDictionary
                         .Add(new(tilex, tiley),
                                 new TileObject(TileType.Enemy,
-                                        Int32.Parse(tile.Value["Pattern"]),
-                                            returnTileDirection(tile.Value["TileDirection"]),
                                                 createEnemyData(tile.Value)));
                     break;
                 case "Meat":
@@ -126,8 +124,6 @@ public class StageData
                     _tileDictionary
                         .Add(new(tilex, tiley),
                                 new TileObject(TileType.Meat,
-                                        Int32.Parse(tile.Value["Pattern"]),
-                                            returnTileDirection(tile.Value["TileDirection"]),
                                                 createMeatData(tile.Value)));
                     break;
 
@@ -148,14 +144,14 @@ public class StageData
         EnemyType enemyType = new EnemyType();
         bool isAlive = true;
         int heart;
-        SpriteDirection attackDirection = new SpriteDirection();
+        SpriteDirection spriteDirection = new SpriteDirection();
 
         switch (data["EnemyType"])
         {
             case "NormalEnemy":
                 enemyType = EnemyType.NormalEnemy;
                 break;
-            case "ChaserEnemy":
+            case "Chaser":
                 enemyType = EnemyType.Chaser;
                 break;
             case "MiniBoss":
@@ -164,8 +160,8 @@ public class StageData
             case "StrongAttack":
                 enemyType = EnemyType.StrongAttack;
                 break;
-            case "AllDirection":
-                enemyType = EnemyType.AllDirection;
+            case "AllDirectionsAttack":
+                enemyType = EnemyType.AllDirectionsAttack;
                 break;
             case "Angel":
                 enemyType = EnemyType.Angel;
@@ -188,23 +184,23 @@ public class StageData
 
         heart = Int32.Parse(data["Heart"]);
 
-        switch (data["AttackDirection"])
+        switch (data["SpriteDirection"])
         {
             case "Up":
-                attackDirection = SpriteDirection.Up;
+                spriteDirection = SpriteDirection.Up;
                 break;
             case "Down":
-                attackDirection = SpriteDirection.Down;
+                spriteDirection = SpriteDirection.Down;
                 break;
             case "Left":
-                attackDirection = SpriteDirection.Left;
+                spriteDirection = SpriteDirection.Left;
                 break;
             case "Right":
-                attackDirection = SpriteDirection.Right;
+                spriteDirection = SpriteDirection.Right;
                 break;
         }
 
-        enemyData = new EnemyData(enemyType, isAlive, heart, attackDirection);
+        enemyData = new EnemyData(enemyType, isAlive, heart, spriteDirection);
 
         return enemyData;
     }
@@ -250,22 +246,6 @@ public class StageData
         }
     }
 
-    public TileDirection returnTileDirection(String tileDirection)
-    {
-        switch (tileDirection)
-        {
-            case "Up":
-                return TileDirection.Up;
-            case "Down":
-                return TileDirection.Down;
-            case "Left":
-                return TileDirection.Left;
-            case "Right":
-                return TileDirection.Right;
-            default:
-                return TileDirection.None;
-        }
-    }
 }
 
 

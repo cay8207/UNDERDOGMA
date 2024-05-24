@@ -120,12 +120,7 @@ public class ExecutionManager : MonoBehaviour
 
         UpdateRemainEnemyUI();
 
-        // 1, 2, 3스테이지에서는 처형 횟수를 표시하지 않기 위한 로직. 
-        // 24년 3월 이후에 한번 확인해서 필요없으면 지우면 된다. 
-        if (GameManager.Instance.Stage != 1 && GameManager.Instance.Stage != 2 && GameManager.Instance.Stage != 3)
-        {
-            ExecutionNum.SetText((ExecutionCount - StageManager.Instance._character.GetComponent<Character>().MoveCount).ToString());
-        }
+        ExecutionNum.SetText((ExecutionCount - StageManager.Instance._character.GetComponent<Character>().MoveCount).ToString());
     }
 
     // 남은 적 UI를 세팅해주는 함수. 
@@ -151,7 +146,7 @@ public class ExecutionManager : MonoBehaviour
                 if (ExecutionCount > 0)
                 {
                     // 처형 대상들을 찾아 딕셔너리에 저장한다. 
-                    _executionTargetDictionary = ExecuteEnemies();
+                    _executionTargetDictionary = FindExecutionTargets();
 
                     if (_executionTargetDictionary.Count > 0)
                     {
@@ -315,7 +310,7 @@ public class ExecutionManager : MonoBehaviour
 
 
     // 체력이 가장 높은 적 or 캐릭터들이 처형당해야 한다.
-    public Dictionary<Vector2Int, GameObject> ExecuteEnemies()
+    public Dictionary<Vector2Int, GameObject> FindExecutionTargets()
     {
         // 1. 체력이 가장 높은 오브젝트를 저장하는 변수들을 선언한다.
         int _targetHeart = 0;
@@ -334,7 +329,9 @@ public class ExecutionManager : MonoBehaviour
 
             if (tile.Type == TileType.Enemy)
             {
-                if ((tile.EnemyData.EnemyType == EnemyType.NormalEnemy || tile.EnemyData.EnemyType == EnemyType.Chaser)
+                if ((tile.EnemyData.EnemyType == EnemyType.NormalEnemy || tile.EnemyData.EnemyType == EnemyType.Chaser
+                    || tile.EnemyData.EnemyType == EnemyType.StrongAttack || tile.EnemyData.EnemyType == EnemyType.AllDirectionsAttack
+                    || tile.EnemyData.EnemyType == EnemyType.Angel)
                     && tile.EnemyData.IsAlive == true)
                 {
                     // 2.1. 만약 해당 적이 체력이 가장 높다면 기존 큐를 비우고 새롭게 추가한다. 

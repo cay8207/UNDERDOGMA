@@ -100,7 +100,7 @@ public abstract class Enemy : MonoBehaviour, IEnemyAttributesSetter, IEnemyPosit
 
         if (deathByExecution == true)
         {
-            yield return new WaitForSeconds(2.5f);
+            yield return new WaitForSeconds(2.2f);
         }
 
         StageManager.Instance.TempTileDictionary[targetPosition].EnemyData.IsAlive = false;

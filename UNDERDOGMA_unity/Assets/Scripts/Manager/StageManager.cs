@@ -74,6 +74,14 @@ public class StageManager : MonoBehaviour
         set => _tempTileDictionary = value;
     }
 
+    // 3.2. 현재 게임에 존재하는 타일 오브젝트들을 관리하는 dictionary.
+    private Dictionary<Vector2Int, GameObject> _tileObjectDictionary = new Dictionary<Vector2Int, GameObject>();
+    public Dictionary<Vector2Int, GameObject> TileObjectDictionary
+    {
+        get => _tileObjectDictionary;
+        set => _tileObjectDictionary = value;
+    }
+
     // 3.2. 현재 게임에 존재하는 모든 오브젝트들을 관리하는 dictionary.
     private Dictionary<Vector2Int, GameObject> _gameObjectDictionary = new Dictionary<Vector2Int, GameObject>();
     public Dictionary<Vector2Int, GameObject> GameObjectDictionary
@@ -213,6 +221,7 @@ public class StageManager : MonoBehaviour
             {
                 GameObject newTile = Instantiate(TilePrefab, tilePosition, Quaternion.identity, Tiles.transform);
                 newTile.transform.DORotate(new Vector3(0, 0, UnityEngine.Random.Range(-5.0f, 5.0f)), 0.0f);
+                _tileObjectDictionary.Add(new Vector2Int(tile.Key.x, tile.Key.y), newTile);
             }
 
             if (tile.Value.Type == TileType.Enemy)
@@ -343,7 +352,7 @@ public class StageManager : MonoBehaviour
                 return MiniBossPrefab;
             case EnemyType.StrongAttack:
                 return StrongAttackPrefab;
-            case EnemyType.AllDirection:
+            case EnemyType.AllDirectionsAttack:
                 return AllDirectionPrefab;
             case EnemyType.Angel:
                 return AngelPrefab;

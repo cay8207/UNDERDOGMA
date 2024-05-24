@@ -115,7 +115,7 @@ public class DamagedState : BaseState
                         _character.EnqueueCoroutine(_character.CharacterDamaged(amount));
                     }
                 }
-                else if (StageManager.Instance.TempTileDictionary[new Vector2Int(enemyRow, enemyCol)].EnemyData.EnemyType == EnemyType.AllDirection)
+                else if (StageManager.Instance.TempTileDictionary[new Vector2Int(enemyRow, enemyCol)].EnemyData.EnemyType == EnemyType.AllDirectionsAttack)
                 {
                     amount = gameObject.Value.GetComponent<AllDirection>().CheckCharacterDamaged(PlayerPosition.x, PlayerPosition.y);
                     if (amount > 0)

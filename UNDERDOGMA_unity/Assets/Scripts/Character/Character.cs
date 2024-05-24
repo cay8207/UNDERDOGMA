@@ -76,6 +76,8 @@ public class Character : MonoBehaviour
     }
     public Queue<KeyCode> _keyDownQueue = new Queue<KeyCode>();
 
+    public Vector2 characterBias = new Vector2(-0.07f, 0.35f);
+
     // 7. 캐릭터의 코루틴을 관리하기 위한 변수. 큐로 관리하므로 하나의 변수만 필요.
 
     private bool _isCharacterCoroutineRunning;
@@ -365,15 +367,46 @@ public class Character : MonoBehaviour
         _coroutineController.EnqueueCoroutine(coroutine);
     }
 
+    // 캐릭터가 이동하는 애니메이션을 보여준다.
     public IEnumerator CharacterMoveCoroutine(Vector2Int targetPosition)
     {
+        // 1. 코루틴이 실행되는 동안 다른 코루틴이 실행되지 않도록, isCharacterCoroutineRunning을 true로 설정한다.
         _isCharacterCoroutineRunning = true;
 
+
+
+        // 3. 캐릭터가 이동하는 애니메이션을 재생한다.
+        transform.DOMove(new Vector2(targetPosition.x, targetPosition.y) + characterBias, 0.5f, false).SetEase(Ease.OutCirc);
+
+        // 4. 캐릭터가 시작하는 타일과 도착하는 타일이 살짝 흔들리는 애니메이션을 재생한다.
+        Sequence StartTileMoveSequence = DOTween.Sequence();
+
+        StartTileMoveSequence
+            .Append(StageManager.Instance.TileObjectDictionary[new Vector2Int(_row, _col)].transform
+                .DOMove(new Vector2(_row, _col) + characterBias - new Vector2(targetPosition.x - _row, targetPosition.y - _col) * 0.1f, 0.1f, false)
+                .SetEase(Ease.OutCirc))
+        .Append(StageManager.Instance.TileObjectDictionary[new Vector2Int(_row, _col)].transform
+                .DOMove(new Vector2(_row, _col) + characterBias + new Vector2(targetPosition.x - _row, targetPosition.y - _col) * 0.1f, 0.1f, false)
+            .SetEase(Ease.OutCirc));
+
+        Sequence EndTileMoveSequence = DOTween.Sequence();
+
+        EndTileMoveSequence
+            .Append(StageManager.Instance.TileObjectDictionary[targetPosition].transform
+            .DOMove(new Vector2(targetPosition.x, targetPosition.y) + characterBias + new Vector2(targetPosition.x - _row, targetPosition.y - _col) * 0.1f, 0.1f, false)
+            .SetEase(Ease.OutCirc)
+        )
+        .Append(StageManager.Instance.TileObjectDictionary[targetPosition].transform
+            .DOMove(new Vector2(targetPosition.x, targetPosition.y) + characterBias - new Vector2(targetPosition.x - _row, targetPosition.y - _col) * 0.1f, 0.1f, false)
+            .SetEase(Ease.OutCirc)
+        );
+
+
+        // 2. 위치값을 업데이트 해준다. 
         int row = targetPosition.x;
         int col = targetPosition.y;
 
-        transform.DOMove(new Vector3(row, col, 0) + new Vector3(-0.07f, 0.35f, 0), 0.5f, false).SetEase(Ease.OutCirc);
-
+        // 5. 캐릭터가 이동하는 시간동안 다른 코루틴이 실행되지 않도록, 0.5초간 대기한다.
         yield return new WaitForSeconds(0.5f);
 
         _isCharacterCoroutineRunning = false;
@@ -391,10 +424,10 @@ public class Character : MonoBehaviour
         CharacterAttackSequence
                 .AppendInterval(0.3f)
                 .Append(
-                    transform.DOMove(new Vector2(Row + (targetPosition.x - Row) * 0.5f, Col + (targetPosition.y - Col) * 0.5f) + new Vector2(-0.07f, 0.35f), 0.3f, false)
+                    transform.DOMove(new Vector2(Row + (targetPosition.x - Row) * 0.5f, Col + (targetPosition.y - Col) * 0.5f) + characterBias, 0.3f, false)
                 )
                 .Append(
-                    transform.DOMove(new Vector2(Row, Col) + new Vector2(-0.07f, 0.35f), 0.3f, false)
+                    transform.DOMove(new Vector2(Row, Col) + characterBias, 0.3f, false)
                 );
 
         // 캐릭터가 공격하는 애니메이션 재생.

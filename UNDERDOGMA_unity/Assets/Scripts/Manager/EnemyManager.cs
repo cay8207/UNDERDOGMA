@@ -32,7 +32,7 @@ public class EnemyManager : Singleton<EnemyManager>
         {
             EnemyDeathCoroutine = StartCoroutine(GameObjectDictionary[targetPosition].GetComponent<StrongAttack>().EnemyDeath(targetPosition, deathByExecution));
         }
-        else if (StageManager.Instance.TempTileDictionary[targetPosition].EnemyData.EnemyType == EnemyType.AllDirection)
+        else if (StageManager.Instance.TempTileDictionary[targetPosition].EnemyData.EnemyType == EnemyType.AllDirectionsAttack)
         {
             EnemyDeathCoroutine = StartCoroutine(GameObjectDictionary[targetPosition].GetComponent<AllDirection>().EnemyDeath(targetPosition, deathByExecution));
         }
