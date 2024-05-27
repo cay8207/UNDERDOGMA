@@ -892,6 +892,7 @@ MonoBehaviour:
     Empty: {fileID: 21300000, guid: ab8b2a87786ed764ca3612c68355a1b7, type: 3}
     Player: {fileID: 21300000, guid: c2708c6366428184c99e43dd92247982, type: 3}
     Meat: {fileID: 21300000, guid: 2eb0bb53f02ab414cad49f65ff62b7d1, type: 3}
+    Ball: {fileID: 21300000, guid: 7f79a1f743796f343a7c98e7bdecd62c, type: 3}
     NormalEnemy: {fileID: 21300000, guid: f84df4042f89e014e96b8731ec9e9833, type: 3}
     ChaserEnemy: {fileID: 21300000, guid: 6078112b8cb7c2a4c9c2fcc949841400, type: 3}
     MiniBoss: {fileID: 21300000, guid: 41b5f74544360f349adc75c12717fa6e, type: 3}

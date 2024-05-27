@@ -251,6 +251,12 @@ public class StageManager : MonoBehaviour
 
                 _gameObjectDictionary.Add(new Vector2Int(tile.Key.x, tile.Key.y), newMeat);
             }
+
+            // 5.4. 공을 만들어준다.
+            if (tile.Value.Type == TileType.Ball)
+            {
+                SetUpBall(new Vector2Int(tile.Key.x, tile.Key.y), tile.Value);
+            }
         }
 
         // 캐릭터 오브젝트를 생성하고 초기화해준다. 

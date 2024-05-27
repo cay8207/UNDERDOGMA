@@ -13,7 +13,7 @@ public class MapEditorTile : MonoBehaviour
 {
     public enum TileType
     {
-        Wall, Empty, Player, Enemy, Meat
+        Wall, Empty, Player, Enemy, Meat, Ball
     }
 
     public TileType CurrentTileType;
@@ -35,6 +35,7 @@ public class MapEditorTile : MonoBehaviour
         public Sprite Empty;
         public Sprite Player;
         public Sprite Meat;
+        public Sprite Ball;
         public Sprite NormalEnemy;
         public Sprite ChaserEnemy;
         public Sprite MiniBoss;
@@ -181,6 +182,8 @@ public class MapEditorTile : MonoBehaviour
                 return tileSprites.Empty;
             case TileType.Player:
                 return tileSprites.Player;
+            case TileType.Ball:
+                return tileSprites.Ball;
             case TileType.Enemy:
                 switch (CurrentEnemyType)
                 {

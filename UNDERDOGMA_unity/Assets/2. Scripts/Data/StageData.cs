@@ -126,6 +126,11 @@ public class StageData
                                 new TileObject(TileType.Meat,
                                                 createMeatData(tile.Value)));
                     break;
+                case "Ball":
+                    _tileDictionary
+                        .Add(new(tilex, tiley),
+                                new TileObject(TileType.Ball));
+                    break;
 
             }
         }

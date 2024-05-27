@@ -44,7 +44,9 @@ public class MoveState : BaseState
             else if (_nextState == Character.State.Kick)
             {
                 // Kick State에서 체력이 깎이는데, move와 kick에서 둘 다 까이면 안되니 체력을 하나 올려준다. 
+                // 그리고 kick에서 이동 횟수도 증가하는데, 이럼 두 번 증가해버림. 한번만 증가하도록 해야 함. 
                 _character.HeartChange(1);
+                _character.MoveCount--;
                 _character.ChangeState(Character.State.Kick, targetPosition + returnDirection(_key), _key);
             }
             else if (_nextState == Character.State.Damaged)
