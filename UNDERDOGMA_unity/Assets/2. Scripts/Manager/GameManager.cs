@@ -42,6 +42,8 @@ public class GameManager : Singleton<GameManager>
         set => _dialogueDataTable = value;
     }
 
+    public bool FromMapEditor = false;
+
     void Awake()
     {
         DontDestroyOnLoad(this.gameObject);
@@ -76,20 +78,27 @@ public class GameManager : Singleton<GameManager>
         int setWidth = 1920; // 사용자 설정 너비
         int setHeight = 1080; // 사용자 설정 높이
 
-        int deviceWidth = Screen.width; // 기기 너비 저장
-        int deviceHeight = Screen.height; // 기기 높이 저장
+        // 목표 해상도 비율을 계산합니다.
+        float targetAspect = (float)setWidth / setHeight;
+        // 현재 기기의 해상도 비율을 계산합니다.
+        float deviceAspect = (float)Screen.width / Screen.height;
 
-        Screen.SetResolution(setWidth, (int)(((float)deviceHeight / deviceWidth) * setWidth), true); // SetResolution 함수 제대로 사용하기
+        // 목표 해상도에 맞추어 스크린 해상도를 설정합니다.
+        Screen.SetResolution(setWidth, setHeight, true);
 
-        if ((float)setWidth / setHeight < (float)deviceWidth / deviceHeight) // 기기의 해상도 비가 더 큰 경우
+        Debug.Log("ScreenWidth: " + Screen.width + " " + "ScreenHeight: " + Screen.height);
+        Debug.Log("targetAspect: " + targetAspect + " " + "deviceAspect: " + deviceAspect);
+
+        // 카메라 뷰포트를 조정하여 올바른 종횡비를 유지합니다.
+        if (targetAspect > deviceAspect)
         {
-            float newWidth = ((float)setWidth / setHeight) / ((float)deviceWidth / deviceHeight); // 새로운 너비
-            Camera.main.rect = new Rect((1f - newWidth) / 2f, 0f, newWidth, 1f); // 새로운 Rect 적용
+            float scaleHeight = targetAspect / deviceAspect;
+            Camera.main.rect = new Rect(0f, (1f - scaleHeight) / 2f, 1f, scaleHeight);
         }
-        else // 게임의 해상도 비가 더 큰 경우
+        else
         {
-            float newHeight = ((float)deviceWidth / deviceHeight) / ((float)setWidth / setHeight); // 새로운 높이
-            Camera.main.rect = new Rect(0f, (1f - newHeight) / 2f, 1f, newHeight); // 새로운 Rect 적용
+            float scaleWidth = deviceAspect / targetAspect;
+            Camera.main.rect = new Rect((1f - scaleWidth) / 2f, 0f, scaleWidth, 1f);
         }
     }
 }

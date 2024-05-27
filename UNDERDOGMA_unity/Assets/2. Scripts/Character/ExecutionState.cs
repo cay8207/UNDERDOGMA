@@ -9,6 +9,8 @@ public class ExecutionState : BaseState
 {
     public Character.State _nextState;
 
+    public bool isCharacterExecuted = false;
+
     public ExecutionState(Character character) : base(character)
     {
 
@@ -16,6 +18,8 @@ public class ExecutionState : BaseState
 
     public override void OnStateEnter()
     {
+        isCharacterExecuted = false;
+
         ExecuteEnemies();
     }
 
@@ -25,13 +29,9 @@ public class ExecutionState : BaseState
         if (_character.IsCharacterCoroutineRunning == false)
         {
             // 1.1. 즉, 처형이 끝났다면 게임이 클리어되었는지를 확인한다. 
-            if (StageManager.Instance.StageClearCheck())
+            if (StageManager.Instance.StageClearCheck() && isCharacterExecuted == false)
             {
                 _nextState = Character.State.EndingDialogueState;
-            }
-            else
-            {
-                _nextState = Character.State.Idle;
             }
 
             // 1.2. 다음 상태에 따라 state를 변경해준다. 
@@ -80,6 +80,8 @@ public class ExecutionState : BaseState
             _character.EnqueueCoroutine(_character.ExecutionEvent(_executionTarget));
 
             _nextState = Character.State.Death;
+
+            isCharacterExecuted = true;
         }
         // 3. 만약 큐에 character가 없다면 적을 모두 처형한다. 
         else
@@ -91,5 +93,8 @@ public class ExecutionState : BaseState
 
             _character.EnqueueCoroutine(_character.ExecutionEvent(_executionTarget));
         }
+
+        // 4. 캐릭터의 이동 카운트를 0으로 초기화한다. 
+        _character.MoveCount = 0;
     }
 }

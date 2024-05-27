@@ -4943,7 +4943,7 @@ PrefabInstance:
     m_TransformParent: {fileID: 1004603182}
     m_Modifications:
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
-      propertyPath: iconDown
+      propertyPath: iconUp
       value: 
       objectReference: {fileID: 1991139437}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
@@ -4956,11 +4956,11 @@ PrefabInstance:
       objectReference: {fileID: 914424749}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: StageScene
-      value: Stage3
+      value: Stage19
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: StageNumber
-      value: 103
+      value: 203
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: selectMarker
@@ -4972,11 +4972,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535945, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -4.014
+      value: -4.738
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535945, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.519
+      value: -0.076
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535945, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_LocalPosition.z
@@ -5024,6 +5024,53 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
+--- !u!1 &90537643
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 90537645}
+  - component: {fileID: 90537644}
+  m_Layer: 0
+  m_Name: LoadingManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &90537644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 90537643}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 781da7590be321142bfa0383e50eb61e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  StageManagerPrefab: {fileID: 7489602292271870393, guid: c22cac02be2d81a4aa8081f3433f1e40, type: 3}
+  ExecutionPrefab: {fileID: 3837279994538466686, guid: 5092b90505c798f429ae38596b01aabc, type: 3}
+  DialogueManagerPrefab: {fileID: 1572301300895597368, guid: 5e735ae1e7391a94e8dcd493ab7b5069, type: 3}
+--- !u!4 &90537645
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 90537643}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &159386075 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 4109438971474169486, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
@@ -5160,11 +5207,11 @@ PrefabInstance:
       objectReference: {fileID: 1815290294}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: StageScene
-      value: Stage2
+      value: Stage18
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: StageNumber
-      value: 102
+      value: 202
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: selectMarker
@@ -5176,11 +5223,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535945, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -5.837
+      value: -5.888
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535945, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.519
+      value: -0.95
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535945, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_LocalPosition.z
@@ -5338,6 +5385,14 @@ PrefabInstance:
     m_TransformParent: {fileID: 1004603182}
     m_Modifications:
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
+      propertyPath: iconUp
+      value: 
+      objectReference: {fileID: 722540736}
+    - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
+      propertyPath: iconDown
+      value: 
+      objectReference: {fileID: 1936586346}
+    - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: iconLeft
       value: 
       objectReference: {fileID: 722540736}
@@ -5347,11 +5402,11 @@ PrefabInstance:
       objectReference: {fileID: 1722323832}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: StageScene
-      value: Stage9
+      value: Stage25
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: StageNumber
-      value: 109
+      value: 209
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: selectMarker
@@ -5363,11 +5418,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535945, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.896
+      value: 2.841
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535945, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.289
+      value: -0.92700005
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535945, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_LocalPosition.z
@@ -5439,16 +5494,16 @@ PrefabInstance:
     m_TransformParent: {fileID: 233126638}
     m_Modifications:
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
-      propertyPath: iconUp
+      propertyPath: iconDown
       value: 
-      objectReference: {fileID: 1162073552}
+      objectReference: {fileID: 1080776743}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: StageScene
-      value: Stage14
+      value: Stage30
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: StageNumber
-      value: 123
+      value: 214
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: selectMarker
@@ -5460,11 +5515,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535945, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.324
+      value: -1.555
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535945, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.652
+      value: 2.983
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535945, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_LocalPosition.z
@@ -5524,16 +5579,16 @@ PrefabInstance:
     m_TransformParent: {fileID: 233126638}
     m_Modifications:
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
-      propertyPath: iconDown
+      propertyPath: iconUp
       value: 
       objectReference: {fileID: 914424749}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: StageScene
-      value: Stage13
+      value: Stage29
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: StageNumber
-      value: 122
+      value: 213
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: selectMarker
@@ -5545,11 +5600,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535945, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.785
+      value: -2.84
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535945, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.593
+      value: -2.514
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535945, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_LocalPosition.z
@@ -5659,7 +5714,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -10
-  m_Sprite: {fileID: 21300000, guid: a49db55fcbd93f943ad574747205650e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: bfb50ce76b884814ca8bfe03b09c9465, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -5710,13 +5765,9 @@ PrefabInstance:
     m_TransformParent: {fileID: 1004603182}
     m_Modifications:
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
-      propertyPath: iconUp
-      value: 
-      objectReference: {fileID: 1510222519}
-    - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: iconDown
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1510222519}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: iconLeft
       value: 
@@ -5727,11 +5778,11 @@ PrefabInstance:
       objectReference: {fileID: 1080776743}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: StageScene
-      value: Stage4
+      value: Stage20
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: StageNumber
-      value: 104
+      value: 204
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: selectMarker
@@ -5743,11 +5794,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535945, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.785
+      value: -2.84
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535945, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.493
+      value: -0.076
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535945, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_LocalPosition.z
@@ -5816,53 +5867,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ae270463f2e01a4ca9dc3c23b58ed17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &748039456
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 748039458}
-  - component: {fileID: 748039457}
-  m_Layer: 0
-  m_Name: GameManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &748039457
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 748039456}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4408f3a93ffffa846a2fa26d8cb19920, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  StageManagerPrefab: {fileID: 7489602292271870393, guid: c22cac02be2d81a4aa8081f3433f1e40, type: 3}
-  ExecutionPrefab: {fileID: 3837279994538466686, guid: 5092b90505c798f429ae38596b01aabc, type: 3}
-  DialogueManagerPrefab: {fileID: 1572301300895597368, guid: 5e735ae1e7391a94e8dcd493ab7b5069, type: 3}
---- !u!4 &748039458
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 748039456}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &830740454
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5870,10 +5874,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1004603182}
     m_Modifications:
-    - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
-      propertyPath: iconDown
-      value: 
-      objectReference: {fileID: 325712940}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: iconLeft
       value: 
@@ -5884,11 +5884,11 @@ PrefabInstance:
       objectReference: {fileID: 1036842134}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: StageScene
-      value: Stage6
+      value: Stage22
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: StageNumber
-      value: 106
+      value: 206
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: selectMarker
@@ -5900,11 +5900,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535945, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.324
+      value: -0.263
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535945, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.539
+      value: 1.8299999
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535945, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_LocalPosition.z
@@ -5980,6 +5980,7 @@ GameObject:
   - component: {fileID: 910457201}
   - component: {fileID: 910457200}
   - component: {fileID: 910457203}
+  - component: {fileID: 910457204}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -6086,6 +6087,20 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
+--- !u!114 &910457204
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 910457199}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11a4cc48ab1a7f844912e276de0bd684, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _character: {fileID: 0}
+  originalTransform: {x: 0, y: 0, z: 0}
 --- !u!114 &914424749 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
@@ -6126,16 +6141,16 @@ PrefabInstance:
     m_TransformParent: {fileID: 233126638}
     m_Modifications:
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
-      propertyPath: iconDown
+      propertyPath: iconUp
       value: 
-      objectReference: {fileID: 722540736}
+      objectReference: {fileID: 618635113}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: StageScene
-      value: Stage16
+      value: Stage32
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: StageNumber
-      value: 125
+      value: 216
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: selectMarker
@@ -6147,11 +6162,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535945, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.975
+      value: 2.841
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535945, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.25
+      value: -3.133
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535945, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_LocalPosition.z
@@ -6580,11 +6595,7 @@ PrefabInstance:
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: iconUp
       value: 
-      objectReference: {fileID: 914424749}
-    - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
-      propertyPath: iconDown
-      value: 
-      objectReference: {fileID: 1162073552}
+      objectReference: {fileID: 325712940}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: iconLeft
       value: 
@@ -6595,11 +6606,11 @@ PrefabInstance:
       objectReference: {fileID: 1162073552}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: StageScene
-      value: Stage5
+      value: Stage21
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: StageNumber
-      value: 105
+      value: 205
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: selectMarker
@@ -6611,11 +6622,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535945, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.696
+      value: -1.555
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535945, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.519
+      value: 0.9239999
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535945, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_LocalPosition.z
@@ -6726,7 +6737,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "1. \uD56D\uAD6C"
+  m_text: "2. \uD658\uB77D\uAC00"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 04c7fa96092c4df4ab8957becda6725e, type: 2}
   m_sharedMaterial: {fileID: -4021121503419889103, guid: 04c7fa96092c4df4ab8957becda6725e, type: 2}
@@ -6759,7 +6770,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 1
+  m_fontStyle: 0
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -6811,16 +6822,16 @@ PrefabInstance:
     m_TransformParent: {fileID: 233126638}
     m_Modifications:
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
-      propertyPath: iconUp
+      propertyPath: iconDown
       value: 
       objectReference: {fileID: 1815290294}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: StageScene
-      value: Stage12
+      value: Stage28
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: StageNumber
-      value: 121
+      value: 212
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: selectMarker
@@ -6832,11 +6843,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535945, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -4.014
+      value: -4.738
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535945, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.559
+      value: 2.315
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535945, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_LocalPosition.z
@@ -6921,28 +6932,20 @@ PrefabInstance:
     m_TransformParent: {fileID: 1004603182}
     m_Modifications:
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
-      propertyPath: iconUp
-      value: 
-      objectReference: {fileID: 722540736}
-    - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: iconDown
       value: 
-      objectReference: {fileID: 1162073552}
+      objectReference: {fileID: 722540736}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: iconLeft
       value: 
       objectReference: {fileID: 1162073552}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
-      propertyPath: iconRight
-      value: 
-      objectReference: {fileID: 1376825588}
-    - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: StageScene
-      value: Stage7
+      value: Stage23
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: StageNumber
-      value: 107
+      value: 207
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: selectMarker
@@ -6954,11 +6957,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535945, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.975
+      value: 1.491
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535945, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.519
+      value: 1.83
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535945, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_LocalPosition.z
@@ -7032,22 +7035,26 @@ PrefabInstance:
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: iconUp
       value: 
-      objectReference: {fileID: 1936586346}
+      objectReference: {fileID: 1036842134}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: iconDown
       value: 
-      objectReference: {fileID: 1036842134}
+      objectReference: {fileID: 618635113}
+    - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
+      propertyPath: iconLeft
+      value: 
+      objectReference: {fileID: 1376825588}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: iconRight
       value: 
       objectReference: {fileID: 618635113}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: StageScene
-      value: Stage8
+      value: Stage24
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: StageNumber
-      value: 108
+      value: 208
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: selectMarker
@@ -7059,11 +7066,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535945, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.975
+      value: 1.491
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535945, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.289
+      value: 0.042000003
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535945, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_LocalPosition.z
@@ -7111,6 +7118,53 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
+--- !u!1 &1661078137
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1661078139}
+  - component: {fileID: 1661078138}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1661078138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1661078137}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4408f3a93ffffa846a2fa26d8cb19920, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  StageManagerPrefab: {fileID: 7489602292271870393, guid: c22cac02be2d81a4aa8081f3433f1e40, type: 3}
+  ExecutionPrefab: {fileID: 3837279994538466686, guid: 5092b90505c798f429ae38596b01aabc, type: 3}
+  DialogueManagerPrefab: {fileID: 1572301300895597368, guid: 5e735ae1e7391a94e8dcd493ab7b5069, type: 3}
+--- !u!4 &1661078139
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1661078137}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1699997398 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 4109438971474169486, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
@@ -7145,16 +7199,16 @@ PrefabInstance:
     m_TransformParent: {fileID: 233126638}
     m_Modifications:
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
-      propertyPath: iconLeft
+      propertyPath: iconRight
       value: 
-      objectReference: {fileID: 1036842134}
+      objectReference: {fileID: 722540736}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: StageScene
-      value: Stage15
+      value: Stage31
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: StageNumber
-      value: 124
+      value: 215
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: selectMarker
@@ -7166,11 +7220,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535945, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.896
+      value: -0.226
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535945, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.519
+      value: 0.042
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535945, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_LocalPosition.z
@@ -7222,53 +7276,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
---- !u!1 &1792576008
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1792576010}
-  - component: {fileID: 1792576009}
-  m_Layer: 0
-  m_Name: LoadingManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1792576009
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1792576008}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 781da7590be321142bfa0383e50eb61e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  StageManagerPrefab: {fileID: 7489602292271870393, guid: c22cac02be2d81a4aa8081f3433f1e40, type: 3}
-  ExecutionPrefab: {fileID: 3837279994538466686, guid: 5092b90505c798f429ae38596b01aabc, type: 3}
-  DialogueManagerPrefab: {fileID: 1572301300895597368, guid: 5e735ae1e7391a94e8dcd493ab7b5069, type: 3}
---- !u!4 &1792576010
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1792576008}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 8
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1815290294 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
@@ -7298,11 +7305,11 @@ PrefabInstance:
       objectReference: {fileID: 618635113}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: StageScene
-      value: Stage10
+      value: Stage26
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: StageNumber
-      value: 110
+      value: 210
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: selectMarker
@@ -7314,11 +7321,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535945, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 5.829
+      value: 6.289
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535945, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.23
+      value: -0.783
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535945, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_LocalPosition.z
@@ -7528,7 +7535,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: e76ccc7a1e45f9c4b85aace7be1c6c7c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8f97e5b4fa6fefe4b978c3794106eb2e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -7547,7 +7554,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2110362155}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 6.141, y: 1.045, z: 0}
+  m_LocalPosition: {x: 5.76, y: 1.29, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7572,16 +7579,20 @@ PrefabInstance:
     m_TransformParent: {fileID: 1004603182}
     m_Modifications:
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
+      propertyPath: iconDown
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: iconRight
       value: 
       objectReference: {fileID: 931490898}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: StageScene
-      value: Stage1
+      value: Stage17
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: StageNumber
-      value: 101
+      value: 201
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535944, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: selectMarker
@@ -7593,11 +7604,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535945, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -7.049
+      value: -7.047
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535945, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.493
+      value: -0.076
       objectReference: {fileID: 0}
     - target: {fileID: 4109438971453535945, guid: 38f4e696489f39944b07bdc29c95ba34, type: 3}
       propertyPath: m_LocalPosition.z

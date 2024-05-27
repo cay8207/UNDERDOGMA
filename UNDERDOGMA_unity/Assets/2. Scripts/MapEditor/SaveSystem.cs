@@ -125,5 +125,26 @@ public class SaveSystem : Singleton<SaveSystem>
         [HideInInspector] public int StageXSize;
         [HideInInspector] public int StageYSize;
     }
+
+    public void PlayStage()
+    {
+        int stage = int.Parse(inputField_StageNum.text);
+
+        string path = Application.streamingAssetsPath + "/Data/Stage/Stage" + stage + ".json";
+
+        if (File.Exists(path))
+        {
+            GameManager.Instance.FromMapEditor = true;
+            LoadingManager.Instance.LoadStage(stage / 100, stage % 100);
+        }
+        else
+        {
+            Debug.LogError("There is no file.");
+            return;
+        }
+
+        string jsonData = File.ReadAllText(path);
+        stageData = JsonConvert.DeserializeObject<StageData>(jsonData);
+    }
 }
 

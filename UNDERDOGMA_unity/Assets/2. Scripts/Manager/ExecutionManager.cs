@@ -120,7 +120,10 @@ public class ExecutionManager : MonoBehaviour
 
         UpdateRemainEnemyUI();
 
-        ExecutionNum.SetText((ExecutionCount - StageManager.Instance._character.GetComponent<Character>().MoveCount).ToString());
+        if (StageManager.Instance._character != null)
+        {
+            ExecutionNum.SetText((ExecutionCount - StageManager.Instance._character.GetComponent<Character>().MoveCount).ToString());
+        }
     }
 
     // 남은 적 UI를 세팅해주는 함수. 

@@ -64,6 +64,9 @@ public class LoadingManager : Singleton<LoadingManager>
         dialogueManager = Instantiate(DialogueManagerPrefab);
 
         InitManagers(world, stage);
+
+        // 로딩이 끝나고 해상도를 설정해준다.
+        GameManager.Instance.SetResolution();
     }
 
     private void InitManagers(int world, int stage)

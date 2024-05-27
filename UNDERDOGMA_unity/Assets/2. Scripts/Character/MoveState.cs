@@ -71,7 +71,7 @@ public class MoveState : BaseState
 
             _character.HeartChange(-1);
 
-            _character.EnqueueCoroutine(_character.CharacterMoveCoroutine(targetPosition));
+            _character.EnqueueCoroutine(_character.CharacterMoveCoroutine(new Vector2Int(_character.Row, _character.Col), targetPosition));
 
             AudioManager.Instance.PlaySfx(AudioManager.Sfx.Move);
         }

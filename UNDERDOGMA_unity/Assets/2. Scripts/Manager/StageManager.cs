@@ -143,7 +143,10 @@ public class StageManager : MonoBehaviour
             }
         }
 
-        // 
+        if (Input.GetKeyDown(KeyCode.BackQuote) && GameManager.Instance.FromMapEditor == true)
+        {
+            SceneManager.LoadScene("MapEditor");
+        }
     }
 
     // 타일들을 모두 탐색해서, 가장 맵의 끝에 있는 타일의 x, y값을 찾아서 그 중간값을 카메라의 위치로 설정해준다.
@@ -194,41 +197,53 @@ public class StageManager : MonoBehaviour
 
     public void TileInstantiate(int world, int stage)
     {
-        // 원래는 한번만 가져오면 될 것 같은데 지금 알 수 없는 이유로 기존의 데이터가 훼손되어서... 일단 반복해서 가져오는걸로.
+        // 1. 원래는 한번만 가져오면 될 것 같은데 지금 알 수 없는 이유로 기존의 데이터가 훼손되어서... 일단 반복해서 가져오는걸로.
         string path = "Stage" + (world * 100 + stage).ToString();
         _stageData = StageDataLoader.Instance.LoadStageData(path);
 
-        // 타일들을 하나씩 만들어준다. 
+        // 2. 타일들을 하나씩 만들어준다. 
         GameObject Tiles = new GameObject("Tiles");
 
         Debug.Log("(StageManager.cs) TileInstantiate 함수 실행됨.");
 
+        // 3. 만약 스테이지가 바뀌는 경우라면, 원래 있는 데이터들을 모두 없애줘야 한다. 
         _tempTileDictionary.Clear();
+        _tileObjectDictionary.Clear();
 
-        // 게임을 리셋할때에 변경된 데이터들을 모두 제대로 되돌려준다. 
+        // 4. 게임을 리셋할때에 변경된 데이터들을 모두 제대로 되돌려준다. 
         foreach (var entry in _stageData.TileDictionary)
         {
             TileObject clonedTileObject = new TileObject(entry.Value); // 복사 생성자 사용
             _tempTileDictionary.Add(entry.Key, clonedTileObject);
         }
 
+        // 5. 오브젝트들을 모두 만들어준다. 타일, 캐릭터, 적 등등. 
         foreach (var tile in _tempTileDictionary)
         {
             Vector3 tilePosition = new Vector3(tile.Key.x, tile.Key.y, 0);
 
-            // -1인 경우는 벽. 이외의 경우에만 타일 만들어주면 된다. 
+            // 5.1. -1인 경우는 벽. 이외의 경우에만 타일 만들어주면 된다. 
             if (tile.Value.Type != TileType.Wall)
             {
                 GameObject newTile = Instantiate(TilePrefab, tilePosition, Quaternion.identity, Tiles.transform);
+
+                // 타일이 -5도에서 5도까지 랜덤한 회전값을 가지도록 한다. 
                 newTile.transform.DORotate(new Vector3(0, 0, UnityEngine.Random.Range(-5.0f, 5.0f)), 0.0f);
+
+                // 아래에 있는 타일일수록 더 높은 레이어에 있어야 한다.
+                newTile.GetComponent<SpriteRenderer>().sortingOrder = 10 - tile.Key.y;
+
+                // 이를 관리하기 위해 Dictionary에 넣어줘야 한다. 
                 _tileObjectDictionary.Add(new Vector2Int(tile.Key.x, tile.Key.y), newTile);
             }
 
+            // 5.2. 적을 만들어준다. 
             if (tile.Value.Type == TileType.Enemy)
             {
                 SetUpEnemy(new Vector2Int(tile.Key.x, tile.Key.y), tile.Value);
             }
 
+            // 5.3. 고기를 만들어준다. 
             if (tile.Value.Type == TileType.Meat)
             {
                 GameObject newMeat = Instantiate(MeatPrefab, tilePosition, Quaternion.identity);

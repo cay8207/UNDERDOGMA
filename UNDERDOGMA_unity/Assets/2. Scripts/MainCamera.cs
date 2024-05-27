@@ -16,7 +16,7 @@ public class MainCamera : MonoBehaviour
 
     void Awake()
     {
-
+        originalTransform = transform.position;
     }
 
     // 호출하여 쉐이크 시작

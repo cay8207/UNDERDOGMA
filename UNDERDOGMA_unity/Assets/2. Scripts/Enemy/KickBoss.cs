@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class KickBoss : Enemy
@@ -58,7 +59,11 @@ public class KickBoss : Enemy
             }
 
             StageManager.Instance._character.GetComponent<Character>()
-                        .EnqueueCoroutine(StageManager.Instance._character.GetComponent<Character>().CharacterMoveCoroutine(KickedPosition));
+                        .EnqueueCoroutine(StageManager.Instance._character.GetComponent<Character>()
+                            .CharacterMoveCoroutine(
+                                new Vector2Int(StageManager.Instance._character.GetComponent<Character>().Row,
+                                StageManager.Instance._character.GetComponent<Character>().Col),
+                                    KickedPosition));
 
             StageManager.Instance._character.GetComponent<Character>().UpdatePosition(KickedPosition.x, KickedPosition.y);
 

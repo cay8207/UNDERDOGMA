@@ -368,45 +368,41 @@ public class Character : MonoBehaviour
     }
 
     // 캐릭터가 이동하는 애니메이션을 보여준다.
-    public IEnumerator CharacterMoveCoroutine(Vector2Int targetPosition)
+    public IEnumerator CharacterMoveCoroutine(Vector2Int originPosition, Vector2Int targetPosition)
     {
         // 1. 코루틴이 실행되는 동안 다른 코루틴이 실행되지 않도록, isCharacterCoroutineRunning을 true로 설정한다.
         _isCharacterCoroutineRunning = true;
 
-
-
-        // 3. 캐릭터가 이동하는 애니메이션을 재생한다.
+        // 2. 캐릭터가 이동하는 애니메이션을 재생한다.
         transform.DOMove(new Vector2(targetPosition.x, targetPosition.y) + characterBias, 0.5f, false).SetEase(Ease.OutCirc);
 
-        // 4. 캐릭터가 시작하는 타일과 도착하는 타일이 살짝 흔들리는 애니메이션을 재생한다.
+        // 3. 캐릭터가 시작하는 타일과 도착하는 타일이 살짝 흔들리는 애니메이션을 재생한다.
         Sequence StartTileMoveSequence = DOTween.Sequence();
 
         StartTileMoveSequence
-            .Append(StageManager.Instance.TileObjectDictionary[new Vector2Int(_row, _col)].transform
-                .DOMove(new Vector2(_row, _col) + characterBias - new Vector2(targetPosition.x - _row, targetPosition.y - _col) * 0.1f, 0.1f, false)
+            .Append(StageManager.Instance.TileObjectDictionary[new Vector2Int(originPosition.x, originPosition.y)].transform
+                .DOLocalMove(new Vector2(originPosition.x, originPosition.y) - new Vector2(targetPosition.x - originPosition.x, targetPosition.y - originPosition.y) * 0.1f, 0.3f, false)
                 .SetEase(Ease.OutCirc))
-        .Append(StageManager.Instance.TileObjectDictionary[new Vector2Int(_row, _col)].transform
-                .DOMove(new Vector2(_row, _col) + characterBias + new Vector2(targetPosition.x - _row, targetPosition.y - _col) * 0.1f, 0.1f, false)
-            .SetEase(Ease.OutCirc));
+            .Append(StageManager.Instance.TileObjectDictionary[new Vector2Int(originPosition.x, originPosition.y)].transform
+                .DOLocalMove(new Vector2(originPosition.x, originPosition.y), 0.6f, false)
+                .SetEase(Ease.OutCirc));
+
+        StartTileMoveSequence.Play();
 
         Sequence EndTileMoveSequence = DOTween.Sequence();
 
         EndTileMoveSequence
+            .AppendInterval(0.4f)
             .Append(StageManager.Instance.TileObjectDictionary[targetPosition].transform
-            .DOMove(new Vector2(targetPosition.x, targetPosition.y) + characterBias + new Vector2(targetPosition.x - _row, targetPosition.y - _col) * 0.1f, 0.1f, false)
-            .SetEase(Ease.OutCirc)
-        )
-        .Append(StageManager.Instance.TileObjectDictionary[targetPosition].transform
-            .DOMove(new Vector2(targetPosition.x, targetPosition.y) + characterBias - new Vector2(targetPosition.x - _row, targetPosition.y - _col) * 0.1f, 0.1f, false)
-            .SetEase(Ease.OutCirc)
-        );
+                .DOLocalMove(new Vector2(targetPosition.x, targetPosition.y) + new Vector2(targetPosition.x - originPosition.x, targetPosition.y - originPosition.y) * 0.1f, 0.3f, false)
+                .SetEase(Ease.OutCirc))
+            .Append(StageManager.Instance.TileObjectDictionary[targetPosition].transform
+                .DOLocalMove(new Vector2(targetPosition.x, targetPosition.y), 0.6f, false)
+                .SetEase(Ease.OutCirc));
 
+        EndTileMoveSequence.Play();
 
-        // 2. 위치값을 업데이트 해준다. 
-        int row = targetPosition.x;
-        int col = targetPosition.y;
-
-        // 5. 캐릭터가 이동하는 시간동안 다른 코루틴이 실행되지 않도록, 0.5초간 대기한다.
+        // 4. 캐릭터가 이동하는 시간동안 다른 코루틴이 실행되지 않도록, 0.5초간 대기한다.
         yield return new WaitForSeconds(0.5f);
 
         _isCharacterCoroutineRunning = false;
@@ -739,6 +735,13 @@ public class Character : MonoBehaviour
 
         int stageId = GameManager.Instance.World * 100 + GameManager.Instance.Stage;
         Debug.Log(stageId);
+
+        if (GameManager.Instance.FromMapEditor == true)
+        {
+            GameManager.Instance.FromMapEditor = false;
+            SceneManager.LoadScene("MapEditor");
+            yield break;
+        }
 
         // 만약 111이면 World1BossClear 씬으로, 112 이상 116 이하면 World1 씬으로,
         // 만약 212 이상 226 이하면 World2 씬으로, 이외에는 stageId+1 씬으로 이동.
