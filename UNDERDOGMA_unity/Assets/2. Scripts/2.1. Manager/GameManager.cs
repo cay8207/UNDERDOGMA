@@ -42,6 +42,7 @@ public class GameManager : Singleton<GameManager>
         set => _dialogueDataTable = value;
     }
 
+    public bool FromStageSelector = false;
     public bool FromMapEditor = false;
 
     void Awake()
