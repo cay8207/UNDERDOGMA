@@ -143,9 +143,16 @@ public class StageManager : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.BackQuote) && GameManager.Instance.FromMapEditor == true)
+        if (Input.GetKeyDown(KeyCode.BackQuote))
         {
-            SceneManager.LoadScene("MapEditor");
+            if (GameManager.Instance.FromStageSelector == true)
+            {
+                SceneManager.LoadScene("StageSelector");
+            }
+            else if (GameManager.Instance.FromMapEditor == true)
+            {
+                SceneManager.LoadScene("MapEditor");
+            }
         }
     }
 

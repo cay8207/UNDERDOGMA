@@ -1,11 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 using DG.Tweening;
 using UnityEngine.SceneManagement;
-using System.Drawing;
-using UnityEditor.SceneManagement;
 
 public class Character : MonoBehaviour
 {
@@ -736,7 +733,13 @@ public class Character : MonoBehaviour
         int stageId = GameManager.Instance.World * 100 + GameManager.Instance.Stage;
         Debug.Log(stageId);
 
-        if (GameManager.Instance.FromMapEditor == true)
+        if (GameManager.Instance.FromStageSelector == true)
+        {
+            GameManager.Instance.FromStageSelector = false;
+            SceneManager.LoadScene("StageSelector");
+            yield break;
+        }
+        else if (GameManager.Instance.FromMapEditor == true)
         {
             GameManager.Instance.FromMapEditor = false;
             SceneManager.LoadScene("MapEditor");

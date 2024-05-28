@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,6 +14,14 @@ public class SaveSystem : Singleton<SaveSystem>
     public TMP_InputField inputField_ExecutionCount;
     public TMP_InputField inputField_CharacterHeart;
     public TMP_InputField inputField_StageNum;
+
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            LoadMapDataFromJson();
+        }
+    }
 
     [ContextMenu("SaveMapData")]
     public void SaveMapDataToJson()
@@ -142,9 +151,6 @@ public class SaveSystem : Singleton<SaveSystem>
             Debug.LogError("There is no file.");
             return;
         }
-
-        string jsonData = File.ReadAllText(path);
-        stageData = JsonConvert.DeserializeObject<StageData>(jsonData);
     }
 }
-
+#endif

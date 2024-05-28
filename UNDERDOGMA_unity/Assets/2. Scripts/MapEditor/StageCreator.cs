@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -36,7 +37,7 @@ public class StageCreator : MonoBehaviour
 
     public void CreateButtonClick()
     {
-        xSize= 0;
+        xSize = 0;
         ySize = 0;
         bool resultX = int.TryParse(inputField_X.text, out xSize);
         bool resultY = int.TryParse(inputField_Y.text, out ySize);
@@ -77,3 +78,4 @@ public class StageCreator : MonoBehaviour
         }
     }
 }
+#endif
