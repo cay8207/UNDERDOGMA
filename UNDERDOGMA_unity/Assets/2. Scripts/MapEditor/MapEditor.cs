@@ -26,11 +26,17 @@ public class MapEditor : OdinEditorWindow
     [ShowIf("tileType", MapEditorTile.TileType.Enemy), EnumToggleButtons, OnValueChanged("OnEnemyTypeChanged")]
     public MapEditorTile.EnemyType EnemyType;
 
-    [ShowIf("tileType", MapEditorTile.TileType.Enemy), EnumToggleButtons, OnValueChanged("OnEnemyDirectionChanged")]
-    public MapEditorTile.EnemyDirection EnemyDirection;
-
     [ShowIf("tileType", MapEditorTile.TileType.Enemy), OnValueChanged("OnEnemyHPChanged")]
     public int EnemyHP;
+
+        //if EnemyType == SoulLink
+    [ShowIf("@tileType == MapEditorTile.TileType.Enemy && EnemyType == MapEditorTile.EnemyType.SoulLink"), EnumToggleButtons, OnValueChanged("OnSoulNumChanged")]
+    public int SoulNum;
+
+    [ShowIf("tileType", MapEditorTile.TileType.Enemy), EnumToggleButtons, OnValueChanged("OnSpriteDirectionChanged")]
+    public MapEditorTile.SpriteDirection SpriteDirection;
+
+
 
     //if TileType == Meat
     [ShowIf("tileType", MapEditorTile.TileType.Meat), OnValueChanged("OnMeatHPChanged")]
@@ -71,15 +77,22 @@ public class MapEditor : OdinEditorWindow
             }
             tile.SetTileType(tileType);
             UpdateTileValues();
-            Debug.Log(keyCode);
         }
     }
 
     public void setTile(MapEditorTile t)
     {
+        //disable isSelectedSprite of previous selected tile
+        try {
+            tile.IsSelected = false;
+            tile.UpdateUI();
+        } catch {}
+        
         tile = t;
+        tile.IsSelected = true;
         tileType = t.CurrentTileType;
         UpdateTileValues();
+        tile.UpdateUI();
     }
 
     public void OnTypeChanged()
@@ -94,7 +107,7 @@ public class MapEditor : OdinEditorWindow
         {
             case MapEditorTile.TileType.Enemy:
                 EnemyType = tile.CurrentEnemyType;
-                EnemyDirection = tile.CurrentEnemyDirection;
+                SpriteDirection = tile.CurrentSpriteDirection;
                 EnemyHP = tile.EnemyHP;
                 break;
             case MapEditorTile.TileType.Meat:
@@ -111,14 +124,19 @@ public class MapEditor : OdinEditorWindow
         tile.SetEnemyType(EnemyType);
     }
 
-    public void OnEnemyDirectionChanged()
+    public void OnSpriteDirectionChanged()
     {
-        tile.SetEnemyDirection(EnemyDirection);
+        tile.SetEnemyDirection(SpriteDirection);
     }
 
     public void OnEnemyHPChanged()
     {
         tile.SetEnemyHP(EnemyHP);
+    }
+
+    public void OnSoulNumChanged()
+    {
+        tile.SetSoulNum(SoulNum);
     }
 
     public void OnMeatHPChanged()

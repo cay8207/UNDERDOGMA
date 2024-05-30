@@ -12,22 +12,27 @@ using Newtonsoft.Json.Linq;
 
 public class MapEditorTile : MonoBehaviour
 {
+    //[HideInInspector] 
+    public bool IsSelected = false;
+    [SerializeField] GameObject isSelectedSprite;
     public enum TileType
     {
         Wall, Empty, Player, Enemy, Meat, Ball
     }
 
     public TileType CurrentTileType;
-    public enum EnemyDirection
+    public enum SpriteDirection
     {
-        Up = 0, Down = 1, Left = 2, Right = 3
+        Left = 0, Right = 1
     }
-    public EnemyDirection CurrentEnemyDirection;
+    public SpriteDirection CurrentSpriteDirection;
+
     public enum EnemyType
     {
-        NormalEnemy, ChaserEnemy, MiniBoss, StrongAttack, AllDirectionsAttack
+        NormalCat, NormalEnemy, StrongAttack, SoulLink, ChaserEnemy, Angel, MiniBoss
     }
     public EnemyType CurrentEnemyType;
+    public int SoulNum;
 
     [System.Serializable]
     public class TileSprites
@@ -37,11 +42,13 @@ public class MapEditorTile : MonoBehaviour
         public Sprite Player;
         public Sprite Meat;
         public Sprite Ball;
+        public Sprite NormalCat;
         public Sprite NormalEnemy;
-        public Sprite ChaserEnemy;
-        public Sprite MiniBoss;
         public Sprite StrongAttack;
-        public Sprite AllDirectionsAttack;
+        public Sprite SoulLink;
+        public Sprite ChaserEnemy;
+        public Sprite Angel;
+        public Sprite MiniBoss;
     }
 
     [Header("Coordinate")]
@@ -139,15 +146,21 @@ public class MapEditorTile : MonoBehaviour
         UpdateUI();
     }
 
-    public void SetEnemyDirection(EnemyDirection direction)
+    public void SetEnemyDirection(SpriteDirection direction)
     {
-        CurrentEnemyDirection = direction;
+        CurrentSpriteDirection = direction;
         UpdateUI();
     }
 
     public void SetEnemyHP(int hp)
     {
         EnemyHP = hp;
+        UpdateUI();
+    }
+
+    public void SetSoulNum(int soulNum)
+    {
+        SoulNum = soulNum;
         UpdateUI();
     }
 
@@ -159,17 +172,21 @@ public class MapEditorTile : MonoBehaviour
 
     public void UpdateUI()
     {
-        //Ÿ�� �̹��� ����
+        isSelectedSprite.SetActive(IsSelected);
+        //Get Tile Sprite
         tileImage.sprite = GetCurrentSprite();
-        //�� ���� UI ����
-        for (int i = 0; i < 4; i++)
+        //Sprite Direction Arrow Update(Will be actual Sprite Direction afterwards)
+        for (int i = 0; i < 2; i++)
         {
             enemyUI.transform.Find("Direction").transform.GetChild(i).gameObject.SetActive(false);
         }
-        enemyUI.transform.Find("Direction").transform.GetChild((int)CurrentEnemyDirection).gameObject.SetActive(true);
-        //�� HP �ؽ�Ʈ ����
+        enemyUI.transform.Find("Direction").transform.GetChild((int)CurrentSpriteDirection).gameObject.SetActive(true);
+        //SoulNum Update
+        enemyUI.transform.Find("SoulNum").transform.GetChild(0).gameObject.SetActive(CurrentEnemyType == EnemyType.SoulLink);
+        enemyUI.transform.Find("SoulNum").transform.GetChild(0).transform.GetComponent<TextMeshProUGUI>().text = SoulNum.ToString();
+        //Enemy HP UI Update
         enemyUI.transform.Find("HP").transform.GetChild(1).transform.GetComponent<TextMeshProUGUI>().text = EnemyHP.ToString();
-        //���� HP �ؽ�Ʈ ����
+        //Meat HP UI Update
         meatUI.transform.GetChild(1).transform.GetComponent<TextMeshProUGUI>().text = MeatHP.ToString();
     }
 
@@ -183,25 +200,29 @@ public class MapEditorTile : MonoBehaviour
                 return tileSprites.Empty;
             case TileType.Player:
                 return tileSprites.Player;
-            case TileType.Ball:
-                return tileSprites.Ball;
             case TileType.Enemy:
                 switch (CurrentEnemyType)
                 {
+                    case EnemyType.NormalCat:
+                        return tileSprites.NormalCat;
                     case EnemyType.NormalEnemy:
                         return tileSprites.NormalEnemy;
-                    case EnemyType.ChaserEnemy:
-                        return tileSprites.ChaserEnemy;
-                    case EnemyType.MiniBoss:
-                        return tileSprites.MiniBoss;
                     case EnemyType.StrongAttack:
                         return tileSprites.StrongAttack;
-                    case EnemyType.AllDirectionsAttack:
-                        return tileSprites.AllDirectionsAttack;
+                    case EnemyType.SoulLink:
+                        return tileSprites.SoulLink;
+                    case EnemyType.ChaserEnemy:
+                        return tileSprites.ChaserEnemy;
+                    case EnemyType.Angel:
+                        return tileSprites.Angel;
+                    case EnemyType.MiniBoss:
+                        return tileSprites.MiniBoss;
                     default: return null;
                 }
             case TileType.Meat:
                 return tileSprites.Meat;
+            case TileType.Ball:
+                return tileSprites.Ball;
             default:
                 return null;
         }
@@ -226,7 +247,8 @@ public class MapEditorTile : MonoBehaviour
                 json.Add("EnemyType", CurrentEnemyType.ToString());
                 json.Add("IsAlive", true);
                 json.Add("Heart", enemyHP);
-                json.Add("SpriteDirection", CurrentEnemyDirection.ToString());
+                if (CurrentEnemyType == EnemyType.SoulLink) json.Add("SoulNum", SoulNum);
+                json.Add("SpriteDirection", CurrentSpriteDirection.ToString());
                 break;
 
             case TileType.Meat:
@@ -254,7 +276,8 @@ public class MapEditorTile : MonoBehaviour
             case TileType.Enemy:
                 Enum.TryParse<EnemyType>(data["EnemyType"].ToString(), out CurrentEnemyType);
                 int.TryParse(data["Heart"].ToString(), out enemyHP);
-                Enum.TryParse<EnemyDirection>(data["SpriteDirection"].ToString(), out CurrentEnemyDirection);
+                if (CurrentEnemyType == EnemyType.SoulLink) int.TryParse(data["SoulNum"].ToString(), out SoulNum);
+                Enum.TryParse<SpriteDirection>(data["SpriteDirection"].ToString(), out CurrentSpriteDirection);
                 break;
 
             case TileType.Meat:
