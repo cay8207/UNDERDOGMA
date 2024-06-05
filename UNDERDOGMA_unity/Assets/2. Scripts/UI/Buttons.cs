@@ -17,7 +17,7 @@ public class Buttons : MonoBehaviour
     public void ReturnToWorldMap()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene("Mingyu");
+        SceneManager.LoadScene("WorldSelect");
     }
     public void MakeButtonBigger()
     {

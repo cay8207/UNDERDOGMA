@@ -14,14 +14,14 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] GameObject ExecutionPrefab;
     [SerializeField] GameObject DialogueManagerPrefab;
 
-    private int world;
+    private int world = 1;
     public int World
     {
         get => world;
         set => world = value;
     }
 
-    private int stage;
+    private int stage = 1;
     public int Stage
     {
         get => stage;

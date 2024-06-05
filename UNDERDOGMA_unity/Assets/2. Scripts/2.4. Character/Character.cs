@@ -152,10 +152,6 @@ public class Character : MonoBehaviour
 
                             }
                         }
-                        else if (WhatIsNextPosition(key) == TileType.Ball)
-                        {
-                            ChangeState(State.Kick, FindNextPosition(key, new Vector2Int(_row, _col)), key);
-                        }
                         else if (WhatIsNextPosition(key) == TileType.Wall)
                         {
 

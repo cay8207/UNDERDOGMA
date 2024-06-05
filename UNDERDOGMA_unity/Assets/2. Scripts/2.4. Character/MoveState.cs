@@ -47,7 +47,7 @@ public class MoveState : BaseState
                 // 그리고 kick에서 이동 횟수도 증가하는데, 이럼 두 번 증가해버림. 한번만 증가하도록 해야 함. 
                 _character.HeartChange(1);
                 _character.MoveCount--;
-                _character.ChangeState(Character.State.Kick, targetPosition + returnDirection(_key), _key);
+                _character.ChangeState(Character.State.Kick, targetPosition, _key);
             }
             else if (_nextState == Character.State.Damaged)
             {
@@ -115,7 +115,6 @@ public class MoveState : BaseState
             // 2. 만약 이동하려는 칸에 공이 있다면 Kick State로 이동한다.
             if (tileObject.Type == TileType.Ball)
             {
-                targetPosition -= returnDirection(key);
                 _nextState = Character.State.Kick;
                 break;
             }

@@ -5,37 +5,37 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
+  - enabled: 1
     path: Assets/1. Scenes/GameStart.unity
     guid: 37682d69df4509f4d84ea94719dd579f
-  - enabled: 1
+  - enabled: 0
     path: Assets/1. Scenes/StageSelector.unity
     guid: 18a6d08e266e4b54a94e8c5dd37376cc
   - enabled: 1
     path: Assets/1. Scenes/Stage.unity
     guid: 07e31d944c652bf41acb8ef50f2b4374
-  - enabled: 0
+  - enabled: 1
     path: Assets/1. Scenes/Credit.unity
     guid: f748b7c5fc7ba9845bd6d68cb3301b73
   - enabled: 0
-    path: Assets/1. Scenes/WorldMap.unity
-    guid: 6e3a9aafbea81834cab0d79f3e6031da
-  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
+  - enabled: 1
     path: Assets/1. Scenes/Ending.unity
     guid: 3c33722900966fe4c88bfddcd4fd55f2
-  - enabled: 0
+  - enabled: 1
     path: Assets/1. Scenes/Tutorial.unity
     guid: 98a9f8b1589eddc40b4213d3e1554d56
-  - enabled: 0
+  - enabled: 1
     path: Assets/1. Scenes/WorldMaps/World1.unity
     guid: bccdd8f14bf928c45af688052245072f
-  - enabled: 0
+  - enabled: 1
     path: Assets/1. Scenes/WorldMaps/World2.unity
     guid: c49887579e7466341ada54fb5daffd73
-  - enabled: 0
-    path: Assets/1. Scenes/Mingyu.unity
+  - enabled: 1
+    path: Assets/1. Scenes/WorldSelect.unity
     guid: b6ddad9b1bd60c34c879fff5441299c5
-  - enabled: 0
+  - enabled: 1
     path: Assets/1. Scenes/World1BossClear.unity
     guid: 5d4a0d2082f562349921ba910703a203
   - enabled: 0
