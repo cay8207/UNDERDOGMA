@@ -1,23 +1,33 @@
 {
   "TileDictionary": {
     "0, 0": {
-      "Type": "Wall"
+      "Type": "Enemy",
+      "EnemyType": "NormalEnemy",
+      "IsAlive": true,
+      "Heart": 5,
+      "SpriteDirection": "Left"
     },
     "1, 0": {
-      "Type": "Wall"
+      "Type": "Empty"
     },
     "2, 0": {
       "Type": "Empty"
     },
     "3, 0": {
-      "Type": "Enemy",
-      "EnemyType": "NormalCat",
-      "IsAlive": true,
-      "Heart": 7,
-      "SpriteDirection": "Left"
+      "Type": "Wall"
     },
     "4, 0": {
-      "Type": "Wall"
+      "Type": "Empty"
+    },
+    "5, 0": {
+      "Type": "Empty"
+    },
+    "6, 0": {
+      "Type": "Enemy",
+      "EnemyType": "NormalEnemy",
+      "IsAlive": true,
+      "Heart": 10,
+      "SpriteDirection": "Left"
     },
     "0, 1": {
       "Type": "Empty"
@@ -32,14 +42,16 @@
       "Type": "Empty"
     },
     "4, 1": {
-      "Type": "Enemy",
-      "EnemyType": "NormalCat",
-      "IsAlive": true,
-      "Heart": 9,
-      "SpriteDirection": "Left"
+      "Type": "Empty"
+    },
+    "5, 1": {
+      "Type": "Empty"
+    },
+    "6, 1": {
+      "Type": "Empty"
     },
     "0, 2": {
-      "Type": "Wall"
+      "Type": "Empty"
     },
     "1, 2": {
       "Type": "Empty"
@@ -53,8 +65,14 @@
     "4, 2": {
       "Type": "Empty"
     },
-    "0, 3": {
+    "5, 2": {
       "Type": "Wall"
+    },
+    "6, 2": {
+      "Type": "Wall"
+    },
+    "0, 3": {
+      "Type": "Empty"
     },
     "1, 3": {
       "Type": "Empty"
@@ -66,7 +84,17 @@
       "Type": "Empty"
     },
     "4, 3": {
-      "Type": "Wall"
+      "Type": "Empty"
+    },
+    "5, 3": {
+      "Type": "Empty"
+    },
+    "6, 3": {
+      "Type": "Enemy",
+      "EnemyType": "NormalEnemy",
+      "IsAlive": true,
+      "Heart": 4,
+      "SpriteDirection": "Left"
     },
     "0, 4": {
       "Type": "Wall"
@@ -79,13 +107,19 @@
     },
     "3, 4": {
       "Type": "Enemy",
-      "EnemyType": "MiniBoss",
+      "EnemyType": "NormalEnemy",
       "IsAlive": true,
-      "Heart": 12,
+      "Heart": 11,
       "SpriteDirection": "Left"
     },
     "4, 4": {
-      "Type": "Wall"
+      "Type": "Empty"
+    },
+    "5, 4": {
+      "Type": "Empty"
+    },
+    "6, 4": {
+      "Type": "Empty"
     },
     "-1, -1": {
       "Type": "Wall"
@@ -141,29 +175,41 @@
     "5, -1": {
       "Type": "Wall"
     },
-    "5, 0": {
-      "Type": "Wall"
-    },
-    "5, 1": {
-      "Type": "Wall"
-    },
-    "5, 2": {
-      "Type": "Wall"
-    },
-    "5, 3": {
-      "Type": "Wall"
-    },
-    "5, 4": {
-      "Type": "Wall"
-    },
     "5, 5": {
+      "Type": "Wall"
+    },
+    "6, -1": {
+      "Type": "Wall"
+    },
+    "6, 5": {
+      "Type": "Wall"
+    },
+    "7, -1": {
+      "Type": "Wall"
+    },
+    "7, 0": {
+      "Type": "Wall"
+    },
+    "7, 1": {
+      "Type": "Wall"
+    },
+    "7, 2": {
+      "Type": "Wall"
+    },
+    "7, 3": {
+      "Type": "Wall"
+    },
+    "7, 4": {
+      "Type": "Wall"
+    },
+    "7, 5": {
       "Type": "Wall"
     }
   },
-  "ExecutionCount": 3,
-  "CharacterHeart": 12,
-  "CharacterX": 1,
+  "ExecutionCount": 4,
+  "CharacterHeart": 15,
+  "CharacterX": 2,
   "CharacterY": 2,
-  "StageXSize": 5,
+  "StageXSize": 7,
   "StageYSize": 5
 }
